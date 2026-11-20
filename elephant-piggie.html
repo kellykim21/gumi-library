@@ -116,7 +116,9 @@
     .booknav{grid-column:1;grid-row:2;margin:0;font-size:10.5px}
     .booknav button{padding:4px 7px;font-size:10.5px;white-space:nowrap}
     .booknav .mid{display:none}
-    .text{grid-column:2;grid-row:1;margin:0;font-size:18px;line-height:1.45}
+    .text{grid-column:2;grid-row:1;margin:0;font-size:18px;line-height:1.42}
+    .text .sent{margin:0 0 2px}
+    .text .sx{padding:0 4px}
     .ctrl{grid-column:2;grid-row:2;margin:0}
     .ctrl button{padding:11px 6px}
     .ko{grid-column:2;grid-row:4;margin:0;font-size:13px}
@@ -147,8 +149,10 @@
 
   .text{margin:12px 2px 0;font-size:21px;line-height:1.62;font-weight:700;letter-spacing:-.005em;font-family:Georgia,"Times New Roman","Apple SD Gothic Neo",serif}
   @media(min-width:520px){.text{font-size:24px}}
-  .sent{display:inline;padding:1px 2px;border-radius:5px;transition:background-color .18s ease,color .18s ease;-webkit-box-decoration-break:clone;box-decoration-break:clone}
-  .sent.on{background:var(--hl);color:var(--hl-ink);padding:1px 5px;box-shadow:0 1px 0 rgba(0,0,0,.04)}
+  .sent{display:block;margin:0 0 7px}
+  .sent:last-child{margin-bottom:0}
+  .sx{padding:1px 6px;border-radius:7px;transition:background-color .18s ease,color .18s ease;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+  .sent.on .sx{background:var(--hl);color:var(--hl-ink);box-shadow:0 1px 0 rgba(0,0,0,.04)}
   .ko{margin:11px 2px 0;padding:11px 13px;border-radius:14px;background:var(--soft);font-size:14px;line-height:1.6;color:var(--ink);display:none}
   .ko.show{display:block}
   body.night .ko{background:#221e2e}
@@ -927,7 +931,10 @@ function renderPage(){
     var sp = document.createElement("span");
     sp.className = "sent" + (i === sentIdx ? " on" : "");
     sp.setAttribute("data-i", String(i));
-    sp.textContent = s + " ";
+    var sx = document.createElement("span");
+    sx.className = "sx";
+    sx.textContent = s;
+    sp.appendChild(sx);
     holder.appendChild(sp);
   });
   $("#rKoText").textContent = p.ko;
