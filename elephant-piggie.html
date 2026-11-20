@@ -210,7 +210,7 @@
 
   <section class="hero">
     <b>피기와 제럴드, 25권을 순서대로</b>
-    <p>그림이 크게 나오고, 지금 읽는 문장이 노랗게 빛나요. 5쪽씩 아주 짧은 이야기예요. 속도는 0.55배까지, 목소리는 미국·영국 영어로 골라요.</p>
+    <p>그림이 크게 나오고, 지금 읽는 문장이 노랗게 빛나요. 5쪽씩 아주 짧은 이야기예요. 스튜디오 고음질 음성으로 미국·영국 영어를 들려주고, 속도는 0.55배까지 내릴 수 있어요.</p>
     <div class="hero-row">
       <button class="cta" id="playAll">▶ 전체 연속 재생</button>
       <button class="cta ghost" id="resumeBtn" hidden>이어 보기</button>
@@ -256,8 +256,9 @@
     </div>
     <div class="voicebar" id="voiceBar">
       <span class="vlabel">목소리</span>
-      <button class="vbtn" id="vUS" data-accent="us" aria-label="미국 영어 목소리">🇺🇸 미국</button>
-      <button class="vbtn" id="vUK" data-accent="uk" aria-label="영국 영어 목소리">🇬🇧 영국</button>
+      <button class="vbtn nv" id="vJenny" data-nk="us-jenny" aria-label="미국 여성 고음질 음성, 추천">🇺🇸 여성</button>
+      <button class="vbtn nv" id="vGuy" data-nk="us-guy" aria-label="미국 남성 고음질 음성">🇺🇸 남성</button>
+      <button class="vbtn nv" id="vSonia" data-nk="uk-sonia" aria-label="영국 여성 고음질 음성">🇬🇧 여성</button>
       <button class="vmore" id="rVoice" aria-label="다른 음성 고르기">음성 목록 ›</button>
     </div>
     <p class="vnow" id="rVoiceNow">—</p>
@@ -283,11 +284,12 @@
 /* =========================================================
    엘리펀트 앤 피기 25권 · 그림책 읽어주는 웹앱
    - 그림: 브라우저에서 직접 그리는 SVG (외부 이미지 없음)
-   - 소리: Web Speech API (브라우저 내장 음성)
-   - 저장: 즐겨찾기/들은 책/밤 모드/속도/목소리(미국·영국)/한국어 뜻 → localStorage (ep_ 접두사)
+   - 소리: 신경망(Neural) 녹음 MP3 <audio> (기본) + 기기 내장 음성(speechSynthesis) 대체
+   - 저장: 즐겨찾기/들은 책/밤 모드/속도/목소리/한국어 뜻 → localStorage (ep_ 접두사)
    ========================================================= */
 var UPDATED_AT = "2026-11-20";
 var BOOKS = [{"n":1,"en":"Today I Will Fly!","ko":"오늘 나는 날 거야!","intro":"돼지 피기의 엉뚱한 도전","ar":1.1,"pages":[{"en":["“Today I will fly,” said Piggie.","“Pigs cannot fly,” said Gerald."],"ko":"“오늘 나는 날 거야,” 피기가 말했어요. “돼지는 못 나는걸,” 제럴드가 말했어요.","scene":{"pk":"stand","pf":"grin","ek":"stand","ef":"worry","deco":["sun"]}},{"en":["Piggie jumped up high.","She waved her big ears.","“Up, up, up!”"],"ko":"피기가 높이 폴짝 뛰었어요. 커다란 귀를 파닥파닥 흔들었어요. “위로, 위로, 위로!”","scene":{"pk":"jump","pf":"grin","ek":"stand","ef":"surprised","deco":["cloud"]}},{"en":["Piggie did not go up.","She went down. Plop!","“Ouch,” said Piggie."],"ko":"피기는 올라가지 않았어요. 아래로 푹 내려갔어요. “아야,” 피기가 말했어요.","scene":{"pk":"sit","pf":"sad","ek":"stand","ef":"surprised"}},{"en":["A bird flew down.","“Can I help?” said the bird."],"ko":"새 한 마리가 날아왔어요. “내가 도와줄까?” 새가 말했어요.","scene":{"pk":"stand","pf":"happy","ek":"stand","ef":"surprised","props":[{"n":"bird","who":"sky"}]}},{"en":["Piggie held the bird’s feet.","“Look at me! I can fly!”"],"ko":"피기가 새의 발을 꼭 잡았어요. “나 봐! 나는 날 수 있어!”","scene":{"bg":"sky","pk":"fly","pf":"grin","ek":"wave","ef":"happy","props":[{"n":"bird","who":"p"}],"deco":["cloud","cloud2"]}}]},{"n":2,"en":"My Friend Is Sad","ko":"내 친구가 슬퍼요","intro":"슬픈 친구를 웃게 하려는 피기","ar":1.0,"pages":[{"en":["Gerald sat on a rock.","He was very sad.","“Oh, Gerald,” said Piggie."],"ko":"제럴드는 바위에 앉아 있었어요. 마음이 아주 슬펐어요. “제럴드,” 피기가 말했어요.","scene":{"ek":"sit","ef":"sad","pk":"stand","pf":"worry","props":[{"n":"rock","who":"far-l"}]}},{"en":["Piggie put on a cowboy hat.","“Howdy, partner!”","Gerald did not look up."],"ko":"피기가 카우보이 모자를 썼어요. “하우디, 친구!” 그래도 제럴드는 고개를 들지 않았어요.","scene":{"ek":"sit","ef":"sad","pk":"stand","pf":"grin","props":[{"n":"rock","who":"far-l"},{"n":"hat","who":"p-head"}]}},{"en":["Piggie did a silly dance.","“Wiggle, wiggle, wiggle!”","Gerald did not smile."],"ko":"피기가 웃긴 춤을 췄어요. “흔들흔들흔들!” 그래도 제럴드는 웃지 않았어요.","scene":{"ek":"sit","ef":"sad","pk":"dance","pf":"silly","props":[{"n":"rock","who":"far-l"}],"deco":["music"]}},{"en":["Piggie came back as a robot.","“Beep, boop, beep!”","Gerald looked up at last."],"ko":"피기가 로봇이 되어 돌아왔어요. “삐빅, 뿅, 삐빅!” 그때야 제럴드가 고개를 들었어요.","scene":{"ek":"sit","ef":"surprised","pk":"stand","pf":"silly","props":[{"n":"rock","who":"far-l"},{"n":"mask","who":"p-eyes"}]}},{"en":["“You are here!” said Gerald.","“Now I am happy.”","“I never left,” said Piggie."],"ko":"“네가 여기 있구나!” 제럴드가 말했어요. “이제 행복해.” “난 계속 여기 있었는데,” 피기가 말했어요.","scene":{"ek":"jump","ef":"grin","pk":"stand","pf":"happy","deco":["hearts"]}}]},{"n":3,"en":"I Am Invited to a Party!","ko":"나 파티에 초대받았어!","intro":"무엇을 입을지 고민하는 피기","ar":1.2,"pages":[{"en":["“I am invited to a party!” said Piggie.","“What should I wear?”"],"ko":"“나 파티에 초대받았어!” 피기가 말했어요. “뭘 입고 가야 하지?”","scene":{"pk":"jump","pf":"grin","ek":"stand","ef":"happy","props":[{"n":"gift","who":"p"}]}},{"en":["“Wear a hat and a bow tie,” said Gerald.","Piggie put them on."],"ko":"“모자랑 나비넥타이를 해,” 제럴드가 말했어요. 피기가 둘 다 했어요.","scene":{"pk":"stand","pf":"happy","ek":"point","ef":"happy","props":[{"n":"hat","who":"p-head"}]}},{"en":["“What if it is a pool party?” said Gerald.","Piggie put on her goggles."],"ko":"“수영장 파티면 어떡하지?” 제럴드가 말했어요. 피기가 물안경을 썼어요.","scene":{"bg":"pond","pk":"stand","pf":"grin","ek":"stand","ef":"surprised","props":[{"n":"goggles","who":"p-eyes"}]}},{"en":["“What if it is a costume party?”","Piggie put on a crown and a cape."],"ko":"“가면 파티면 어떡하지?” 피기가 왕관과 망토를 했어요.","scene":{"pk":"dance","pf":"silly","ek":"stand","ef":"surprised","props":[{"n":"crown","who":"p-head"},{"n":"cape","who":"p-back"}],"deco":["confetti"]}},{"en":["At the party, Piggie saw Gerald.","“You are the party!” she said.","“You are my best friend.”"],"ko":"파티에서 피기는 제럴드를 봤어요. “너야말로 파티야!” “넌 내 제일 친한 친구잖아.”","scene":{"bg":"party","pk":"jump","pf":"grin","ek":"wave","ef":"grin","props":[{"n":"crown","who":"p-head"}],"deco":["confetti","hearts"]}}]},{"n":4,"en":"There Is a Bird on Your Head!","ko":"네 머리에 새가 있어!","intro":"머리에 새 둥지가 생긴 제럴드","ar":1.1,"pages":[{"en":["“Gerald, there is a bird on your head,” said Piggie.","“A bird?” said Gerald. “On my head?”"],"ko":"“제럴드, 네 머리에 새가 있어,” 피기가 말했어요. “새? 내 머리에?” 제럴드가 말했어요.","scene":{"ek":"stand","ef":"happy","pk":"point","pf":"worry","props":[{"n":"bird","who":"e-top"}]}},{"en":["“A bird? On my head?”","“Yes. It is making a nest.”"],"ko":"“새? 내 머리에?” “응. 둥지를 짓고 있어.”","scene":{"ek":"stand","ef":"surprised","pk":"point","pf":"grin","props":[{"n":"bird","who":"e-top"},{"n":"nest","who":"e-nest"}]}},{"en":["“Bird, please go away,” said Gerald.","The bird sang a happy song."],"ko":"“새야, 저리 가 줘,” 제럴드가 말했어요. 새는 즐거운 노래를 불렀어요.","scene":{"ek":"stand","ef":"worry","pk":"stand","pf":"happy","props":[{"n":"bird","who":"e-top"},{"n":"nest","who":"e-nest"}],"deco":["music"]}},{"en":["“Now there are two birds,” said Piggie.","“And an egg!”"],"ko":"“이제 새가 두 마리야,” 피기가 말했어요. “알도 하나 있어!”","scene":{"ek":"sit","ef":"surprised","pk":"point","pf":"surprised","props":[{"n":"bird","who":"e-top"},{"n":"bird2","who":"e-top2"},{"n":"egg","who":"e-egg"}]}},{"en":["“Oh, no!” said Gerald.","“Oh, yes!” said the birds.","“We like it here!”"],"ko":"“어떡해!” 제럴드가 말했어요. “좋아!” 새들이 말했어요. “우린 여기가 좋아!”","scene":{"ek":"sit","ef":"silly","pk":"stand","pf":"grin","props":[{"n":"bird","who":"e-top"},{"n":"bird2","who":"e-top2"},{"n":"nest","who":"e-nest"}],"deco":["hearts"]}}]},{"n":5,"en":"I Love My New Toy!","ko":"내 새 장난감이 좋아!","intro":"부서진 장난감과 화해","ar":1.1,"pages":[{"en":["Piggie had a new toy.","It was round and red.","“I love it!” she said."],"ko":"피기에게 새 장난감이 생겼어요. 둥글고 빨갰어요. “정말 좋아!”","scene":{"pk":"hold","pf":"grin","ek":"stand","ef":"happy","props":[{"n":"ball","who":"p"}]}},{"en":["Gerald threw the toy.","It went up, up, up.","Then it went CRASH!"],"ko":"제럴드가 장난감을 던졌어요. 위로 위로 올라갔어요. 그러다가 와장창!","scene":{"ek":"hold","ef":"happy","pk":"stand","pf":"grin","props":[{"n":"ball","who":"sky"}]}},{"en":["The toy was in two parts.","“My toy!” cried Piggie.","“I am sorry,” said Gerald."],"ko":"장난감이 두 조각 났어요. “내 장난감!” 피기가 울었어요. “미안해,” 제럴드가 말했어요.","scene":{"pk":"sit","pf":"sad","ek":"stand","ef":"worry","props":[{"n":"toy2","who":"mid"}]}},{"en":["Piggie was mad.","Gerald was sad.","They sat far apart."],"ko":"피기는 화가 났어요. 제럴드는 슬펐어요. 둘은 멀리 떨어져 앉았어요.","scene":{"pk":"sit","pf":"angry","ek":"sit","ef":"sad"}},{"en":["Piggie put the toy together.","“It still works!” she said.","“Friends are better than toys.”"],"ko":"피기가 장난감을 맞췄어요. “아직 돼!” “친구가 장난감보다 좋아.”","scene":{"pk":"hold","pf":"happy","ek":"jump","ef":"grin","props":[{"n":"ball","who":"mid"}],"deco":["hearts"]}}]},{"n":6,"en":"I Will Surprise My Friend!","ko":"내가 친구를 깜짝 놀라게 할 거야!","intro":"숨바꼭질 소동","ar":1.2,"pages":[{"en":["“Let’s play hide-and-seek,” said Piggie.","“I will hide first.”"],"ko":"“숨바꼭질 하자,” 피기가 말했어요. “내가 먼저 숨을게.”","scene":{"pk":"point","pf":"grin","ek":"stand","ef":"happy"}},{"en":["Piggie hid behind a tree.","Gerald hid behind a rock.","They both waited."],"ko":"피기는 나무 뒤에 숨었어요. 제럴드는 바위 뒤에 숨었어요. 둘 다 기다렸어요.","scene":{"props":[{"n":"tree","who":"far-l"},{"n":"rock","who":"far-r"}],"ek":"sit","pk":"sit","ef":"happy","pf":"happy"}},{"en":["“Where is Piggie?” said Gerald.","“Where is Gerald?” said Piggie."],"ko":"“피기는 어디 있지?” “제럴드는 어디 있지?”","scene":{"props":[{"n":"tree","who":"far-l"},{"n":"rock","who":"far-r"}],"ek":"sit","ef":"worry","pk":"sit","pf":"worry"}},{"en":["They waited and waited.","The sun went down.","The stars came out."],"ko":"기다리고 또 기다렸어요. 해가 지고 별이 나왔어요.","scene":{"bg":"sunset","props":[{"n":"tree","who":"far-l"},{"n":"rock","who":"far-r"}],"ek":"sit","ef":"sleepy","pk":"sit","pf":"sleepy"}},{"en":["“Boo!” they said at the same time.","“You surprised me!”","They laughed and laughed."],"ko":"“깜짝!” 둘이 동시에 소리쳤어요. “깜짝 놀랐어!” 둘은 깔깔 웃었어요.","scene":{"bg":"sunset","ek":"jump","ef":"grin","pk":"jump","pf":"grin","deco":["hearts"]}}]},{"n":7,"en":"Are You Ready to Play Outside?","ko":"밖에서 놀 준비 됐어?","intro":"비 오는 날의 즐거움","ar":1.1,"pages":[{"en":["“Let’s play outside,” said Piggie.","Then it began to rain."],"ko":"“밖에서 놀자,” 피기가 말했어요. 그때 비가 내리기 시작했어요.","scene":{"bg":"rain","pk":"stand","pf":"grin","ek":"stand","ef":"worry"}},{"en":["“I do not like rain,” said Piggie.","“Rain is not fun.”"],"ko":"“비는 싫어,” 피기가 말했어요. “비는 하나도 안 재밌어.”","scene":{"bg":"rain","pk":"sit","pf":"sad","ek":"sit","ef":"sad"}},{"en":["Two worms came out.","They danced in the rain.","“Look at them!”"],"ko":"지렁이 두 마리가 나왔어요. 빗속에서 춤을 췄어요. “저것 봐!”","scene":{"bg":"rain","props":[{"n":"worm","who":"g1"},{"n":"worm","who":"g2"}],"pk":"stand","pf":"surprised","ek":"stand","ef":"surprised"}},{"en":["“Maybe rain is fun,” said Piggie.","She jumped in a puddle. SPLASH!"],"ko":"“비도 재밌을지 몰라,” 피기가 말했어요. 물웅덩이에 폴짝! 첨벙!","scene":{"bg":"rain","pk":"jump","pf":"grin","ek":"stand","ef":"happy","deco":["splash"]}},{"en":["“I love rain!” said Piggie.","Then the sun came out.","“Oh, no!”"],"ko":"“비 좋아!” 피기가 말했어요. 그때 해가 나왔어요. “어떡해!”","scene":{"pk":"jump","pf":"silly","ek":"stand","ef":"grin","deco":["sun"]}}]},{"n":8,"en":"Watch Me Throw the Ball!","ko":"내가 공 던지는 거 봐!","intro":"공 던지기 대결","ar":1.2,"pages":[{"en":["Gerald had a ball.","“Watch me throw!” he said.","The ball went far."],"ko":"제럴드에게 공이 있었어요. “내가 던지는 거 봐!” 공이 멀리 날아갔어요.","scene":{"ek":"hold","ef":"grin","pk":"stand","pf":"happy","props":[{"n":"ball","who":"sky"}]}},{"en":["“Wow!” said Piggie.","“Now watch me!”","Her ball went behind her."],"ko":"“와!” 피기가 말했어요. “이번엔 나 봐!” 피기의 공은 뒤로 갔어요.","scene":{"pk":"hold","pf":"grin","ek":"stand","ef":"surprised","props":[{"n":"ball","who":"far-l"}]}},{"en":["“That was not far,” said Gerald.","“But it was fun!” said Piggie."],"ko":"“별로 안 멀었는데,” 제럴드가 말했어요. “그래도 재밌었어!” 피기가 말했어요.","scene":{"ek":"stand","ef":"worry","pk":"dance","pf":"grin"}},{"en":["Piggie threw the ball up high.","It came down on her head.","BONK!"],"ko":"피기가 공을 높이 던졌어요. 공이 머리 위로 떨어졌어요. 똑!","scene":{"pk":"sit","pf":"surprised","ek":"stand","ef":"surprised","props":[{"n":"ball","who":"p-top"}],"deco":["stars"]}},{"en":["“I am the best thrower!” said Piggie.","“You are the best laugher,” said Gerald."],"ko":"“난 최고의 던지기야!” 피기가 말했어요. “넌 최고의 웃음꾼이야,” 제럴드가 말했어요.","scene":{"pk":"jump","pf":"grin","ek":"jump","ef":"grin","props":[{"n":"ball","who":"mid"}],"deco":["hearts"]}}]},{"n":9,"en":"Elephants Cannot Dance!","ko":"코끼리는 춤을 못 춰!","intro":"춤추는 코끼리 제럴드","ar":1.2,"pages":[{"en":["“Dance with me!” said Piggie.","“Elephants cannot dance,” said Gerald."],"ko":"“나랑 춤추자!” 피기가 말했어요. “코끼리는 춤을 못 춰,” 제럴드가 말했어요.","scene":{"pk":"dance","pf":"grin","ek":"stand","ef":"worry","deco":["music"]}},{"en":["Piggie showed him a step.","“Jump, jump, turn!”","Gerald jumped and fell."],"ko":"피기가 한 동작을 보여 줬어요. “폴짝, 폴짝, 돌기!” 제럴드는 넘어졌어요.","scene":{"pk":"point","pf":"happy","ek":"sit","ef":"surprised","deco":["stars"]}},{"en":["“Try again,” said Piggie.","Gerald wiggled his trunk.","He tripped on his feet."],"ko":"“다시 해 봐,” 피기가 말했어요. 제럴드는 코를 흔들었어요. 발에 걸려 넘어졌어요.","scene":{"pk":"stand","pf":"happy","ek":"dance","ef":"worry","deco":["music"]}},{"en":["Gerald took a deep breath.","He closed his eyes.","He danced his own way."],"ko":"제럴드는 깊게 숨을 쉬었어요. 눈을 감았어요. 자기만의 방식으로 춤을 췄어요.","scene":{"pk":"stand","pf":"surprised","ek":"dance","ef":"sleepy","deco":["music"]}},{"en":["“That is a new dance!” said Piggie.","And she danced it too."],"ko":"“새로운 춤이네!” 피기가 말했어요. 피기도 같이 췄어요.","scene":{"pk":"dance","pf":"grin","ek":"dance","ef":"grin","deco":["music","hearts"]}}]},{"n":10,"en":"Pigs Make Me Sneeze!","ko":"돼지 보면 재채기가 나!","intro":"재채기가 멈추지 않는 제럴드","ar":1.0,"pages":[{"en":["Piggie came close. “Hello, Gerald!”","AH-CHOO!","“Oh, no,” said Gerald."],"ko":"피기가 다가왔어요. “안녕, 제럴드!” 에취! “이런,” 제럴드가 말했어요.","scene":{"pk":"stand","pf":"grin","ek":"sneeze","ef":"silly","deco":["sparkle"]}},{"en":["“Do I make you sneeze?” said Piggie.","AH-CHOO!","“Yes, you do.”"],"ko":"“내가 재채기 나게 해?” 피기가 말했어요. 에취! “응, 그래.”","scene":{"pk":"stand","pf":"worry","ek":"sneeze","ef":"silly","deco":["sparkle"]}},{"en":["“Then I will go away,” said Piggie.","She sat far, far away."],"ko":"“그럼 난 멀리 갈게,” 피기가 말했어요. 아주 아주 멀리 앉았어요.","scene":{"pk":"sit","pf":"sad","ek":"sit","ef":"sad"}},{"en":["Gerald felt sad.","He walked to Piggie.","AH-CHOO! He sneezed again."],"ko":"제럴드는 마음이 슬펐어요. 피기에게 걸어갔어요. 에취! 또 재채기했어요.","scene":{"pk":"stand","pf":"sad","ek":"sneeze","ef":"sad","deco":["sparkle"]}},{"en":["“Maybe it is the flowers,” said Piggie.","A flower was in Gerald’s trunk.","AH-CHOO!"],"ko":"“어쩌면 꽃 때문일지도,” 피기가 말했어요. 꽃이 제럴드 코에 있었어요. “에취!”","scene":{"pk":"point","pf":"surprised","ek":"sneeze","ef":"silly","props":[{"n":"flowers","who":"e"}]}}]},{"n":11,"en":"I Am Going!","ko":"나 갈 거야!","intro":"떠난다고 말하는 피기","ar":1.0,"pages":[{"en":["“I am going,” said Piggie.","“Going where?” said Gerald."],"ko":"“나 갈게,” 피기가 말했어요. “어디에?” 제럴드가 물었어요.","scene":{"pk":"stand","pf":"happy","ek":"stand","ef":"worry"}},{"en":["“Away,” said Piggie.","“For how long?”","“A long, long time.”"],"ko":"“멀리,” 피기가 말했어요. “얼마나?” “아주 아주 오래.”","scene":{"pk":"point","pf":"happy","ek":"stand","ef":"sad"}},{"en":["Gerald’s ears drooped.","“I will miss you,” he said.","“I will miss you too.”"],"ko":"제럴드의 귀가 축 처졌어요. “보고 싶을 거야.” “나도 보고 싶을 거야.”","scene":{"pk":"stand","pf":"sad","ek":"sit","ef":"sad","deco":["hearts"]}},{"en":["Piggie walked to the door.","She stopped.","“Wait. I forgot something.”"],"ko":"피기가 문 쪽으로 걸어갔어요. 멈췄어요. “잠깐. 뭘 잊었어.”","scene":{"pk":"run","pf":"surprised","ek":"stand","ef":"surprised"}},{"en":["“What did you forget?” said Gerald.","“My lunch!” said Piggie.","“I am going to the kitchen!”"],"ko":"“뭘 잊었는데?” “내 도시락!” “난 부엌에 가는 거야!”","scene":{"pk":"hold","pf":"grin","ek":"jump","ef":"grin","props":[{"n":"bag","who":"p"}],"deco":["hearts"]}}]},{"n":12,"en":"Can I Play Too?","ko":"나도 같이 놀아도 돼?","intro":"팔이 없는 뱀과 공놀이","ar":1.1,"pages":[{"en":["Gerald and Piggie played catch.","A snake came by.","“Can I play too?”"],"ko":"제럴드와 피기가 공놀이를 했어요. 뱀이 왔어요. “나도 해도 돼?”","scene":{"ek":"hold","ef":"happy","pk":"hold","pf":"happy","props":[{"n":"ball","who":"sky"},{"n":"snake","who":"far-r"}]}},{"en":["“You have no arms,” said Gerald.","“I know,” said the snake."],"ko":"“넌 팔이 없잖아,” 제럴드가 말했어요. “알아,” 뱀이 말했어요.","scene":{"ek":"stand","ef":"worry","pk":"stand","pf":"worry","props":[{"n":"snake","who":"far-r"}]}},{"en":["The snake tried to catch the ball.","It hit him on the head.","BONK!"],"ko":"뱀이 공을 잡아 봤어요. 공이 머리에 맞았어요. 똑!","scene":{"ek":"stand","ef":"surprised","pk":"stand","pf":"surprised","props":[{"n":"snake","who":"far-r"},{"n":"ball","who":"far-r"}],"deco":["stars"]}},{"en":["“Let’s throw low,” said Piggie.","The snake caught it with his tail!"],"ko":"“낮게 던지자,” 피기가 말했어요. 뱀이 꼬리로 공을 잡았어요!","scene":{"ek":"hold","ef":"grin","pk":"point","pf":"grin","props":[{"n":"snake","who":"far-r"},{"n":"ball","who":"far-r"}]}},{"en":["“You are good at this!” said Gerald.","“Throw it again!” said the snake."],"ko":"“너 이거 잘한다!” 제럴드가 말했어요. “한 번 더!” 뱀이 말했어요.","scene":{"ek":"jump","ef":"grin","pk":"jump","pf":"grin","props":[{"n":"snake","who":"far-r"}],"deco":["hearts"]}}]},{"n":13,"en":"We Are in a Book!","ko":"우리는 책 속에 있어!","intro":"독자를 발견한 두 친구","ar":1.2,"pages":[{"en":["“Look,” said Gerald.","“Someone is looking at us.”","“That is a reader,” said Piggie."],"ko":"“봐,” 제럴드가 말했어요. “누가 우리를 보고 있어.” “저건 독자야,” 피기가 말했어요.","scene":{"ek":"stand","ef":"surprised","pk":"point","pf":"grin","props":[{"n":"book","who":"mid"}]}},{"en":["“Hello, reader!” said Piggie.","“We are in a book!”"],"ko":"“안녕, 독자!” 피기가 말했어요. “우린 책 속에 살아!”","scene":{"ek":"wave","ef":"grin","pk":"wave","pf":"grin","props":[{"n":"book","who":"mid"}]}},{"en":["“The reader turns the page,” said Gerald.","“Let’s make the reader laugh.”","They made silly faces."],"ko":"“독자가 쪽을 넘겨,” 제럴드가 말했어요. “독자를 웃겨 보자.” 둘은 우스꽝스러운 얼굴을 했어요.","scene":{"ek":"dance","ef":"silly","pk":"dance","pf":"silly","props":[{"n":"book","who":"mid"}],"deco":["music"]}},{"en":["“The book will end,” said Gerald.","“What will we do then?”","Piggie had an idea."],"ko":"“책이 끝나면 어떡하지?” 제럴드가 물었어요. “그다음엔 뭘 하지?” 피기에게 좋은 생각이 났어요.","scene":{"ek":"sit","ef":"worry","pk":"stand","pf":"surprised","props":[{"n":"book","who":"mid"}]}},{"en":["“Please read us again,” said Piggie.","“Again and again and again!”","The end. (For now.)"],"ko":"“우리를 다시 읽어 줘,” 피기가 말했어요. “또, 또, 또!” 끝. (지금은.)","scene":{"ek":"jump","ef":"grin","pk":"jump","pf":"grin","props":[{"n":"book","who":"mid"}],"deco":["hearts","confetti"]}}]},{"n":14,"en":"I Broke My Trunk!","ko":"내 코가 부러졌어!","intro":"길고도 긴 이야기","ar":1.2,"pages":[{"en":["“Gerald, what happened to your trunk?”","“It is a long story,” said Gerald."],"ko":"“제럴드, 네 코가 왜 그래?” “긴 이야기야,” 제럴드가 말했어요.","scene":{"ek":"stand","ef":"sad","pk":"point","pf":"worry"}},{"en":["“First I lifted a hippo.","Then I lifted two rhinos.”"],"ko":"“먼저 하마를 들어 올렸어. 그다음엔 코뿔소 두 마리를.”","scene":{"ek":"dance","ef":"grin","pk":"stand","pf":"surprised","props":[{"n":"hippo","who":"far-l"}]}},{"en":["“Then a piano and a whale and a tree!”","“Wow!” said Piggie."],"ko":"“그다음엔 피아노, 고래, 나무까지!” “와!” 피기가 말했어요.","scene":{"ek":"dance","ef":"grin","pk":"jump","pf":"grin","props":[{"n":"piano","who":"far-l"},{"n":"whale","who":"far-r"}]}},{"en":["“And then?” said Piggie.","“Then I tripped,” said Gerald."],"ko":"“그다음엔?” 피기가 물었어요. “그다음엔 넘어졌어,” 제럴드가 말했어요.","scene":{"ek":"sit","ef":"silly","pk":"stand","pf":"surprised","props":[{"n":"ball","who":"far-r"}]}},{"en":["“That is not a long story,” said Piggie.","“It is a funny story!” said Gerald."],"ko":"“그건 긴 이야기가 아니잖아,” 피기가 말했어요. “웃긴 이야기지!” 제럴드가 말했어요.","scene":{"ek":"jump","ef":"grin","pk":"dance","pf":"grin","deco":["hearts"]}}]},{"n":15,"en":"Should I Share My Ice Cream?","ko":"아이스크림을 나눠야 할까?","intro":"나눔을 고민하는 제럴드","ar":1.2,"pages":[{"en":["Gerald had ice cream.","It was pink and sweet.","Piggie was far away."],"ko":"제럴드에게 아이스크림이 있었어요. 분홍색이고 달콤했어요. 피기는 멀리 있었어요.","scene":{"ek":"hold","ef":"grin","pk":"stand","pf":"happy","props":[{"n":"icecream","who":"e"}]}},{"en":["“Should I share?” said Gerald.","“It is my ice cream.”","He took a lick."],"ko":"“나눠야 하나?” 제럴드가 말했어요. “내 아이스크림인데.” 한 입 핥았어요.","scene":{"ek":"hold","ef":"silly","pk":"stand","pf":"happy","props":[{"n":"icecream","who":"e"}]}},{"en":["He thought and thought.","The ice cream began to melt.","Drip, drip, drip."],"ko":"생각하고 또 생각했어요. 아이스크림이 녹기 시작했어요. 뚝, 뚝, 뚝.","scene":{"ek":"sit","ef":"worry","pk":"stand","pf":"worry","props":[{"n":"icecream","who":"e"}]}},{"en":["“Piggie!” he called.","He ran fast.","But the ice cream was gone."],"ko":"“피기!” 제럴드가 불렀어요. 빠르게 달렸어요. 하지만 아이스크림은 없어졌어요.","scene":{"ek":"run","ef":"worry","pk":"stand","pf":"surprised","props":[{"n":"icecream","who":"mid"}]}},{"en":["“I have a cookie,” said Piggie.","“Let’s share it.”","“Yes, please!” said Gerald."],"ko":"“난 쿠키가 있어,” 피기가 말했어요. “같이 먹자.” “좋아!” 제럴드가 말했어요.","scene":{"pk":"hold","pf":"grin","ek":"jump","ef":"grin","props":[{"n":"cookie","who":"p"}],"deco":["hearts"]}}]},{"n":16,"en":"Happy Pig Day!","ko":"행복한 돼지의 날!","intro":"모두를 위한 돼지의 날","ar":1.1,"pages":[{"en":["“Today is Happy Pig Day!” said Piggie.","“It is the best day!”"],"ko":"“오늘은 행복한 돼지의 날!” 피기가 말했어요. “최고의 날이야!”","scene":{"bg":"party","pk":"jump","pf":"grin","ek":"stand","ef":"happy","deco":["confetti"]}},{"en":["Piggie gave hats to all the pigs.","They sang and they danced."],"ko":"피기가 모든 돼지에게 모자를 나눠 줬어요. 다 같이 노래하고 춤췄어요.","scene":{"bg":"party","pk":"dance","pf":"grin","ek":"stand","ef":"happy","props":[{"n":"hat","who":"p-head"}],"deco":["confetti","music"]}},{"en":["Gerald stood alone.","“I am not a pig,” he said.","“I cannot join.”"],"ko":"제럴드는 혼자 서 있었어요. “난 돼지가 아니야,” 제럴드가 말했어요. “낄 수 없어.”","scene":{"bg":"party","ek":"sit","ef":"sad","pk":"dance","pf":"happy","deco":["confetti"]}},{"en":["Piggie came to him.","“Happy Pig Day is for everyone,” she said."],"ko":"피기가 제럴드에게 왔어요. “행복한 돼지의 날은 누구나의 날이야,” 피기가 말했어요.","scene":{"bg":"party","pk":"point","pf":"happy","ek":"stand","ef":"surprised","deco":["confetti"]}},{"en":["She put a hat on Gerald’s head.","“Happy Pig Day, Gerald!”","All the pigs cheered."],"ko":"피기가 제럴드 머리에 모자를 씌웠어요. “행복한 돼지의 날, 제럴드!” 모든 돼지가 환호했어요.","scene":{"bg":"party","pk":"jump","pf":"grin","ek":"wave","ef":"grin","props":[{"n":"hat","who":"e-head"}],"deco":["confetti","hearts"]}}]},{"n":17,"en":"Listen to My Trumpet!","ko":"내 트럼펫 소리 들어 봐!","intro":"시끄러운 트럼펫 연주","ar":1.2,"pages":[{"en":["“Listen to my trumpet!” said Piggie.","“I will play a song.”"],"ko":"“내 트럼펫 소리 들어 봐!” 피기가 말했어요. “노래를 연주할 거야.”","scene":{"pk":"hold","pf":"grin","ek":"stand","ef":"happy","props":[{"n":"trumpet","who":"p"}]}},{"en":["Piggie played. It sounded like a goose.","HONK!","“That is loud,” said Gerald."],"ko":"피기가 불었어요. 거위 소리 같았어요. 꽥! “시끄럽네,” 제럴드가 말했어요.","scene":{"pk":"hold","pf":"grin","ek":"stand","ef":"surprised","props":[{"n":"trumpet","who":"p"}],"deco":["music"]}},{"en":["Piggie played again. It sounded like a car.","BEEP!","“Try again,” said Gerald."],"ko":"피기가 또 불었어요. 자동차 소리 같았어요. 빵! “다시 해 봐,” 제럴드가 말했어요.","scene":{"pk":"hold","pf":"worry","ek":"stand","ef":"worry","props":[{"n":"trumpet","who":"p"}],"deco":["music"]}},{"en":["Piggie played a small, soft song.","It was beautiful.","Gerald smiled."],"ko":"피기가 작고 부드러운 노래를 연주했어요. 아름다웠어요. 제럴드가 웃었어요.","scene":{"pk":"hold","pf":"happy","ek":"sit","ef":"happy","props":[{"n":"trumpet","who":"p"}],"deco":["music","hearts"]}},{"en":["“That was wonderful!” said Gerald.","“Really?” said Piggie. HONK!","“No,” said Gerald."],"ko":"“정말 멋졌어!” 제럴드가 말했어요. “정말?” 피기가 불었어요. 꽥! “아니,” 제럴드가 말했어요.","scene":{"pk":"hold","pf":"silly","ek":"sit","ef":"silly","props":[{"n":"trumpet","who":"p"}],"deco":["music"]}}]},{"n":18,"en":"Let’s Go for a Drive!","ko":"드라이브 가자!","intro":"준비물은 많은데 차가 없네","ar":1.3,"pages":[{"en":["“Let’s go for a drive!” said Gerald.","“Yes!” said Piggie.","“I will get the car.”"],"ko":"“드라이브 가자!” 제럴드가 말했어요. “좋아!” 피기가 말했어요. “내가 차를 가져올게.”","scene":{"ek":"point","ef":"grin","pk":"jump","pf":"grin","props":[{"n":"car","who":"far-r"}]}},{"en":["“We need a map,” said Gerald.","“I have a map,” said Piggie."],"ko":"“지도가 필요해,” 제럴드가 말했어요. “나 지도 있어,” 피기가 말했어요.","scene":{"ek":"hold","ef":"happy","pk":"hold","pf":"happy","props":[{"n":"map","who":"mid"}]}},{"en":["“We need sunglasses and a hat.”","“We need an umbrella too!”"],"ko":"“선글라스랑 모자가 필요해.” “우산도 필요해!”","scene":{"ek":"hold","ef":"happy","pk":"hold","pf":"grin","props":[{"n":"glasses","who":"e-eyes"},{"n":"hat","who":"p-head"},{"n":"umbrella","who":"far-r"}]}},{"en":["They had the map and the hat.","They had the umbrella and the sunglasses.","But they had no car."],"ko":"지도도 모자도 있었어요. 우산도 선글라스도 있었어요. 그런데 차가 없었어요.","scene":{"ek":"sit","ef":"worry","pk":"sit","pf":"worry","props":[{"n":"map","who":"mid"},{"n":"hat","who":"p-head"},{"n":"umbrella","who":"far-r"}]}},{"en":["“We have no car,” said Piggie.","“So let’s walk,” said Gerald.","“That is a good plan!”"],"ko":"“우리 차가 없네,” 피기가 말했어요. “그럼 걸어가자,” 제럴드가 말했어요. “좋은 생각이야!”","scene":{"ek":"jump","ef":"grin","pk":"jump","pf":"grin","deco":["sun","hearts"]}}]},{"n":19,"en":"A Big Guy Took My Ball!","ko":"덩치 큰 녀석이 내 공을 가져갔어!","intro":"고래와 함께 노는 법","ar":1.2,"pages":[{"en":["Piggie was crying.","“A big guy took my ball!” she said."],"ko":"피기가 울고 있었어요. “덩치 큰 녀석이 내 공을 가져갔어!”","scene":{"pk":"sit","pf":"sad","ek":"stand","ef":"worry","props":[{"n":"ball","who":"far-r"}]}},{"en":["“I will get it back,” said Gerald.","The big guy was a whale."],"ko":"“내가 찾아올게,” 제럴드가 말했어요. 그 덩치 큰 녀석은 고래였어요.","scene":{"ek":"point","ef":"worry","pk":"stand","pf":"surprised","props":[{"n":"whale","who":"far-r"}]}},{"en":["“Excuse me,” said Gerald.","“That is my friend’s ball.”","“I found it,” said the whale."],"ko":"“실례합니다,” 제럴드가 말했어요. “그건 내 친구 공이에요.” “내가 주웠는데,” 고래가 말했어요.","scene":{"ek":"stand","ef":"worry","pk":"stand","pf":"worry","props":[{"n":"whale","who":"far-r"},{"n":"ball","who":"far-r"}]}},{"en":["“The ball is small for me,” said the whale.","“But the ocean is big.”","“Come and play!”"],"ko":"“내겐 공이 너무 작아,” 고래가 말했어요. “그런데 바다는 넓어.” “같이 놀자!”","scene":{"bg":"pond","ek":"stand","ef":"surprised","pk":"stand","pf":"surprised","props":[{"n":"whale","who":"far-r"}]}},{"en":["They all played in the water.","“Thank you, big guy!” said Piggie.","“You are welcome, small guys!”"],"ko":"모두 물에서 놀았어요. “고마워, 덩치 큰 친구!” 피기가 말했어요. “별말씀을, 작은 친구들!”","scene":{"bg":"pond","ek":"jump","ef":"grin","pk":"jump","pf":"grin","props":[{"n":"whale","who":"far-r"}],"deco":["hearts"]}}]},{"n":20,"en":"I’m a Frog!","ko":"나는 개구리야!","intro":"개구리 흉내를 내는 피기","ar":1.1,"pages":[{"en":["“I am a frog,” said Piggie.","“You are a pig,” said Gerald."],"ko":"“나는 개구리야,” 피기가 말했어요. “넌 돼지야,” 제럴드가 말했어요.","scene":{"pk":"stand","pf":"silly","ek":"stand","ef":"surprised"}},{"en":["“Ribbit, ribbit,” said Piggie.","She hopped. Hop, hop!"],"ko":"“개굴, 개굴,” 피기가 말했어요. 폴짝폴짝 뛰었어요!","scene":{"pk":"jump","pf":"grin","ek":"stand","ef":"surprised","props":[{"n":"frog","who":"mid"}]}},{"en":["“Frogs eat flies,” said Piggie.","“Ribbit!”","Gerald looked scared."],"ko":"“개구리는 파리를 먹어,” 피기가 말했어요. “개굴!” 제럴드는 무서운 얼굴을 했어요.","scene":{"pk":"jump","pf":"silly","ek":"sit","ef":"worry","props":[{"n":"frog","who":"mid"}]}},{"en":["“Can I be a frog too?” said Gerald.","“You are too big,” said Piggie.","“But you can be a hippo.”"],"ko":"“나도 개구리가 되면 안 돼?” “넌 너무 커,” 피기가 말했어요. “대신 하마가 될 수 있어.”","scene":{"ek":"jump","ef":"happy","pk":"point","pf":"grin","props":[{"n":"hippo","who":"far-r"}]}},{"en":["“I am a hippo!” said Gerald.","“Ribbit,” said Piggie.","“Hippos do not say ribbit!”"],"ko":"“나는 하마야!” 제럴드가 말했어요. “개굴,” 피기가 말했어요. “하마는 개굴 안 해!”","scene":{"ek":"dance","ef":"grin","pk":"dance","pf":"silly","deco":["music","hearts"]}}]},{"n":21,"en":"My New Friend Is So Fun!","ko":"내 새 친구는 정말 재밌어!","intro":"새 친구가 생긴 피기","ar":1.2,"pages":[{"en":["Piggie met a new pig.","They played and laughed.","Gerald watched."],"ko":"피기가 새 돼지 친구를 만났어요. 둘은 놀고 웃었어요. 제럴드는 지켜봤어요.","scene":{"pk":"point","pf":"happy","ek":"stand","ef":"worry","props":[{"n":"pig","who":"far-r"}]}},{"en":["“Piggie has a new friend,” said Gerald.","“Maybe she likes him more.”"],"ko":"“피기에게 새 친구가 생겼어,” 제럴드가 말했어요. “아마 날보다 그 애를 더 좋아하나 봐.”","scene":{"ek":"sit","ef":"sad","pk":"dance","pf":"grin","props":[{"n":"pig","who":"far-r"}]}},{"en":["Gerald sat alone.","He felt small.","He felt sad."],"ko":"제럴드는 혼자 앉았어요. 작아진 기분이었어요. 마음이 슬펐어요.","scene":{"ek":"sit","ef":"sad","pk":"stand","pf":"happy","props":[{"n":"pig","who":"far-r"}],"deco":["cloud"]}},{"en":["Piggie ran to him.","“Come and meet my new friend.”","“He is funny, like you.”"],"ko":"피기가 제럴드에게 달려왔어요. “와서 내 새 친구 만나 봐.” “너처럼 웃기다구.”","scene":{"pk":"run","pf":"grin","ek":"stand","ef":"surprised","props":[{"n":"pig","who":"far-r"}]}},{"en":["“Two friends are better than one,” said Piggie.","“Three friends are best!” said the new pig."],"ko":"“친구 둘이 하나보다 좋아,” 피기가 말했어요. “친구 셋이 제일 좋지!” 새 친구가 말했어요.","scene":{"pk":"jump","pf":"grin","ek":"jump","ef":"grin","props":[{"n":"pig","who":"far-r"}],"deco":["hearts"]}}]},{"n":22,"en":"Waiting Is Not Easy!","ko":"기다리는 건 힘들어!","intro":"밤하늘 깜짝 선물","ar":1.1,"pages":[{"en":["“I have a surprise for you,” said Piggie.","“But you must wait.”"],"ko":"“너에게 깜짝 선물이 있어,” 피기가 말했어요. “그런데 기다려야 해.”","scene":{"pk":"point","pf":"grin","ek":"stand","ef":"happy"}},{"en":["“How long?” said Gerald.","“A little while,” said Piggie.","He counted to ten."],"ko":"“얼마나?” 제럴드가 물었어요. “조금만,” 피기가 말했어요. 제럴드는 열까지 셌어요.","scene":{"ek":"sit","ef":"worry","pk":"stand","pf":"happy"}},{"en":["“Is it now?” said Gerald.","“No,” said Piggie.","He waited. He counted to one hundred."],"ko":"“이제야?” 제럴드가 물었어요. “아니,” 피기가 말했어요. 백까지 셌어요.","scene":{"ek":"lie","ef":"worry","pk":"stand","pf":"grin"}},{"en":["“I cannot wait!” said Gerald.","“Look up,” said Piggie.","The sky was full of stars."],"ko":"“못 기다리겠어!” 제럴드가 말했어요. “위를 봐,” 피기가 말했어요. 하늘이 별로 가득했어요.","scene":{"bg":"night","ek":"stand","ef":"surprised","pk":"point","pf":"grin","deco":["stars","moon"]}},{"en":["“Oh,” said Gerald.","“That was worth the wait.”"],"ko":"“와,” 제럴드가 말했어요. “기다린 보람이 있네.”","scene":{"bg":"night","ek":"lie","ef":"happy","pk":"lie","pf":"happy","deco":["stars","moon"]}}]},{"n":23,"en":"I Will Take a Nap!","ko":"나 낮잠 잘 거야!","intro":"조용한 낮잠 소동","ar":1.0,"pages":[{"en":["“I am tired,” said Gerald.","“I will take a nap.”","He lay down."],"ko":"“나 피곤해,” 제럴드가 말했어요. “낮잠 잘 거야.” 누웠어요.","scene":{"ek":"lie","ef":"sleepy","pk":"stand","pf":"happy","deco":["zzz"]}},{"en":["Piggie came by.","“Can I nap too?”","“Yes. But no talking.”"],"ko":"피기가 왔어요. “나도 자도 돼?” “응. 그런데 말하면 안 돼.”","scene":{"ek":"lie","ef":"sleepy","pk":"stand","pf":"grin"}},{"en":["“I am not talking,” said Piggie.","“You are talking now,” said Gerald."],"ko":"“나 말 안 했어,” 피기가 말했어요. “지금 말하고 있잖아,” 제럴드가 말했어요.","scene":{"ek":"lie","ef":"angry","pk":"point","pf":"silly"}},{"en":["“Let’s count sheep,” said Piggie.","“One sheep, two sheep…”","Gerald snored."],"ko":"“양을 세자,” 피기가 말했어요. “한 마리, 두 마리…” 제럴드가 코를 골았어요.","scene":{"ek":"lie","ef":"sleepy","pk":"lie","pf":"happy","deco":["zzz","cloud"]}},{"en":["Piggie covered him with a leaf.","“Good night, Gerald.”","Then she slept too."],"ko":"피기가 나뭇잎을 덮어 줬어요. “잘 자, 제럴드.” 그리고 피기도 잤어요.","scene":{"bg":"sunset","ek":"lie","ef":"sleepy","pk":"lie","pf":"sleepy","props":[{"n":"leaf","who":"e"}],"deco":["zzz"]}}]},{"n":24,"en":"I Really Like Slop!","ko":"난 슬롭이 정말 좋아!","intro":"초록색 음식 한 입","ar":1.2,"pages":[{"en":["Piggie had a bowl of slop.","“This is my favorite food,” she said."],"ko":"피기에게 슬롭 한 그릇이 있었어요. “이건 내가 제일 좋아하는 음식이야.”","scene":{"pk":"hold","pf":"grin","ek":"stand","ef":"happy","props":[{"n":"bowl","who":"p"}]}},{"en":["“Do you want to try it?” said Piggie.","“It looks… green,” said Gerald."],"ko":"“한번 먹어 볼래?” 피기가 말했어요. “색이… 초록색이네,” 제럴드가 말했어요.","scene":{"pk":"hold","pf":"happy","ek":"sit","ef":"worry","props":[{"n":"bowl","who":"mid"}]}},{"en":["Gerald took a small bite.","He made a funny face.","He held his nose."],"ko":"제럴드가 조그맣게 한 입 먹었어요. 이상한 얼굴을 했어요. 코를 막았어요.","scene":{"pk":"stand","pf":"surprised","ek":"hold","ef":"silly","props":[{"n":"bowl","who":"e"}],"deco":["sparkle"]}},{"en":["“I really like slop!” said Gerald.","“You do?” said Piggie.","“No. But I like you.”"],"ko":"“난 슬롭이 정말 좋아!” 제럴드가 말했어요. “정말?” “아니. 그치만 널 좋아해.”","scene":{"pk":"jump","pf":"grin","ek":"stand","ef":"grin","deco":["hearts"]}},{"en":["“I will eat it all,” said Piggie.","“I will watch,” said Gerald.","“From far away.”"],"ko":"“내가 다 먹을 거야,” 피기가 말했어요. “난 지켜볼게,” 제럴드가 말했어요. “아주 멀리서.”","scene":{"pk":"hold","pf":"grin","ek":"stand","ef":"worry","props":[{"n":"bowl","who":"p"}]}}]},{"n":25,"en":"The Thank You Book","ko":"고맙다고 말하는 책","intro":"모두에게 고마워","ar":1.1,"pages":[{"en":["“I will thank everyone,” said Piggie.","“Everyone who helped me.”"],"ko":"“모두에게 고맙다고 할 거야,” 피기가 말했어요. “나를 도와준 모두에게.”","scene":{"pk":"point","pf":"grin","ek":"stand","ef":"happy"}},{"en":["“Thank you, bird. Thank you, snake.”","“Thank you, whale.”"],"ko":"“고마워, 새야. 고마워, 뱀아.” “고마워, 고래야.”","scene":{"pk":"wave","pf":"happy","ek":"stand","ef":"happy","props":[{"n":"bird","who":"sky"},{"n":"snake","who":"far-l"},{"n":"whale","who":"far-r"}]}},{"en":["“Thank you, ice cream. Thank you, ball.”","“Thank you, slop.”"],"ko":"“고마워, 아이스크림. 고마워, 공아.” “고마워, 슬롭아.”","scene":{"pk":"point","pf":"silly","ek":"stand","ef":"grin","props":[{"n":"icecream","who":"mid"},{"n":"ball","who":"far-l"},{"n":"bowl","who":"far-r"}]}},{"en":["“And thank you, Gerald,” said Piggie.","“You are my best friend.”"],"ko":"“그리고 고마워, 제럴드,” 피기가 말했어요. “넌 내 제일 친한 친구야.”","scene":{"pk":"point","pf":"happy","ek":"stand","ef":"grin","deco":["hearts"]}},{"en":["“Thank you, Piggie,” said Gerald.","“Thank you for being you.”","And they hugged. The end."],"ko":"“고마워, 피기,” 제럴드가 말했어요. “너여서 고마워.” 그리고 둘은 꼭 안았어요. 끝.","scene":{"pk":"jump","pf":"grin","ek":"jump","ef":"grin","deco":["hearts","confetti","sun"]}}]}];
+var TIMINGS = {"uk-sonia":{"1":{"1":[[0.0,2.51],[2.51,5.18]],"2":[[0.0,1.85],[1.85,3.74],[3.74,5.62]],"3":[[0.0,1.86],[1.86,4.06],[4.06,6.0]],"4":[[0.0,1.64],[1.64,3.94]],"5":[[0.0,2.12],[2.12,4.39]]},"10":{"1":[[0.0,3.51],[3.51,4.91],[4.91,7.27]],"2":[[0.0,2.62],[2.62,3.89],[3.89,5.57]],"3":[[0.0,2.54],[2.54,4.92]],"4":[[0.0,1.8],[1.8,3.38],[3.38,6.22]],"5":[[0.0,2.69],[2.69,5.09],[5.09,6.22]]},"11":{"1":[[0.0,2.14],[2.14,4.51]],"2":[[0.0,1.9],[1.9,3.17],[3.17,5.11]],"3":[[0.0,1.98],[1.98,4.0],[4.0,5.66]],"4":[[0.0,1.94],[1.94,3.12],[3.12,5.66]],"5":[[0.0,2.65],[2.65,4.54],[4.54,6.34]]},"12":{"1":[[0.0,2.44],[2.44,4.0],[4.0,5.54]],"2":[[0.0,2.59],[2.59,4.7]],"3":[[0.0,2.35],[2.35,4.04],[4.04,4.9]],"4":[[0.0,2.31],[2.31,4.61]],"5":[[0.0,2.38],[2.38,4.8]]},"13":{"1":[[0.0,2.01],[2.01,3.98],[3.98,6.29]],"2":[[0.0,2.52],[2.52,3.94]],"3":[[0.0,2.95],[2.95,4.91],[4.91,6.89]],"4":[[0.0,2.48],[2.48,4.06],[4.06,5.81]],"5":[[0.0,2.55],[2.55,4.58],[4.58,6.77]]},"14":{"1":[[0.0,2.64],[2.64,5.33]],"2":[[0.0,2.04],[2.04,4.25]],"3":[[0.0,2.59],[2.59,4.32]],"4":[[0.0,2.08],[2.08,4.44]],"5":[[0.0,2.81],[2.81,5.45]]},"15":{"1":[[0.0,1.88],[1.88,3.67],[3.67,5.45]],"2":[[0.0,2.49],[2.49,4.17],[4.17,5.57]],"3":[[0.0,1.66],[1.66,3.86],[3.86,6.17]],"4":[[0.0,1.62],[1.62,3.15],[3.15,5.11]],"5":[[0.0,2.26],[2.26,3.67],[3.67,6.19]]},"16":{"1":[[0.0,2.84],[2.84,4.42]],"2":[[0.0,2.5],[2.5,4.49]],"3":[[0.0,1.76],[1.76,3.88],[3.88,5.38]],"4":[[0.0,1.61],[1.61,4.8]],"5":[[0.0,2.33],[2.33,4.49],[4.49,6.17]]},"17":{"1":[[0.0,2.59],[2.59,4.22]],"2":[[0.0,3.16],[3.16,4.0],[4.0,6.43]],"3":[[0.0,3.33],[3.33,4.08],[4.08,6.38]],"4":[[0.0,2.73],[2.73,4.2],[4.2,5.81]],"5":[[0.0,2.5],[2.5,5.29],[5.29,7.3]]},"18":{"1":[[0.0,2.65],[2.65,4.33],[4.33,5.9]],"2":[[0.0,2.35],[2.35,4.61]],"3":[[0.0,2.42],[2.42,4.3]],"4":[[0.0,1.99],[1.99,4.71],[4.71,6.31]],"5":[[0.0,2.36],[2.36,4.76],[4.76,6.29]]},"19":{"1":[[0.0,1.59],[1.59,4.08]],"2":[[0.0,2.54],[2.54,4.44]],"3":[[0.0,2.41],[2.41,4.21],[4.21,6.5]],"4":[[0.0,2.74],[2.74,4.47],[4.47,5.66]],"5":[[0.0,1.98],[1.98,4.64],[4.64,6.98]]},"2":{"1":[[0.0,2.01],[2.01,3.58],[3.58,6.07]],"2":[[0.0,2.3],[2.3,3.95],[3.95,5.95]],"3":[[0.0,2.05],[2.05,4.21],[4.21,6.14]],"4":[[0.0,2.24],[2.24,4.88],[4.88,6.94]],"5":[[0.0,2.19],[2.19,3.67],[3.67,6.0]]},"20":{"1":[[0.0,2.2],[2.2,4.54]],"2":[[0.0,2.85],[2.85,5.52]],"3":[[0.0,2.59],[2.59,3.56],[3.56,5.33]],"4":[[0.0,2.83],[2.83,5.04],[5.04,6.84]],"5":[[0.0,2.25],[2.25,4.22],[4.22,6.38]]},"21":{"1":[[0.0,1.82],[1.82,3.52],[3.52,5.09]],"2":[[0.0,2.83],[2.83,4.75]],"3":[[0.0,1.74],[1.74,3.2],[3.2,4.68]],"4":[[0.0,1.57],[1.57,3.58],[3.58,5.64]],"5":[[0.0,2.99],[2.99,5.86]]},"22":{"1":[[0.0,2.67],[2.67,4.25]],"2":[[0.0,2.27],[2.27,4.49],[4.49,6.17]],"3":[[0.0,2.26],[2.26,4.03],[4.03,7.34]],"4":[[0.0,2.39],[2.39,4.36],[4.36,6.5]],"5":[[0.0,1.95],[1.95,3.82]]},"23":{"1":[[0.0,2.34],[2.34,3.85],[3.85,5.18]],"2":[[0.0,1.51],[1.51,3.04],[3.04,5.4]],"3":[[0.0,2.39],[2.39,4.92]],"4":[[0.0,2.39],[2.39,4.23],[4.23,5.64]],"5":[[0.0,2.1],[2.1,4.12],[4.12,5.81]]},"24":{"1":[[0.0,2.05],[2.05,4.73]],"2":[[0.0,2.59],[2.59,5.35]],"3":[[0.0,2.09],[2.09,3.81],[3.81,5.47]],"4":[[0.0,2.55],[2.55,4.5],[4.5,6.74]],"5":[[0.0,2.4],[2.4,4.75],[4.75,6.29]]},"25":{"1":[[0.0,2.54],[2.54,4.39]],"2":[[0.0,3.67],[3.67,5.47]],"3":[[0.0,3.69],[3.69,5.54]],"4":[[0.0,2.81],[2.81,4.66]],"5":[[0.0,2.79],[2.79,4.65],[4.65,7.01]]},"3":{"1":[[0.0,2.83],[2.83,4.3]],"2":[[0.0,2.9],[2.9,4.46]],"3":[[0.0,3.04],[3.04,5.06]],"4":[[0.0,2.21],[2.21,4.7]],"5":[[0.0,2.79],[2.79,4.88],[4.88,6.72]]},"4":{"1":[[0.0,3.41],[3.41,6.82]],"2":[[0.0,2.35],[2.35,5.02]],"3":[[0.0,3.05],[3.05,5.14]],"4":[[0.0,2.56],[2.56,3.7]],"5":[[0.0,2.31],[2.31,4.74],[4.74,6.12]]},"5":{"1":[[0.0,1.79],[1.79,3.6],[3.6,5.35]],"2":[[0.0,1.76],[1.76,4.08],[4.08,5.71]],"3":[[0.0,2.12],[2.12,4.14],[4.14,6.43]],"4":[[0.0,1.49],[1.49,3.06],[3.06,4.94]],"5":[[0.0,2.09],[2.09,4.12],[4.12,6.22]]},"6":{"1":[[0.0,2.71],[2.71,4.44]],"2":[[0.0,2.06],[2.06,4.15],[4.15,5.71]],"3":[[0.0,2.48],[2.48,4.9]],"4":[[0.0,1.95],[1.95,3.56],[3.56,5.33]],"5":[[0.0,2.38],[2.38,3.83],[3.83,5.57]]},"7":{"1":[[0.0,2.55],[2.55,4.37]],"2":[[0.0,2.54],[2.54,4.18]],"3":[[0.0,1.89],[1.89,3.59],[3.59,4.7]],"4":[[0.0,2.58],[2.58,5.33]],"5":[[0.0,2.08],[2.08,3.83],[3.83,5.11]]},"8":{"1":[[0.0,1.65],[1.65,3.58],[3.58,5.21]],"2":[[0.0,1.76],[1.76,3.0],[3.0,5.04]],"3":[[0.0,2.58],[2.58,4.7]],"4":[[0.0,2.1],[2.1,3.99],[3.99,4.82]],"5":[[0.0,2.51],[2.51,5.26]]},"9":{"1":[[0.0,2.11],[2.11,5.09]],"2":[[0.0,1.94],[1.94,4.11],[4.11,6.02]],"3":[[0.0,2.19],[2.19,4.24],[4.24,6.02]],"4":[[0.0,2.04],[2.04,3.69],[3.69,5.52]],"5":[[0.0,2.45],[2.45,4.25]]}},"us-guy":{"1":{"1":[[0.0,2.77],[2.77,5.64]],"2":[[0.0,2.25],[2.25,4.54],[4.54,6.82]],"3":[[0.0,2.24],[2.24,5.46],[5.46,7.61]],"4":[[0.0,2.09],[2.09,4.61]],"5":[[0.0,2.4],[2.4,5.93]]},"10":{"1":[[0.0,4.2],[4.2,6.38],[6.38,8.9]],"2":[[0.0,2.89],[2.89,5.06],[5.06,7.08]],"3":[[0.0,2.81],[2.81,5.54]],"4":[[0.0,2.15],[2.15,4.17],[4.17,8.4]],"5":[[0.0,2.96],[2.96,5.59],[5.59,7.82]]},"11":{"1":[[0.0,2.44],[2.44,4.94]],"2":[[0.0,2.25],[2.25,3.98],[3.98,6.26]],"3":[[0.0,2.23],[2.23,4.56],[4.56,6.7]],"4":[[0.0,2.36],[2.36,4.05],[4.05,7.54]],"5":[[0.0,2.81],[2.81,5.14],[5.14,7.46]]},"12":{"1":[[0.0,2.65],[2.65,4.65],[4.65,6.53]],"2":[[0.0,2.85],[2.85,5.26]],"3":[[0.0,2.7],[2.7,4.92],[4.92,6.41]],"4":[[0.0,2.67],[2.67,5.18]],"5":[[0.0,2.85],[2.85,5.66]]},"13":{"1":[[0.0,2.21],[2.21,4.55],[4.55,7.2]],"2":[[0.0,2.74],[2.74,4.73]],"3":[[0.0,3.23],[3.23,5.7],[5.7,8.11]],"4":[[0.0,2.73],[2.73,4.76],[4.76,7.06]],"5":[[0.0,2.74],[2.74,5.08],[5.08,8.45]]},"14":{"1":[[0.0,2.94],[2.94,5.93]],"2":[[0.0,2.42],[2.42,4.85]],"3":[[0.0,2.96],[2.96,5.21]],"4":[[0.0,2.38],[2.38,4.97]],"5":[[0.0,3.01],[3.01,6.02]]},"15":{"1":[[0.0,2.21],[2.21,4.46],[4.46,6.7]],"2":[[0.0,2.62],[2.62,4.69],[4.69,6.48]],"3":[[0.0,2.04],[2.04,4.5],[4.5,7.08]],"4":[[0.0,2.15],[2.15,4.1],[4.1,6.5]],"5":[[0.0,2.54],[2.54,4.24],[4.24,7.06]]},"16":{"1":[[0.0,3.01],[3.01,5.06]],"2":[[0.0,2.81],[2.81,5.14]],"3":[[0.0,2.19],[2.19,4.66],[4.66,6.58]],"4":[[0.0,1.94],[1.94,5.14]],"5":[[0.0,2.73],[2.73,5.16],[5.16,7.3]]},"17":{"1":[[0.0,2.86],[2.86,4.94]],"2":[[0.0,4.14],[4.14,5.54],[5.54,8.21]],"3":[[0.0,4.39],[4.39,5.7],[5.7,8.14]],"4":[[0.0,2.89],[2.89,4.86],[4.86,6.89]],"5":[[0.0,2.86],[2.86,6.53],[6.53,8.81]]},"18":{"1":[[0.0,2.95],[2.95,5.15],[5.15,7.37]],"2":[[0.0,2.65],[2.65,5.18]],"3":[[0.0,2.73],[2.73,5.06]],"4":[[0.0,2.52],[2.52,5.67],[5.67,7.92]],"5":[[0.0,2.67],[2.67,5.24],[5.24,7.42]]},"19":{"1":[[0.0,2.02],[2.02,4.97]],"2":[[0.0,2.71],[2.71,5.04]],"3":[[0.0,2.58],[2.58,4.78],[4.78,7.27]],"4":[[0.0,3.16],[3.16,5.3],[5.3,7.13]],"5":[[0.0,2.48],[2.48,5.38],[5.38,8.09]]},"2":{"1":[[0.0,2.35],[2.35,4.42],[4.42,7.08]],"2":[[0.0,2.54],[2.54,4.64],[4.64,7.01]],"3":[[0.0,2.51],[2.51,5.01],[5.01,7.39]],"4":[[0.0,2.64],[2.64,5.1],[5.1,7.56]],"5":[[0.0,2.6],[2.6,4.64],[4.64,7.15]]},"20":{"1":[[0.0,2.6],[2.6,5.3]],"2":[[0.0,2.86],[2.86,6.5]],"3":[[0.0,2.71],[2.71,4.38],[4.38,6.6]],"4":[[0.0,2.98],[2.98,5.61],[5.61,7.87]],"5":[[0.0,2.67],[2.67,4.91],[4.91,7.51]]},"21":{"1":[[0.0,2.12],[2.12,4.14],[4.14,6.05]],"2":[[0.0,2.98],[2.98,5.3]],"3":[[0.0,2.16],[2.16,4.1],[4.1,6.0]],"4":[[0.0,2.0],[2.0,4.38],[4.38,6.67]],"5":[[0.0,3.19],[3.19,6.38]]},"22":{"1":[[0.0,3.04],[3.04,5.06]],"2":[[0.0,2.4],[2.4,4.9],[4.9,7.03]],"3":[[0.0,2.59],[2.59,4.7],[4.7,8.74]],"4":[[0.0,2.67],[2.67,4.88],[4.88,7.46]],"5":[[0.0,2.19],[2.19,4.44]]},"23":{"1":[[0.0,2.6],[2.6,4.59],[4.59,6.43]],"2":[[0.0,2.01],[2.01,3.81],[3.81,7.2]],"3":[[0.0,2.71],[2.71,5.52]],"4":[[0.0,2.62],[2.62,4.48],[4.48,5.9]],"5":[[0.0,2.5],[2.5,4.6],[4.6,6.74]]},"24":{"1":[[0.0,2.49],[2.49,5.47]],"2":[[0.0,2.76],[2.76,5.71]],"3":[[0.0,2.46],[2.46,4.7],[4.7,6.74]],"4":[[0.0,2.91],[2.91,5.26],[5.26,8.57]],"5":[[0.0,2.66],[2.66,5.21],[5.21,7.25]]},"25":{"1":[[0.0,2.85],[2.85,5.11]],"2":[[0.0,4.17],[4.17,6.41]],"3":[[0.0,4.31],[4.31,6.41]],"4":[[0.0,2.94],[2.94,5.11]],"5":[[0.0,2.88],[2.88,4.99],[4.99,8.42]]},"3":{"1":[[0.0,3.19],[3.19,5.14]],"2":[[0.0,3.15],[3.15,5.21]],"3":[[0.0,3.21],[3.21,5.59]],"4":[[0.0,2.61],[2.61,5.3]],"5":[[0.0,3.06],[3.06,5.71],[5.71,7.9]]},"4":{"1":[[0.0,3.69],[3.69,7.9]],"2":[[0.0,3.34],[3.34,6.94]],"3":[[0.0,3.05],[3.05,5.57]],"4":[[0.0,2.98],[2.98,4.7]],"5":[[0.0,2.58],[2.58,5.26],[5.26,7.22]]},"5":{"1":[[0.0,2.25],[2.25,4.45],[4.45,6.7]],"2":[[0.0,2.23],[2.23,4.71],[4.71,6.89]],"3":[[0.0,2.46],[2.46,4.85],[4.85,7.44]],"4":[[0.0,1.91],[1.91,3.96],[3.96,6.24]],"5":[[0.0,2.58],[2.58,5.05],[5.05,7.58]]},"6":{"1":[[0.0,2.88],[2.88,5.02]],"2":[[0.0,2.52],[2.52,5.01],[5.01,6.96]],"3":[[0.0,2.64],[2.64,5.26]],"4":[[0.0,2.12],[2.12,4.19],[4.19,6.29]],"5":[[0.0,2.77],[2.77,4.8],[4.8,6.91]]},"7":{"1":[[0.0,2.7],[2.7,5.02]],"2":[[0.0,2.83],[2.83,4.94]],"3":[[0.0,2.19],[2.19,4.3],[4.3,6.12]],"4":[[0.0,2.74],[2.74,6.65]],"5":[[0.0,2.55],[2.55,4.78],[4.78,6.7]]},"8":{"1":[[0.0,2.23],[2.23,4.64],[4.64,6.79]],"2":[[0.0,2.24],[2.24,4.06],[4.06,6.5]],"3":[[0.0,2.73],[2.73,5.35]],"4":[[0.0,2.52],[2.52,4.88],[4.88,6.34]],"5":[[0.0,2.94],[2.94,5.93]]},"9":{"1":[[0.0,2.5],[2.5,5.57]],"2":[[0.0,2.24],[2.24,4.61],[4.61,7.01]],"3":[[0.0,2.39],[2.39,4.79],[4.79,6.94]],"4":[[0.0,2.41],[2.41,4.4],[4.4,6.7]],"5":[[0.0,2.79],[2.79,4.99]]}},"us-jenny":{"1":{"1":[[0.0,2.91],[2.91,5.9]],"2":[[0.0,2.09],[2.09,4.3],[4.3,6.43]],"3":[[0.0,2.11],[2.11,5.2],[5.2,7.46]],"4":[[0.0,2.0],[2.0,4.34]],"5":[[0.0,2.26],[2.26,5.59]]},"10":{"1":[[0.0,4.11],[4.11,6.1],[6.1,8.81]],"2":[[0.0,2.89],[2.89,4.88],[4.88,7.03]],"3":[[0.0,2.81],[2.81,5.57]],"4":[[0.0,2.08],[2.08,4.05],[4.05,8.02]],"5":[[0.0,3.01],[3.01,5.67],[5.67,7.73]]},"11":{"1":[[0.0,2.51],[2.51,5.04]],"2":[[0.0,2.27],[2.27,3.95],[3.95,6.38]],"3":[[0.0,2.06],[2.06,4.53],[4.53,6.58]],"4":[[0.0,2.21],[2.21,3.84],[3.84,7.3]],"5":[[0.0,2.86],[2.86,5.29],[5.29,7.44]]},"12":{"1":[[0.0,2.69],[2.69,4.69],[4.69,6.5]],"2":[[0.0,2.76],[2.76,5.23]],"3":[[0.0,2.67],[2.67,4.69],[4.69,6.12]],"4":[[0.0,2.8],[2.8,5.33]],"5":[[0.0,2.94],[2.94,5.69]]},"13":{"1":[[0.0,2.27],[2.27,4.53],[4.53,7.18]],"2":[[0.0,2.92],[2.92,4.8]],"3":[[0.0,3.11],[3.11,5.35],[5.35,7.73]],"4":[[0.0,2.71],[2.71,4.61],[4.61,6.65]],"5":[[0.0,2.9],[2.9,5.34],[5.34,8.4]]},"14":{"1":[[0.0,2.8],[2.8,5.71]],"2":[[0.0,2.31],[2.31,4.78]],"3":[[0.0,2.88],[2.88,5.18]],"4":[[0.0,2.36],[2.36,4.94]],"5":[[0.0,3.12],[3.12,6.14]]},"15":{"1":[[0.0,2.17],[2.17,4.29],[4.29,6.41]],"2":[[0.0,2.6],[2.6,4.64],[4.64,6.48]],"3":[[0.0,2.05],[2.05,4.54],[4.54,6.98]],"4":[[0.0,2.19],[2.19,4.14],[4.14,6.48]],"5":[[0.0,2.64],[2.64,4.35],[4.35,7.44]]},"16":{"1":[[0.0,3.19],[3.19,5.18]],"2":[[0.0,2.85],[2.85,5.18]],"3":[[0.0,2.08],[2.08,4.61],[4.61,6.53]],"4":[[0.0,1.99],[1.99,5.33]],"5":[[0.0,2.56],[2.56,4.99],[4.99,6.98]]},"17":{"1":[[0.0,3.04],[3.04,5.09]],"2":[[0.0,4.01],[4.01,5.36],[5.36,8.04]],"3":[[0.0,4.21],[4.21,5.49],[5.49,8.06]],"4":[[0.0,2.95],[2.95,4.81],[4.81,6.74]],"5":[[0.0,2.94],[2.94,6.53],[6.53,8.78]]},"18":{"1":[[0.0,3.05],[3.05,5.35],[5.35,7.34]],"2":[[0.0,2.61],[2.61,5.18]],"3":[[0.0,2.69],[2.69,4.97]],"4":[[0.0,2.3],[2.3,5.31],[5.31,7.42]],"5":[[0.0,2.71],[2.71,5.45],[5.45,7.51]]},"19":{"1":[[0.0,1.95],[1.95,5.06]],"2":[[0.0,2.79],[2.79,4.99]],"3":[[0.0,2.59],[2.59,4.78],[4.78,7.32]],"4":[[0.0,2.99],[2.99,5.06],[5.06,6.82]],"5":[[0.0,2.24],[2.24,5.41],[5.41,8.21]]},"2":{"1":[[0.0,2.21],[2.21,4.25],[4.25,7.03]],"2":[[0.0,2.48],[2.48,4.46],[4.46,6.65]],"3":[[0.0,2.33],[2.33,4.88],[4.88,7.13]],"4":[[0.0,2.52],[2.52,4.69],[4.69,7.1]],"5":[[0.0,2.66],[2.66,4.49],[4.49,7.08]]},"20":{"1":[[0.0,2.61],[2.61,5.28]],"2":[[0.0,2.94],[2.94,6.29]],"3":[[0.0,2.88],[2.88,4.36],[4.36,6.46]],"4":[[0.0,2.99],[2.99,5.61],[5.61,7.75]],"5":[[0.0,2.69],[2.69,4.94],[4.94,7.39]]},"21":{"1":[[0.0,2.11],[2.11,4.17],[4.17,6.07]],"2":[[0.0,2.95],[2.95,5.26]],"3":[[0.0,2.1],[2.1,3.96],[3.96,5.88]],"4":[[0.0,1.96],[1.96,4.2],[4.2,6.62]],"5":[[0.0,3.24],[3.24,6.5]]},"22":{"1":[[0.0,3.05],[3.05,5.06]],"2":[[0.0,2.46],[2.46,5.0],[5.0,7.1]],"3":[[0.0,2.58],[2.58,4.75],[4.75,8.59]],"4":[[0.0,2.67],[2.67,5.0],[5.0,7.44]],"5":[[0.0,2.21],[2.21,4.39]]},"23":{"1":[[0.0,2.6],[2.6,4.47],[4.47,6.26]],"2":[[0.0,1.91],[1.91,3.67],[3.67,7.06]],"3":[[0.0,2.79],[2.79,5.71]],"4":[[0.0,2.71],[2.71,4.67],[4.67,6.17]],"5":[[0.0,2.48],[2.48,4.58],[4.58,6.72]]},"24":{"1":[[0.0,2.27],[2.27,5.3]],"2":[[0.0,2.79],[2.79,5.81]],"3":[[0.0,2.38],[2.38,4.56],[4.56,6.65]],"4":[[0.0,3.06],[3.06,5.45],[5.45,8.69]],"5":[[0.0,2.67],[2.67,5.22],[5.22,7.15]]},"25":{"1":[[0.0,2.89],[2.89,5.02]],"2":[[0.0,4.19],[4.19,6.34]],"3":[[0.0,4.38],[4.38,6.53]],"4":[[0.0,3.05],[3.05,5.28]],"5":[[0.0,2.95],[2.95,4.99],[4.99,8.18]]},"3":{"1":[[0.0,3.25],[3.25,5.06]],"2":[[0.0,3.3],[3.3,5.3]],"3":[[0.0,3.12],[3.12,5.52]],"4":[[0.0,2.45],[2.45,5.04]],"5":[[0.0,2.84],[2.84,5.42],[5.42,7.66]]},"4":{"1":[[0.0,3.67],[3.67,7.58]],"2":[[0.0,3.0],[3.0,6.65]],"3":[[0.0,3.21],[3.21,5.66]],"4":[[0.0,2.92],[2.92,4.58]],"5":[[0.0,2.77],[2.77,5.69],[5.69,7.54]]},"5":{"1":[[0.0,2.14],[2.14,4.19],[4.19,6.6]],"2":[[0.0,2.09],[2.09,4.45],[4.45,6.46]],"3":[[0.0,2.36],[2.36,4.86],[4.86,7.44]],"4":[[0.0,1.86],[1.86,3.79],[3.79,6.0]],"5":[[0.0,2.38],[2.38,4.95],[4.95,7.44]]},"6":{"1":[[0.0,3.08],[3.08,5.14]],"2":[[0.0,2.27],[2.27,4.55],[4.55,6.38]],"3":[[0.0,2.67],[2.67,5.28]],"4":[[0.0,2.01],[2.01,4.0],[4.0,6.07]],"5":[[0.0,2.89],[2.89,4.79],[4.79,6.96]]},"7":{"1":[[0.0,2.9],[2.9,5.06]],"2":[[0.0,2.86],[2.86,4.94]],"3":[[0.0,2.08],[2.08,4.17],[4.17,5.83]],"4":[[0.0,2.89],[2.89,6.55]],"5":[[0.0,2.58],[2.58,4.66],[4.66,6.55]]},"8":{"1":[[0.0,2.01],[2.01,4.59],[4.59,6.62]],"2":[[0.0,2.29],[2.29,4.04],[4.04,6.31]],"3":[[0.0,2.83],[2.83,5.5]],"4":[[0.0,2.29],[2.29,4.45],[4.45,5.88]],"5":[[0.0,3.04],[3.04,6.1]]},"9":{"1":[[0.0,2.58],[2.58,5.62]],"2":[[0.0,2.2],[2.2,4.45],[4.45,6.7]],"3":[[0.0,2.52],[2.52,4.84],[4.84,7.06]],"4":[[0.0,2.39],[2.39,4.51],[4.51,6.7]],"5":[[0.0,2.94],[2.94,5.09]]}}};
 
 var SPEEDS = [0.55, 0.65, 0.75, 0.85, 1.0];
 var SPEED_DEF = 0.75;
@@ -296,7 +298,7 @@ var SLEEPS = [15, 30, 45];
 var LS = {
   fav: "ep_fav.v1", done: "ep_done.v1", night: "ep_night.v1", speed: "ep_speed.v1",
   ko: "ep_ko.v1", auto: "ep_auto.v1", cont: "ep_cont.v1", last: "ep_last.v1", sleep: "ep_sleep.v1",
-  voice: "ep_voice", accent: "ep_accent"
+  voice: "ep_voice", accent: "ep_accent", engine: "ep_engine.v1", nkey: "ep_nkey.v1"
 };
 var TABS = [
   {id:"all", label:"전체 25권"},
@@ -961,6 +963,33 @@ function paintSent(){
 }
 
 /* ---------- 음성 ---------- */
+/* 1) 고음질 신경망 음성(녹음 MP3) — 기본 엔진 */
+var NEURAL = [
+  { key: "us-jenny", flag: "🇺🇸", ko: "미국 여성", name: "Jenny", sub: "또렷하고 따뜻한 동화 구연 톤", rec: true },
+  { key: "us-guy",   flag: "🇺🇸", ko: "미국 남성", name: "Guy",   sub: "차분하고 명확한 톤" },
+  { key: "uk-sonia", flag: "🇬🇧", ko: "영국 여성", name: "Sonia", sub: "또렷한 영국식 발음" }
+];
+var NEURAL_DEF = "us-jenny";
+var AUDIO_BASE = "ep-audio/";
+function neuInfo(k){
+  for (var i = 0; i < NEURAL.length; i++){ if (NEURAL[i].key === k) return NEURAL[i]; }
+  return null;
+}
+var engine = loadStr(LS.engine, "") === "device" ? "device" : "neural";
+var nKey = (function(){ var k = loadStr(LS.nkey, ""); return neuInfo(k) ? k : NEURAL_DEF; })();
+function audSrc(k, n, pi){ return AUDIO_BASE + k + "/b" + (n < 10 ? "0" : "") + n + "_p" + (pi + 1) + ".mp3"; }
+function pageSpans(){
+  var b = curBook();
+  if (!b) return null;
+  var byBook = TIMINGS[nKey];
+  if (!byBook) return null;
+  var pages = byBook[String(b.n)];
+  if (!pages) return null;
+  var sp = pages[String(page + 1)];
+  return (sp && sp.length) ? sp : null;
+}
+
+/* 2) 기기 내장 음성(speechSynthesis) — 대체 엔진 */
 var synth = window.speechSynthesis || null;
 var voices = [], utter = null, seq = 0, silenceSince = 0, pendingRestart = -1;
 var ACCENTS = {
@@ -1019,22 +1048,29 @@ function pickVoice(){
 function paintVoice(){
   var v = pickVoice();
   var anyUS = voicesOf("us").length, anyUK = voicesOf("uk").length;
-  var bUS = $("#vUS"), bUK = $("#vUK");
-  if (bUS) bUS.classList.toggle("on", accent === "us");
-  if (bUK) bUK.classList.toggle("on", accent === "uk");
+  ["vJenny", "vGuy", "vSonia"].forEach(function(id, i){
+    var el = $("#" + id);
+    if (el) el.classList.toggle("on", engine === "neural" && nKey === NEURAL[i].key);
+  });
   var now = $("#rVoiceNow");
   if (now){
-    if (!synth) now.textContent = "이 브라우저는 읽어주기를 지원하지 않아요.";
+    if (engine === "neural"){
+      var info = neuInfo(nKey) || NEURAL[0];
+      now.innerHTML = "지금 목소리 · <b>" + info.flag + " " + info.ko + " " + info.name + "</b> · " +
+        info.sub + (info.rec ? " · 추천" : "") + " · 고음질 신경망";
+    }
+    else if (!synth) now.textContent = "이 브라우저는 읽어주기를 지원하지 않아요.";
     else if (!voices.length) now.textContent = "영어 음성을 찾는 중이에요 · 기본 음성으로 읽어요";
-    else if (v) now.innerHTML = "지금 목소리 · <b>" + (ACCENTS[regionOf(v)] || ACCENTS.other).flag + " " +
+    else if (v) now.innerHTML = "지금 목소리 · <b>📱 " + (ACCENTS[regionOf(v)] || ACCENTS.other).flag + " " +
       (v.name || "기본 음성") + "</b> (" + (v.lang || "en") + ")";
     else now.textContent = "기본 음성으로 읽어요";
   }
   var warn = $("#rVoiceWarn");
   if (warn){
     var msg = "";
-    if (synth && voices.length){
-      if (accent === "uk" && !anyUK) msg = "이 기기엔 영국 영상 음성이 없어서 다른 영어 음성으로 읽어요.";
+    if (!audioOK) msg = "녹음 음성을 못 불러와 이번에는 기기 음성으로 읽어요. 인터넷이 되면 고음질 음성으로 다시 읽어 줄게요.";
+    else if (engine === "device" && synth && voices.length){
+      if (accent === "uk" && !anyUK) msg = "이 기기엔 영국 영어 음성이 없어서 다른 영어 음성으로 읽어요.";
       else if (accent === "us" && !anyUS) msg = "이 기기엔 미국 영어 음성이 없어서 다른 영어 음성으로 읽어요.";
     }
     if (msg) warn.textContent = msg;
@@ -1045,20 +1081,34 @@ function paintVoice(){
 function saveVoicePrefs(){
   save(LS.voice, voiceURI || "");
   save(LS.accent, accent);
+  save(LS.engine, engine);
+  save(LS.nkey, nKey);
 }
 
-/* 속도나 음성을 바꾸면 지금 읽는 문장부터 새 설정으로 다시 읽는다 */
+/* 속도나 음성을 바꾸면 지금 읽는 문장부터 새 설정으로 다시 읽는다
+   (고음질 음성은 속도만 playbackRate 로 바로 바꾸고 다시 읽지 않는다) */
 function restartCurrent(){
-  if (!synth) return;
   if (!playing && !paused) return;
   var i = sentIdx >= 0 ? sentIdx : 0;
   if (paused){ pendingRestart = i; return; }
   speakSent(i);
 }
 
+function setNeural(k){
+  if (!neuInfo(k)) return;
+  if (engine !== "neural"){ try{ if (synth) synth.cancel(); }catch(e){} }
+  nKey = k; engine = "neural"; audioOK = true;
+  saveVoicePrefs();
+  paintVoice();
+  restartCurrent();
+  var info = neuInfo(k);
+  toast("목소리 " + info.flag + " " + info.ko + " " + info.name + " · 고음질");
+}
+
 function setAccent(a){
   if (!ACCENTS[a]) return;
-  accent = a; voiceURI = "";
+  accent = a; voiceURI = ""; engine = "device";
+  stopAudio();
   saveVoicePrefs();
   paintVoice();
   restartCurrent();
@@ -1066,7 +1116,7 @@ function setAccent(a){
   if (synth && voices.length && !pool.length && a !== "other"){
     toast(ACCENTS[a].flag + " " + ACCENTS[a].ko + " 음성이 이 기기에 없어 다른 영어 음성으로 읽어요");
   } else {
-    toast("목소리 " + ACCENTS[a].flag + " " + ACCENTS[a].ko + " 영어");
+    toast("기기 음성 · " + ACCENTS[a].flag + " " + ACCENTS[a].ko + " 영어");
   }
 }
 
@@ -1074,13 +1124,126 @@ function setVoice(v){
   if (!v) return;
   voiceURI = vkey(v);
   accent = regionOf(v) || "other";
+  engine = "device";
+  stopAudio();
   saveVoicePrefs();
   paintVoice();
   restartCurrent();
-  toast("목소리 " + (v.name || "기본") + " (" + (v.lang || "en") + ")");
+  toast("기기 음성 · " + (v.name || "기본") + " (" + (v.lang || "en") + ")");
+}
+
+/* ---------- 고음질 녹음 재생(HTML5 audio) ---------- */
+var au = null, auWanted = false, auStart = 0, audioOK = true, rafId = 0;
+function ensureAudio(){
+  if (au) return au;
+  var a = new Audio();
+  a.preload = "auto";
+  a.setAttribute("playsinline", "");
+  try{ a.preservesPitch = true; }catch(e){}
+  try{ a.webkitPreservesPitch = true; }catch(e){}
+  try{ a.mozPreservesPitch = true; }catch(e){}
+  a.addEventListener("loadedmetadata", function(){ if (auWanted) seekAndPlay(); });
+  a.addEventListener("timeupdate", syncAudioSent);
+  a.addEventListener("ended", onAudioEnded);
+  a.addEventListener("error", function(){ if (auWanted) audioFailed(); });
+  a.addEventListener("playing", function(){
+    if (!auWanted) return;
+    playing = true; paused = false;
+    document.body.classList.add("reading");
+    paintControls();
+    startRaf();
+  });
+  au = a;
+  return a;
+}
+function stopRaf(){ if (rafId){ cancelAnimationFrame(rafId); rafId = 0; } }
+function startRaf(){
+  stopRaf();
+  (function tick(){
+    if (!auWanted || !au || engine !== "neural"){ rafId = 0; return; }
+    syncAudioSent();
+    rafId = requestAnimationFrame(tick);
+  })();
+}
+/* 지금 재생 위치의 문장을 노란색으로 */
+function syncAudioSent(){
+  if (!au) return;
+  var sp = pageSpans();
+  if (!sp) return;
+  var t = au.currentTime, i = 0;
+  for (var j = 0; j < sp.length; j++){ if (t + 0.06 >= sp[j][0]) i = j; }
+  if (i !== sentIdx){ sentIdx = i; paintSent(); }
+}
+function seekAndPlay(){
+  var a = ensureAudio();
+  if (!auWanted) return;
+  try{ a.currentTime = auStart; }catch(e){}
+  a.playbackRate = speed;
+  var pr = a.play();
+  if (pr && pr.catch){
+    pr.catch(function(err){
+      if (!auWanted) return;
+      if (err && err.name === "NotAllowedError"){ audioFailed(); }
+    });
+  }
+}
+function stopAudio(){
+  auWanted = false;
+  if (au){ try{ au.pause(); }catch(e){} }
+  stopRaf();
+}
+function audioFailed(){
+  if (!auWanted) return;
+  auWanted = false;
+  audioOK = false;
+  stopRaf();
+  playing = false; paused = false;
+  paintVoice();
+  toast("녹음 음성을 못 불러와 기기 음성으로 읽어요");
+  deviceSay(sentIdx >= 0 ? sentIdx : 0);
+}
+function onAudioEnded(){
+  if (!auWanted) return;
+  auWanted = false;
+  stopRaf();
+  var sents = curSents();
+  sentIdx = sents.length ? sents.length - 1 : -1;
+  paintSent();
+  playing = false;
+  pageFinished();
+}
+
+/* 한 쪽 분량의 녹음 음성을 틀고, i번째 문장 위치부터 시작한다 */
+function neuralSay(i){
+  var sents = curSents();
+  if (!sents.length) return;
+  if (i >= sents.length){ pageFinished(); return; }
+  var sp = pageSpans();
+  if (!audioOK || !sp || sp.length !== sents.length){ deviceSay(i); return; }
+  var a = ensureAudio();
+  var url = audSrc(nKey, curBook().n, page);
+  seq++;
+  sentIdx = i; pendingRestart = -1;
+  playing = true; paused = false;
+  document.body.classList.add("reading");
+  paintSent(); paintControls();
+  auWanted = true;
+  auStart = sp[i][0] || 0;
+  startRaf();
+  if (a.getAttribute("src") !== url){
+    a.setAttribute("src", url);
+    a.load();
+  } else if (a.readyState >= 1){
+    seekAndPlay();
+  }
 }
 
 function speakSent(i){
+  if (engine === "neural" && audioOK){ neuralSay(i); return; }
+  deviceSay(i);
+}
+
+function deviceSay(i){
   if (!synth){ toast("이 브라우저는 읽어주기를 지원하지 않아요."); return; }
   var sents = curSents();
   if (!sents.length) return;
@@ -1120,6 +1283,7 @@ function stopSpeech(){
   seq++;
   pendingRestart = -1;
   try{ if (synth) synth.cancel(); }catch(e){}
+  stopAudio();
   playing = false; paused = false;
   document.body.classList.remove("reading");
   paintControls();
@@ -1166,6 +1330,7 @@ function goPage(p, play){
   if (!b || p < 0 || p >= b.pages.length) return;
   seq++;
   pendingRestart = -1;
+  stopAudio();
   try{ if (synth) synth.cancel(); }catch(e){}
   page = p; sentIdx = -1;
   playing = false; paused = false;
@@ -1178,6 +1343,7 @@ function openBook(i, opts){
   if (i < 0 || i >= BOOKS.length) return;
   seq++;
   pendingRestart = -1;
+  stopAudio();
   try{ if (synth) synth.cancel(); }catch(e){}
   idx = i; page = 0; sentIdx = -1;
   playing = false; paused = false;
@@ -1189,6 +1355,44 @@ function openBook(i, opts){
 }
 
 function togglePlay(){
+  if (engine === "neural" && audioOK && pageSpans()){
+    var a = ensureAudio();
+    if (playing && !paused){
+      paused = true;
+      try{ a.pause(); }catch(e){}
+      stopRaf();
+      paintControls();
+      return;
+    }
+    if (paused){
+      paused = false;
+      if (pendingRestart >= 0){
+        var ri = pendingRestart;
+        neuralSay(ri);
+        return;
+      }
+      auWanted = true;
+      if (a.ended || (a.duration && a.currentTime >= a.duration - 0.05)){
+        neuralSay(sentIdx >= 0 ? sentIdx : 0);
+        return;
+      }
+      a.playbackRate = speed;
+      var pr = a.play();
+      if (pr && pr.catch){
+        pr.catch(function(err){
+          if (err && err.name === "NotAllowedError"){ audioFailed(); }
+        });
+      }
+      playing = true;
+      document.body.classList.add("reading");
+      paintControls();
+      startRaf();
+      return;
+    }
+    var ss = curSents();
+    neuralSay((sentIdx >= 0 && sentIdx < ss.length) ? sentIdx : 0);
+    return;
+  }
   if (!synth){ toast("이 브라우저는 읽어주기를 지원하지 않아요."); return; }
   if (playing && !paused){ paused = true; try{ synth.pause(); }catch(e){} paintControls(); return; }
   if (paused){
@@ -1227,6 +1431,7 @@ setInterval(function(){
 
 /* ---------- 음성 멈춤 감시 ---------- */
 setInterval(function(){
+  if (engine === "neural" && audioOK){ silenceSince = 0; return; }
   if (!synth || !playing || paused || document.hidden){ silenceSince = 0; return; }
   if (synth.speaking || synth.pending){ silenceSince = 0; return; }
   if (!silenceSince){ silenceSince = Date.now(); return; }
@@ -1283,23 +1488,47 @@ function buildVoiceSheet(){
   sheet.appendChild(h);
   var note = document.createElement("p");
   note.className = "pnote";
-  note.textContent = (synth && voices.length)
-    ? "이 기기에 있는 영어 음성 " + voices.length + "개예요. 미국·영국 발음을 골라 보세요."
-    : "영어 음성을 찾는 중이에요. 잠시 뒤에 다시 열어 보세요.";
+  note.textContent = audioOK
+    ? "고음질 신경망 음성은 그림책용으로 미리 녹음해 두었어요. 속도를 바꿔도 목소리가 맑게 들려요."
+    : "지금은 녹음 음성을 못 불러와 기기 음성으로 읽고 있어요. 인터넷이 되면 고음질 음성으로 돌아가요.";
   sheet.appendChild(note);
 
+  var g1 = document.createElement("div");
+  g1.className = "pgrp";
+  var t1 = document.createElement("b");
+  t1.textContent = "🎧 고음질 신경망 음성";
+  g1.appendChild(t1);
+  var nb = document.createElement("div");
+  nb.className = "vcl";
+  NEURAL.forEach(function(n){
+    nb.appendChild(vbBtn(
+      n.flag + " " + n.ko + " · " + n.name + (n.rec ? " (추천)" : ""),
+      n.sub,
+      engine === "neural" && nKey === n.key,
+      function(){ setNeural(n.key); }
+    ));
+  });
+  g1.appendChild(nb);
+  sheet.appendChild(g1);
+
+  var g2 = document.createElement("div");
+  g2.className = "pgrp";
+  var t2 = document.createElement("b");
+  t2.textContent = "📱 기기 내장 음성 (인터넷 없이)";
+  g2.appendChild(t2);
   var quick = document.createElement("div");
   quick.className = "vcl";
   ["us", "uk"].forEach(function(a){
     var pool = voicesOf(a);
     quick.appendChild(vbBtn(
-      ACCENTS[a].flag + " " + ACCENTS[a].ko + " 발음으로 읽기",
-      pool.length ? "이 기기 최적 음성을 자동으로 골라요" : "이 기기에 " + ACCENTS[a].ko + " 음성이 없어요",
-      !voiceURI && accent === a,
+      ACCENTS[a].flag + " " + ACCENTS[a].ko + " 발음으로 기기 음성 읽기",
+      pool.length ? "이 기기에서 가장 좋은 음성을 자동으로 골라요" : "이 기기에 " + ACCENTS[a].ko + " 음성이 없어요",
+      engine === "device" && !voiceURI && accent === a,
       function(){ setAccent(a); }
     ));
   });
-  sheet.appendChild(quick);
+  g2.appendChild(quick);
+  sheet.appendChild(g2);
 
   ["us", "uk", "other"].forEach(function(a){
     var pool = voicesOf(a);
@@ -1312,7 +1541,8 @@ function buildVoiceSheet(){
     var box = document.createElement("div");
     box.className = "vcl";
     pool.forEach(function(v){
-      box.appendChild(vbBtn(v.name || "이름 없는 음성", v.lang || "en", !!voiceURI && vkey(v) === voiceURI, function(){ setVoice(v); }));
+      box.appendChild(vbBtn(v.name || "이름 없는 음성", v.lang || "en",
+        engine === "device" && !!voiceURI && vkey(v) === voiceURI, function(){ setVoice(v); }));
     });
     g.appendChild(box);
     sheet.appendChild(g);
@@ -1380,6 +1610,7 @@ $("#resumeBtn").onclick = function(){
 };
 $("#rBack").onclick = function(){
   seq++;
+  stopAudio();
   try{ if (synth) synth.cancel(); }catch(e){}
   playing = false; paused = false;
   document.body.classList.remove("reading");
@@ -1400,12 +1631,19 @@ $("#rSpeed").onclick = function(){
     if (v === speed) return;
     speed = v; save(LS.speed, String(v));
     paintControls();
-    restartCurrent();
+    if (engine === "neural" && audioOK && au){
+      /* 재생 중이어도 멈추지 않고 바로 속도만 바꾼다 */
+      try{ au.playbackRate = speed; }catch(e){}
+      pendingRestart = -1;
+    } else {
+      restartCurrent();
+    }
     toast("속도 " + fmtSpeed(v) + (SPEED_LABEL[v] ? " · " + SPEED_LABEL[v] : ""));
   });
 };
-$("#vUS").onclick = function(){ setAccent("us"); };
-$("#vUK").onclick = function(){ setAccent("uk"); };
+$("#vJenny").onclick = function(){ setNeural("us-jenny"); };
+$("#vGuy").onclick = function(){ setNeural("us-guy"); };
+$("#vSonia").onclick = function(){ setNeural("uk-sonia"); };
 $("#rVoice").onclick = openVoicePop;
 $("#rAuto").onclick = function(){
   autoOn = !autoOn; saveBool(LS.auto, autoOn); paintControls();
@@ -1428,6 +1666,7 @@ $("#rSleep").onclick = function(){
 $("#pop").onclick = function(e){ if (e.target.id === "pop") closePop(); };
 
 /* ---------- 시작 ---------- */
+saveVoicePrefs();
 refreshVoices();
 if (synth && synth.addEventListener) synth.addEventListener("voiceschanged", refreshVoices);
 setTimeout(refreshVoices, 300);
@@ -1450,12 +1689,19 @@ render();
 window.__ep = {
   books: BOOKS,
   speeds: SPEEDS.slice(),
+  neural: NEURAL.map(function(n){ return n.key; }),
+  timings: TIMINGS,
   state: function(){
     var v = pickVoice();
     return { idx: idx, page: page, sent: sentIdx, playing: playing, paused: paused,
              auto: autoOn, cont: contOn, speed: speed, speedLabel: fmtSpeed(speed), ko: koOn, night: night,
+             engine: engine, nkey: nKey, audioOK: audioOK, spans: pageSpans(),
              accent: accent, voice: voiceURI, voiceName: v ? v.name : "", voiceLang: v ? v.lang : "",
              voices: voices.map(function(x){ return { name: x.name, lang: x.lang, uri: vkey(x), region: regionOf(x) }; }),
+             audio: au ? { src: au.getAttribute("src") || "", url: au.src || "", time: au.currentTime,
+                          rate: au.playbackRate, duration: au.duration || 0, paused: au.paused,
+                          ready: au.readyState, wanted: auWanted, ended: au.ended,
+                          pitch: au.preservesPitch } : null,
              sleep: sleepMin, tab: tab, favs: favs.slice(), dones: dones.slice() };
   },
   open: openBook,
@@ -1463,7 +1709,12 @@ window.__ep = {
   sentences: curSents,
   setAccent: setAccent,
   setVoice: setVoice,
+  setNeural: setNeural,
   pickVoice: pickVoice,
+  audio: function(){ return ensureAudio(); },
+  timingsFor: function(k, n, pi){ return (TIMINGS[k] || {})[String(n)] ? (TIMINGS[k][String(n)][String(pi + 1)] || null) : null; },
+  sleepEnds: function(ms){ sleepEndsAt = Date.now() + ms; },
+  base: function(b){ if (b) AUDIO_BASE = b; return AUDIO_BASE; },
   synth: function(){ return synth; }
 };
 </script>
