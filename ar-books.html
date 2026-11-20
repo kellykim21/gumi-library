@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#fdf7f0" id="metaTheme">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>AR 1~2 영어 동화책 200권 · 읽어주는 동화</title>
+<style>
+  :root{
+    --bg:#fdf7f0; --card:#ffffff; --ink:#2b2521; --muted:#8a7e74;
+    --line:#efe3d6; --accent:#e0644a; --accent-ink:#ffffff;
+    --accent-soft:#fdece7; --chip:#f6efe7; --chip-ink:#5d5148;
+    --cover-a:#fde8d4; --cover-b:#f9d9c4; --shadow:0 6px 20px rgba(120,80,50,.07);
+    --night-btn:#2b2521;
+  }
+  body.night{
+    --bg:#0e131d; --card:#161e2c; --ink:#e8eefb; --muted:#94a1b8;
+    --line:#232c3d; --accent:#f2996a; --accent-ink:#20160f;
+    --accent-soft:#2a2334; --chip:#1d2536; --chip-ink:#c3cee2;
+    --cover-a:#1e2a3d; --cover-b:#243349; --shadow:0 6px 22px rgba(0,0,0,.35);
+    --night-btn:#243349;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR","Segoe UI",Roboto,sans-serif;
+    line-height:1.45; letter-spacing:-.01em;
+    padding-bottom:calc(24px + env(safe-area-inset-bottom));
+    transition:background .25s ease,color .25s ease;
+  }
+  body.playing{padding-bottom:calc(190px + env(safe-area-inset-bottom))}
+  .wrap{max-width:760px;margin:0 auto;padding:18px 14px 8px}
+  a{color:inherit}
+  button{font-family:inherit}
+
+  /* header */
+  header{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:14px}
+  .brand{font-size:19px;font-weight:800;letter-spacing:-.02em;line-height:1.25}
+  .brand em{font-style:normal;color:var(--accent)}
+  .sub{font-size:12px;color:var(--muted);margin:5px 0 0}
+  .nightbtn{
+    flex:0 0 auto;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);
+    background:var(--card);font-size:18px;cursor:pointer;color:var(--ink);
+  }
+  .nightbtn.on{background:var(--night-btn);color:#ffd9a8;border-color:transparent}
+
+  /* hero */
+  .hero{
+    border-radius:22px;padding:16px;margin-bottom:14px;
+    background:linear-gradient(140deg,#fff4e6,#ffe6d8 60%,#ffdcc9);
+    border:1px solid #f6d9c4; box-shadow:var(--shadow);
+  }
+  body.night .hero{background:linear-gradient(140deg,#1b2740,#22304a 60%,#2a3550);border-color:#2b3a55}
+  .hero-t{font-size:15px;font-weight:800;margin:0 0 4px}
+  .hero-s{font-size:12.5px;color:#7b6355;margin:0 0 12px}
+  body.night .hero-s{color:#a8b6cf}
+  .hero-row{display:flex;gap:8px;flex-wrap:wrap}
+  .cta{
+    flex:1 1 150px;border:0;border-radius:14px;padding:13px 14px;font-size:14px;font-weight:800;
+    background:var(--accent);color:#fff;cursor:pointer;box-shadow:0 6px 16px rgba(224,100,74,.28);
+  }
+  body.night .cta{color:#20160f;box-shadow:none}
+  .cta.ghost{background:rgba(255,255,255,.72);color:#7a4a36;box-shadow:none;border:1px solid rgba(224,100,74,.25)}
+  body.night .cta.ghost{background:#243150;color:#e8eefb;border-color:#33415e}
+  .hero-tip{font-size:11.5px;color:#8a6a58;margin:10px 0 0}
+  body.night .hero-tip{color:#9fb0cb}
+
+  /* sticky filters */
+  .sticky{position:sticky;top:0;z-index:15;background:var(--bg);padding:6px 0 8px;margin:0 -2px}
+  .search{position:relative}
+  .search input{
+    width:100%;border:1px solid var(--line);background:var(--card);color:var(--ink);
+    border-radius:14px;padding:12px 40px 12px 38px;font-size:15px;outline:none;
+    box-shadow:var(--shadow);
+  }
+  .search input::placeholder{color:var(--muted)}
+  .search .ico{position:absolute;left:13px;top:11px;font-size:15px;opacity:.6}
+  .search .clr{position:absolute;right:8px;top:7px;width:28px;height:28px;border:0;background:var(--chip);color:var(--chip-ink);border-radius:50%;font-size:14px;cursor:pointer}
+  .chips{display:flex;gap:7px;overflow-x:auto;padding:10px 2px 2px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{
+    flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--chip-ink);
+    border-radius:999px;padding:8px 12px;font-size:12.5px;font-weight:700;cursor:pointer;white-space:nowrap;
+  }
+  .chip .cnt{font-weight:600;opacity:.55;margin-left:3px}
+  .chip.on{background:var(--accent);color:var(--accent-ink);border-color:transparent}
+  .chip.on .cnt{opacity:.8}
+  .chip.small{padding:7px 11px;font-size:12px}
+  .countline{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;color:var(--muted);margin:10px 2px 8px}
+  .countline b{color:var(--ink);font-size:12.5px}
+
+  /* list */
+  #list{display:grid;grid-template-columns:1fr;gap:10px}
+  @media(min-width:620px){#list{grid-template-columns:1fr 1fr}}
+  .card{
+    display:grid;grid-template-columns:52px 1fr;gap:11px;align-items:start;
+    background:var(--card);border:1px solid var(--line);border-radius:18px;padding:11px;
+    box-shadow:var(--shadow);
+    transition:border-color .2s,transform .12s;
+  }
+  .card.now{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft),var(--shadow)}
+  .cover{
+    width:52px;height:52px;border-radius:14px;border:0;cursor:pointer;
+    background:linear-gradient(150deg,var(--cover-a),var(--cover-b));
+    font-size:24px;display:grid;place-items:center;line-height:1;padding:0;
+  }
+  .card h3{margin:0;font-size:14.5px;font-weight:800;line-height:1.28;letter-spacing:-.015em}
+  .card .gloss{margin:3px 0 0;font-size:12px;font-weight:700;color:var(--ink);opacity:.82}
+  .card .auth{margin:2px 0 0;font-size:11.5px;color:var(--muted)}
+  .ar{
+    display:inline-block;margin-left:6px;padding:1px 6px;border-radius:6px;
+    background:var(--accent-soft);color:var(--accent);font-size:10.5px;font-weight:800;vertical-align:1px;
+  }
+  .card .nar{
+    margin:5px 0 8px;font-size:12px;color:var(--muted);line-height:1.5;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  }
+  .acts{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  .mini{border:0;border-radius:999px;padding:7px 11px;font-size:12px;font-weight:800;cursor:pointer;background:var(--chip);color:var(--chip-ink)}
+  .mini.play{background:var(--accent);color:#fff}
+  body.night .mini.play{color:#20160f}
+  .mini.yt{background:var(--chip);color:var(--chip-ink);text-decoration:none}
+  .icon{
+    width:31px;height:31px;border-radius:50%;border:1px solid var(--line);background:var(--card);
+    font-size:13px;cursor:pointer;color:var(--muted);display:grid;place-items:center;
+  }
+  .icon.on{background:var(--accent-soft);border-color:transparent;color:var(--accent)}
+  .icon.done.on{background:#e8f3ea;color:#2f7d4e}
+  body.night .icon.done.on{background:#1d3a2a;color:#7fd6a0}
+  .badge{font-size:10.5px;font-weight:800;color:var(--accent);margin-left:6px}
+
+  /* empty */
+  .empty{text-align:center;padding:36px 16px;color:var(--muted);font-size:13.5px}
+  .empty .big{font-size:34px;display:block;margin-bottom:8px}
+
+  /* footer */
+  footer{margin:22px 2px 6px;font-size:11.5px;color:var(--muted);line-height:1.65}
+  footer b{color:var(--ink)}
+  footer details{border-top:1px solid var(--line);padding-top:10px;margin-top:6px}
+  footer summary{cursor:pointer;font-weight:700;color:var(--ink);font-size:12px}
+  footer ul{padding-left:18px;margin:8px 0 0}
+  footer li{margin-bottom:5px}
+  code{background:var(--chip);padding:1px 5px;border-radius:5px;font-size:11px}
+
+  /* player */
+  .player{
+    position:fixed;left:0;right:0;bottom:0;z-index:30;
+    background:var(--card);border-top:1px solid var(--line);
+    box-shadow:0 -8px 28px rgba(90,60,40,.13);
+    padding:9px 12px calc(9px + env(safe-area-inset-bottom));
+    transform:translateY(110%);transition:transform .28s ease;
+  }
+  body.playing .player{transform:translateY(0)}
+  .player-in{max-width:760px;margin:0 auto}
+  .p-top{display:flex;align-items:center;gap:9px;margin-bottom:7px}
+  .p-emoji{width:34px;height:34px;flex:0 0 auto;border-radius:10px;display:grid;place-items:center;font-size:17px;background:linear-gradient(150deg,var(--cover-a),var(--cover-b))}
+  .p-meta{min-width:0;flex:1}
+  .p-title{font-size:13.5px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .p-sub{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .p-close{width:30px;height:30px;border-radius:50%;border:0;background:var(--chip);color:var(--chip-ink);font-size:13px;cursor:pointer}
+  .p-ctrl{display:flex;align-items:center;justify-content:center;gap:8px}
+  .p-ctrl.main{gap:16px;margin-bottom:2px}
+  .pbtn{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:16px;cursor:pointer;display:grid;place-items:center}
+  .pbtn.big{width:56px;height:56px;border:0;background:var(--accent);color:#fff;font-size:21px;box-shadow:0 6px 16px rgba(224,100,74,.3)}
+  body.night .pbtn.big{color:#20160f}
+  .p-ctrl.sub{justify-content:space-between;margin-top:4px;gap:4px}
+  .tbtn{
+    flex:1 1 0;min-width:0;border:1px solid transparent;background:transparent;border-radius:10px;
+    padding:5px 2px;font-size:10.5px;font-weight:700;color:var(--muted);cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;gap:1px;
+  }
+  .tbtn .g{font-size:14px;line-height:1.1}
+  .tbtn.on{background:var(--accent-soft);color:var(--accent)}
+  .p-bar{height:3px;border-radius:3px;background:var(--chip);margin-top:7px;overflow:hidden}
+  body.reading .p-bar::after{content:"";display:block;height:100%;width:40%;border-radius:3px;background:var(--accent);animation:slide 1.6s ease-in-out infinite}
+  @keyframes slide{0%{transform:translateX(-100%)}100%{transform:translateX(320%)}}
+  .p-note{font-size:10.5px;color:var(--accent);margin:5px 0 0;text-align:center;min-height:12px}
+
+  /* popover */
+  .pop{
+    position:fixed;left:12px;right:12px;bottom:calc(206px + env(safe-area-inset-bottom));z-index:40;
+    background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 12px 34px rgba(40,25,15,.2);
+    padding:8px;max-width:440px;margin:0 auto;max-height:52vh;overflow:auto;
+  }
+  .pop h4{margin:4px 8px 6px;font-size:11.5px;color:var(--muted);font-weight:800}
+  .pop button{
+    width:100%;text-align:left;border:0;background:transparent;color:var(--ink);
+    padding:11px 10px;border-radius:10px;font-size:13.5px;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;gap:8px;
+  }
+  .pop button:hover{background:var(--chip)}
+  .pop button.sel{background:var(--accent-soft);color:var(--accent);font-weight:800}
+  .pop button span.s{font-size:11px;color:var(--muted)}
+
+  /* toast */
+  #toast{
+    position:fixed;left:50%;bottom:calc(26px + env(safe-area-inset-bottom));transform:translate(-50%,14px);
+    background:rgba(30,24,20,.92);color:#fff;font-size:12.5px;font-weight:600;padding:9px 14px;border-radius:999px;
+    opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:50;max-width:88vw;text-align:center;
+  }
+  #toast.show{opacity:1;transform:translate(-50%,0)}
+  body.playing #toast{bottom:calc(212px + env(safe-area-inset-bottom))}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <div class="brand">🌙 AR 1~2 <em>영어 동화책</em> 200권</div>
+      <p class="sub">주제별로 골라 담은 읽어주는 동화 · <span id="updatedTxt">2026-11-20 업데이트</span></p>
+    </div>
+    <button class="nightbtn" id="nightTop" aria-label="밤 모드" title="밤 모드">🌙</button>
+  </header>
+
+  <section class="hero">
+    <p class="hero-t">버튼 한 번이면, 영어 동화가 술술</p>
+    <p class="hero-s">고르지 않아도 괜찮아요. 200권을 차례로 읽어주고, 수면 타이머를 켜면 알아서 멈춰요.</p>
+    <div class="hero-row">
+      <button class="cta" id="heroContinue">▶︎ 이어서 듣기</button>
+      <button class="cta ghost" id="heroStart">처음부터 연속 재생</button>
+    </div>
+    <p class="hero-tip">잠자리엔 🌙 밤 모드 + ⏱ 수면 타이머를 함께 켜 보세요.</p>
+  </section>
+
+  <div class="sticky">
+    <div class="search">
+      <span class="ico">🔍</span>
+      <input id="q" type="search" inputmode="search" placeholder="책 제목·작가로 찾기 (예: Frog, Lobel, 곰)" aria-label="책 검색">
+      <button class="clr" id="qClear" aria-label="검색 지우기" hidden>✕</button>
+    </div>
+    <div class="chips" id="catChips" role="tablist" aria-label="주제"></div>
+    <div class="chips" id="levelChips" aria-label="AR 지수"></div>
+    <div class="chips" id="flagChips"></div>
+  </div>
+
+  <div class="countline">
+    <span id="countTxt"><b>200권</b> 전체</span>
+    <span id="sortHint">AR 낮은 순</span>
+  </div>
+
+  <main id="list" aria-live="polite"></main>
+  <div class="empty" id="empty" hidden>
+    <span class="big">🔍</span>
+    조건에 맞는 책이 없어요.<br>
+    <button class="mini" id="resetBtn" style="margin-top:10px">필터 초기화</button>
+  </div>
+
+  <footer>
+    <details>
+      <summary>사용 팁 · 안내</summary>
+      <ul>
+        <li>휴대폰 <b>화면이 꺼지면</b> 낭독이 멈출 수 있어요. 충전기를 꽂고 화면을 켜 두거나, 브라우저 메뉴에서 <b>홈 화면에 추가</b>해 두면 편해요.</li>
+        <li>낭독문은 원서 본문이 아니라, 아이가 알아듣기 쉬운 <b>짧은 영어 미니 스토리</b>예요. 책의 분위기와 줄거리를 살려 새로 썼어요.</li>
+        <li>AR 지수는 참고용 근사값이에요. 같은 시리즈라도 권마다 조금씩 달라요.</li>
+        <li>목소리는 기기에 설치된 영어 음성만 써요. 목록에 마음에 드는 목소리가 없으면 휴대폰 설정에서 영어 음성을 추가로 내려받을 수 있어요.</li>
+        <li>♥ 즐겨찾기와 ✓ 들은 책은 이 기기 브라우저에 저장돼요(인터넷 없어도 유지).</li>
+      </ul>
+    </details>
+    <details>
+      <summary>책 목록 업데이트하는 법 (나중에)</summary>
+      <ul>
+        <li>이 파일 아래쪽 <code>const BOOKS = [ ... ]</code> 에 한 줄만 추가하면 돼요.</li>
+        <li>형식: <code>{title: "책 제목", ko: "한국어 한 줄 설명", author: "작가", ar: 1.8, cat: "animals", narration: "네 문장에서 여섯 문장 영어 낭독문."}</code></li>
+        <li>cat 은 animals · funny · bedtime · daily · mystery · fantasy 중 하나. 넣은 책은 자동으로 목록·개수·필터에 반영돼요.</li>
+        <li>고친 뒤 <code>updatedAt</code> 날짜만 바꿔 주세요.</li>
+      </ul>
+    </details>
+    <p style="margin:10px 0 0">AR 1.0~2.9 · 200권 · 6가지 주제 · 오프라인 재생(기기 음성)</p>
+  </footer>
+</div>
+
+<div class="player" id="player" aria-label="재생기">
+  <div class="player-in">
+    <div class="p-top">
+      <div class="p-emoji" id="pEmoji">📚</div>
+      <div class="p-meta">
+        <div class="p-title" id="pTitle">책을 골라 주세요</div>
+        <div class="p-sub" id="pSub">200권 · AR 1.0~2.9</div>
+      </div>
+      <button class="p-close" id="pClose" aria-label="재생기 닫기">✕</button>
+    </div>
+    <div class="p-ctrl main">
+      <button class="pbtn" id="btnPrev" aria-label="이전 책">⏮</button>
+      <button class="pbtn big" id="btnPlay" aria-label="재생 또는 일시정지">▶︎</button>
+      <button class="pbtn" id="btnNext" aria-label="다음 책">⏭</button>
+    </div>
+    <div class="p-ctrl sub">
+      <button class="tbtn" id="btnSpeed"><span class="g">💬</span><span id="speedLbl">1.0x</span></button>
+      <button class="tbtn" id="btnTimer"><span class="g">⏱</span><span id="timerLbl">타이머</span></button>
+      <button class="tbtn" id="btnCont"><span class="g">🔁</span><span>연속</span></button>
+      <button class="tbtn" id="btnNight"><span class="g">🌙</span><span>밤</span></button>
+      <button class="tbtn" id="btnVoice"><span class="g">🎙</span><span>목소리</span></button>
+    </div>
+    <div class="p-bar" aria-hidden="true"></div>
+    <p class="p-note" id="pNote"></p>
+  </div>
+</div>
+
+<div class="pop" id="pop" hidden></div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+/* =========================================================
+   AR 1~2 영어 동화책 · 읽어주는 웹앱
+   - 낭독: 브라우저 내장 음성(Web Speech API). 외부 라이브러리 없음.
+   - 저장: 즐겨찾기/들은 책/밤 모드/속도/목소리 → localStorage
+   - 업데이트: 맨 아래 const BOOKS 에 항목을 추가하면 자동 반영.
+   ========================================================= */
+
+var UPDATED_AT = "2026-11-20";
+
+var CATS = [
+  {id:"all",     label:"전체",              emoji:"📚"},
+  {id:"animals", label:"동물 친구들",        emoji:"🐻"},
+  {id:"funny",   label:"유머·엉뚱한 모험",   emoji:"😂"},
+  {id:"bedtime", label:"잠자리·따뜻한 감성", emoji:"🌙"},
+  {id:"daily",   label:"일상·가족·학교",     emoji:"🏠"},
+  {id:"mystery", label:"추리·미스터리",      emoji:"🔍"},
+  {id:"fantasy", label:"판타지·상상·탈것",   emoji:"🚀"}
+];
+var LEVELS = [
+  {id:"all", label:"AR 전체", min:1.0, max:2.9},
+  {id:"l1",  label:"1.0~1.4", min:1.0, max:1.4},
+  {id:"l2",  label:"1.5~1.9", min:1.5, max:1.9},
+  {id:"l3",  label:"2.0~2.9", min:2.0, max:2.9}
+];
+var SPEEDS = [1.0, 0.85, 0.75];
+var SLEEPS = [15, 30, 45];
+var LS = {
+  fav:"arbooks.fav.v1", done:"arbooks.done.v1", night:"arbooks.night.v1",
+  speed:"arbooks.speed.v1", voice:"arbooks.voice.v1", cont:"arbooks.cont.v1",
+  last:"arbooks.last.v1", sleep:"arbooks.sleep.v1"
+};
+var CATMAP = {};
+CATS.forEach(function(c){ CATMAP[c.id] = c; });
+
+/* ---------- 작은 도우미 ---------- */
+function $(sel, root){ return (root || document).querySelector(sel); }
+function make(tag, cls, text){
+  var el = document.createElement(tag);
+  if (cls) el.className = cls;
+  if (text != null) el.textContent = text;
+  return el;
+}
+function loadSet(key){
+  try{ var raw = localStorage.getItem(key); if(!raw) return []; var v = JSON.parse(raw); return Array.isArray(v) ? v : []; }
+  catch(e){ return []; }
+}
+function loadNum(key, def){
+  try{ var v = parseFloat(localStorage.getItem(key)); return isFinite(v) ? v : def; }catch(e){ return def; }
+}
+function loadStr(key, def){
+  try{ var v = localStorage.getItem(key); return v == null ? def : v; }catch(e){ return def; }
+}
+function save(key, val){
+  try{ localStorage.setItem(key, typeof val === "string" ? val : JSON.stringify(val)); }catch(e){}
+}
+function toast(msg){
+  var t = $("#toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toast._t);
+  toast._t = setTimeout(function(){ t.classList.remove("show"); }, 2200);
+}
+
+/* ---------- 상태 ---------- */
+var state = {
+  q:"", cat:"all", level:"all", favOnly:false, doneOnly:false
+};
+var favs = {};
+var dones = {};
+loadSet(LS.fav).forEach(function(t){ favs[t] = true; });
+loadSet(LS.done).forEach(function(t){ dones[t] = true; });
+var speed = loadNum(LS.speed, 1.0);
+var cont = loadStr(LS.cont, "1") === "1";
+var night = loadStr(LS.night, "0") === "1";
+var voiceURI = loadStr(LS.voice, "");
+var sleepMin = loadNum(LS.sleep, 0);
+
+/* ---------- 순수 로직(테스트 대상) ---------- */
+function norm(s){
+  return String(s || "").toLowerCase().replace(/\s+/g, " ").trim();
+}
+function catLabel(id){ return CATMAP[id] ? CATMAP[id].label : id; }
+function bookKey(b){ return b.title; }
+
+function filterBooks(list, st, favMap, doneMap){
+  var q = norm(st.q);
+  var lv = null;
+  for (var i=0;i<LEVELS.length;i++){ if (LEVELS[i].id === st.level) lv = LEVELS[i]; }
+  return list.filter(function(b){
+    if (st.cat !== "all" && b.cat !== st.cat) return false;
+    if (lv && lv.id !== "all" && (b.ar < lv.min || b.ar > lv.max)) return false;
+    if (st.favOnly && !favMap[bookKey(b)]) return false;
+    if (st.doneOnly && !doneMap[bookKey(b)]) return false;
+    if (q){
+      var hay = norm([b.title, b.ko || "", b.author, catLabel(b.cat), CATMAP[b.cat] ? CATMAP[b.cat].emoji : "", b.narration].join(" "));
+      if (hay.indexOf(q) === -1) return false;
+    }
+    return true;
+  }).sort(function(a,b){
+    if (a.ar !== b.ar) return a.ar - b.ar;
+    return a.title.localeCompare(b.title);
+  });
+}
+function byTitle(t){
+  for (var i=0;i<BOOKS.length;i++) if (BOOKS[i].title === t) return i;
+  return -1;
+}
+function catEmoji(id){ return CATMAP[id] ? CATMAP[id].emoji : "📚"; }
+
+/* ---------- 음성 ---------- */
+var synth = window.speechSynthesis || null;
+var voices = [];
+var utter = null;
+var cur = -1;
+var queue = [];
+var qPos = -1;
+var playing = false;
+var paused = false;
+var reading = false;
+var sleepEndsAt = 0;
+var sleepFired = false;
+var uttSeq = 0;
+var endHandled = true;
+
+function voiceScore(v){
+  var s = 0, n = (v.name || "").toLowerCase(), l = (v.lang || "").toLowerCase();
+  if (/^en[-_]us/.test(l)) s += 3;
+  if (/^en[-_]gb/.test(l)) s += 2;
+  if (/natural|neural|premium|enhanced|siri/.test(n)) s += 4;
+  if (/google/.test(n)) s += 2;
+  if (/samantha|aria|jenny|karen|daniel|zira|ava|allison|serena|kate|moira|tessa/.test(n)) s += 3;
+  return s;
+}
+function refreshVoices(){
+  if (!synth) return;
+  try{
+    voices = (synth.getVoices() || []).filter(function(v){ return /^en([-_]|$)/i.test(v.lang || ""); });
+    voices.sort(function(a,b){ return voiceScore(b) - voiceScore(a); });
+  }catch(e){ voices = []; }
+}
+function pickVoice(){
+  if (!voices.length) return null;
+  if (voiceURI){
+    for (var i=0;i<voices.length;i++){ if ((voices[i].voiceURI || voices[i].name) === voiceURI) return voices[i]; }
+  }
+  return voices[0] || null;
+}
+
+/* ---------- 재생 ---------- */
+function queueFor(idx){
+  var list = filterBooks(BOOKS, state, favs, dones);
+  var pos = -1;
+  for (var i=0;i<list.length;i++){ if (list[i].title === BOOKS[idx].title){ pos = i; break; } }
+  if (pos === -1){
+    queue = BOOKS.map(function(_,i){ return i; });
+    qPos = idx;
+  } else {
+    queue = list.map(function(b){ return byTitle(b.title); });
+    qPos = pos;
+  }
+}
+function speak(){
+  if (!synth){ toast("이 브라우저는 읽어주기를 지원하지 않아요."); return; }
+  if (cur < 0 || !BOOKS[cur]) return;
+  var b = BOOKS[cur];
+  var mySeq = ++uttSeq;
+  endHandled = false;
+  try{ synth.cancel(); }catch(e){}
+  utter = new SpeechSynthesisUtterance(b.narration);
+  var v = pickVoice();
+  if (v) utter.voice = v;
+  utter.lang = v && v.lang ? v.lang : "en-US";
+  utter.rate = speed;
+  utter.pitch = 1;
+  utter.volume = 1;
+  utter.onstart = function(){ if (mySeq !== uttSeq) return; reading = true; document.body.classList.add("reading"); updatePlayer(); };
+  utter.onend = function(){ if (mySeq !== uttSeq) return; reading = false; document.body.classList.remove("reading"); onEnd(); };
+  utter.onerror = function(e){
+    if (mySeq !== uttSeq) return;
+    reading = false; document.body.classList.remove("reading");
+    if (e && (e.error === "interrupted" || e.error === "canceled")) return;
+    if (playing){ toast("낭독을 계속할 수 없어요. 다른 목소리를 골라 보세요."); playing = false; paused = false; updatePlayer(); }
+  };
+  playing = true; paused = false;
+  document.body.classList.add("playing");
+  updatePlayer();
+  synth.speak(utter);
+}
+function playIdx(idx, opts){
+  opts = opts || {};
+  if (idx < 0 || idx >= BOOKS.length) return;
+  if (sleepFired){ sleepFired = false; sleepMin = 0; sleepEndsAt = 0; clearInterval(setSleep._t); save(LS.sleep, "0"); }
+  cur = idx;
+  save(LS.last, String(idx));
+  if (!opts.keepQueue) queueFor(idx);
+  else {
+    qPos = queue.indexOf(idx);
+    if (qPos === -1) queueFor(idx);
+  }
+  speak();
+  render();
+  scrollToNow();
+}
+var silenceSince = 0;
+function startWatchdog(){
+  setInterval(function(){
+    if (document.hidden) { silenceSince = 0; return; }
+    if (!playing || paused || !synth || endHandled) { silenceSince = 0; return; }
+    if (synth.speaking || synth.pending) { silenceSince = 0; return; }
+    if (!silenceSince) { silenceSince = Date.now(); return; }
+    if (Date.now() - silenceSince > 1500){
+      silenceSince = 0;
+      onEnd();
+    }
+  }, 800);
+}
+function onEnd(){
+  if (endHandled) return;
+  endHandled = true;
+  if (cur >= 0) markDone(BOOKS[cur].title, true);
+  if (sleepFired){ stopAll(false); toast("수면 타이머로 멈췄어요 🌙"); return; }
+  if (cont){ nextBook(true); return; }
+  playing = false; paused = false;
+  updatePlayer(); render();
+}
+function stopAll(closeBar){
+  uttSeq++;
+  endHandled = true;
+  try{ if (synth) synth.cancel(); }catch(e){}
+  playing = false; paused = false; reading = false;
+  document.body.classList.remove("reading");
+  if (closeBar){ cur = -1; document.body.classList.remove("playing"); }
+  updatePlayer(); render();
+}
+function togglePlay(){
+  if (!synth){ toast("이 브라우저는 읽어주기를 지원하지 않아요."); return; }
+  if (!playing && !paused){
+    if (cur < 0){
+      var last = parseInt(loadStr(LS.last, "-1"), 10);
+      playIdx(isFinite(last) && last >= 0 && last < BOOKS.length ? last : 0);
+      return;
+    }
+    speak(); return;
+  }
+  if (playing && !paused){
+    try{ synth.pause(); }catch(e){}
+    paused = true; reading = false;
+    document.body.classList.remove("reading");
+  } else {
+    try{ synth.resume(); }catch(e){}
+    paused = false; reading = true;
+    document.body.classList.add("reading");
+    setTimeout(function(){
+      if (!synth.speaking && !synth.pending && playing && !paused){ speak(); }
+    }, 450);
+  }
+  updatePlayer();
+}
+function nextBook(auto){
+  if (!queue.length) queueFor(cur < 0 ? 0 : cur);
+  var p = queue.indexOf(cur);
+  if (p === -1) p = qPos;
+  var nxt = p + 1;
+  if (nxt >= queue.length){
+    if (auto && cont){ nxt = 0; }
+    else { toast("마지막 책이에요. 처음부터 다시 들으려면 🔁 연속을 켜 두세요."); playing = false; paused = false; updatePlayer(); render(); return; }
+  }
+  playIdx(queue[nxt], {keepQueue:true});
+}
+function prevBook(){
+  if (!queue.length) queueFor(cur < 0 ? 0 : cur);
+  var p = queue.indexOf(cur);
+  if (p === -1) p = qPos;
+  var prv = p - 1;
+  if (prv < 0) prv = queue.length - 1;
+  playIdx(queue[prv], {keepQueue:true});
+}
+function markDone(title, on){
+  if (on) dones[title] = true; else delete dones[title];
+  var arr = Object.keys(dones);
+  save(LS.done, arr);
+  var chip = $("#flagChips").querySelector('[data-flag="done"] .cnt');
+  if (chip) chip.textContent = arr.length ? "(" + arr.length + ")" : "";
+}
+function toggleFav(title){
+  if (favs[title]) delete favs[title]; else favs[title] = true;
+  var arr = Object.keys(favs);
+  save(LS.fav, arr);
+  var chip = $("#flagChips").querySelector('[data-flag="fav"] .cnt');
+  if (chip) chip.textContent = arr.length ? "(" + arr.length + ")" : "";
+  return !!favs[title];
+}
+function scrollToNow(){
+  var el = document.querySelector('.card.now');
+  if (el && el.scrollIntoView) el.scrollIntoView({block:"nearest", behavior:"smooth"});
+}
+
+/* ---------- 수면 타이머 ---------- */
+function sleepLabel(){
+  if (!sleepMin) return "타이머";
+  if (!sleepEndsAt) return sleepMin + "분";
+  var left = Math.max(0, Math.round((sleepEndsAt - Date.now())/60000));
+  return sleepFired ? "곧 정지" : left + "분";
+}
+function setSleep(min, quiet){
+  sleepMin = min || 0;
+  save(LS.sleep, String(sleepMin));
+  clearInterval(setSleep._t);
+  sleepFired = false;
+  if (!sleepMin){ sleepEndsAt = 0; }
+  else {
+    sleepEndsAt = Date.now() + sleepMin*60000;
+    setSleep._t = setInterval(function(){
+      if (Date.now() >= sleepEndsAt){
+        clearInterval(setSleep._t);
+        sleepFired = true;
+        if (!playing){ stopAll(false); toast("수면 타이머 " + sleepMin + "분, 재생을 멈췄어요 🌙"); }
+        else { toast("이 책이 끝나면 멈출게요 🌙"); }
+        updatePlayer();
+      } else { updateTimerBtn(); }
+    }, 1000);
+  }
+  updateTimerBtn();
+  if (!quiet) toast(sleepMin ? "수면 타이머 " + sleepMin + "분 시작 ⏱" : "수면 타이머를 껐어요");
+}
+function updateTimerBtn(){
+  var l = $("#timerLbl");
+  if (l) l.textContent = sleepLabel();
+  var b = $("#btnTimer");
+  if (b) b.classList.toggle("on", !!sleepMin);
+}
+
+/* ---------- 밤 모드 ---------- */
+function applyNight(){
+  document.body.classList.toggle("night", night);
+  var m = $("#metaTheme");
+  if (m) m.setAttribute("content", night ? "#0e131d" : "#fdf7f0");
+  var nt = $("#nightTop"); if (nt){ nt.classList.toggle("on", night); nt.textContent = night ? "☀️" : "🌙"; }
+  var bn = $("#btnNight"); if (bn) bn.classList.toggle("on", night);
+  save(LS.night, night ? "1" : "0");
+}
+
+/* ---------- 팝오버 ---------- */
+function closePop(){ var p = $("#pop"); p.hidden = true; p.innerHTML = ""; }
+function openPop(title, items){
+  var p = $("#pop");
+  p.innerHTML = "";
+  p.appendChild(make("h4", null, title));
+  items.forEach(function(it){
+    var b = make("button");
+    b.type = "button";
+    if (it.active) b.className = "sel";
+    var lab = make("span", null, it.label);
+    b.appendChild(lab);
+    if (it.side) b.appendChild(make("span", "s", it.side));
+    b.addEventListener("click", function(){ closePop(); it.onPick(); });
+    p.appendChild(b);
+  });
+  p.hidden = false;
+}
+
+/* ---------- 렌더 ---------- */
+function renderChips(){
+  var cc = $("#catChips");
+  cc.innerHTML = "";
+  CATS.forEach(function(c){
+    var n = c.id === "all" ? BOOKS.length : BOOKS.filter(function(b){ return b.cat === c.id; }).length;
+    var b = make("button", "chip" + (state.cat === c.id ? " on" : ""));
+    b.type = "button";
+    b.setAttribute("role", "tab");
+    b.setAttribute("aria-selected", state.cat === c.id ? "true" : "false");
+    b.dataset.cat = c.id;
+    b.appendChild(document.createTextNode(c.emoji + " " + c.label + " "));
+    b.appendChild(make("span", "cnt", "(" + n + ")"));
+    b.addEventListener("click", function(){ state.cat = c.id; renderChips(); render(); });
+    cc.appendChild(b);
+  });
+  var lc = $("#levelChips");
+  lc.innerHTML = "";
+  LEVELS.forEach(function(l){
+    var b = make("button", "chip small" + (state.level === l.id ? " on" : ""), l.label);
+    b.type = "button";
+    b.addEventListener("click", function(){ state.level = l.id; renderChips(); render(); });
+    lc.appendChild(b);
+  });
+  var fc = $("#flagChips");
+  fc.innerHTML = "";
+  var favN = Object.keys(favs).length, doneN = Object.keys(dones).length;
+  var f1 = make("button", "chip small" + (state.favOnly ? " on" : ""), "♥ 즐겨찾기");
+  f1.type = "button"; f1.dataset.flag = "fav";
+  f1.appendChild(make("span", "cnt", favN ? "(" + favN + ")" : ""));
+  f1.addEventListener("click", function(){ state.favOnly = !state.favOnly; renderChips(); render(); });
+  fc.appendChild(f1);
+  var f2 = make("button", "chip small" + (state.doneOnly ? " on" : ""), "✓ 들은 책");
+  f2.type = "button"; f2.dataset.flag = "done";
+  f2.appendChild(make("span", "cnt", doneN ? "(" + doneN + ")" : ""));
+  f2.addEventListener("click", function(){ state.doneOnly = !state.doneOnly; renderChips(); render(); });
+  fc.appendChild(f2);
+}
+
+function cardFor(idx){
+  var b = BOOKS[idx];
+  var card = make("article", "card" + (idx === cur ? " now" : ""));
+  card.dataset.idx = String(idx);
+
+  var cover = make("button", "cover", catEmoji(b.cat));
+  cover.type = "button";
+  cover.setAttribute("aria-label", b.title + " 읽어주기");
+  cover.addEventListener("click", function(){ playIdx(idx); });
+  card.appendChild(cover);
+
+  var meta = make("div", "meta");
+  var h = make("h3");
+  h.appendChild(document.createTextNode(b.title));
+  var ar = make("span", "ar", "AR " + b.ar.toFixed(1));
+  h.appendChild(ar);
+  meta.appendChild(h);
+  if (b.ko) meta.appendChild(make("p", "gloss", b.ko));
+  meta.appendChild(make("p", "auth", b.author + " · " + catEmoji(b.cat) + " " + catLabel(b.cat)));
+  meta.appendChild(make("p", "nar", b.narration));
+
+  var acts = make("div", "acts");
+  var play = make("button", "mini play", idx === cur && playing ? "⏸ 일시정지" : "▶ 읽어주기");
+  play.type = "button";
+  play.addEventListener("click", function(){
+    if (idx === cur && (playing || paused)) togglePlay();
+    else playIdx(idx);
+  });
+  acts.appendChild(play);
+
+  var yt = make("a", "mini yt", "▶ 유튜브 낭독");
+  yt.href = "https://www.youtube.com/results?search_query=" + encodeURIComponent(b.title + " " + b.author + " read aloud");
+  yt.target = "_blank";
+  yt.rel = "noopener noreferrer";
+  yt.setAttribute("aria-label", b.title + " 원어민 낭독 영상 유튜브에서 찾기");
+  acts.appendChild(yt);
+
+  var fav = make("button", "icon fav" + (favs[b.title] ? " on" : ""), favs[b.title] ? "♥" : "♡");
+  fav.type = "button";
+  fav.title = "즐겨찾기";
+  fav.setAttribute("aria-pressed", favs[b.title] ? "true" : "false");
+  fav.setAttribute("aria-label", "즐겨찾기");
+  fav.addEventListener("click", function(){
+    var on = toggleFav(b.title);
+    fav.textContent = on ? "♥" : "♡";
+    fav.classList.toggle("on", on);
+    fav.setAttribute("aria-pressed", on ? "true" : "false");
+    if (state.favOnly) render();
+  });
+  acts.appendChild(fav);
+
+  var done = make("button", "icon done" + (dones[b.title] ? " on" : ""), "✓");
+  done.type = "button";
+  done.title = "들은 책으로 표시";
+  done.setAttribute("aria-pressed", dones[b.title] ? "true" : "false");
+  done.setAttribute("aria-label", "들은 책 표시");
+  done.addEventListener("click", function(){
+    markDone(b.title, !dones[b.title]);
+    done.classList.toggle("on", !!dones[b.title]);
+    done.setAttribute("aria-pressed", dones[b.title] ? "true" : "false");
+    if (state.doneOnly) render();
+  });
+  acts.appendChild(done);
+
+  meta.appendChild(acts);
+  card.appendChild(meta);
+  return card;
+}
+
+function render(){
+  var list = filterBooks(BOOKS, state, favs, dones);
+  var root = $("#list");
+  root.innerHTML = "";
+  var frag = document.createDocumentFragment();
+  for (var i=0;i<list.length;i++) frag.appendChild(cardFor(byTitle(list[i].title)));
+  root.appendChild(frag);
+  $("#empty").hidden = list.length > 0;
+  var label = state.cat === "all" ? "전체" : catLabel(state.cat);
+  var filtered = list.length !== BOOKS.length || state.cat !== "all" || state.level !== "all" || !!state.q || state.favOnly || state.doneOnly;
+  $("#countTxt").innerHTML = filtered
+    ? "<b>" + list.length + "권</b> / " + BOOKS.length + "권 · " + label
+    : "<b>" + BOOKS.length + "권</b> 전체 · AR 1.0~2.9";
+  var c = $("#qClear");
+  if (c) c.hidden = !state.q;
+}
+
+function updatePlayer(){
+  var bar = document.body.classList.contains("playing");
+  if (cur < 0){ return; }
+  var b = BOOKS[cur];
+  $("#pEmoji").textContent = catEmoji(b.cat);
+  $("#pTitle").textContent = b.title;
+  var pos = queue.indexOf(cur);
+  if (pos === -1) pos = qPos;
+  $("#pSub").textContent = "AR " + b.ar.toFixed(1) + " · " + catLabel(b.cat) + " · " + (pos + 1) + "/" + (queue.length || BOOKS.length);
+  $("#btnPlay").textContent = (playing && !paused) ? "⏸" : "▶";
+  $("#btnPlay").setAttribute("aria-label", (playing && !paused) ? "일시정지" : "재생");
+  $("#speedLbl").textContent = speed.toFixed(2).replace(/0$/,"") + "x";
+  $("#btnCont").classList.toggle("on", cont);
+  $("#btnNight").classList.toggle("on", night);
+  document.body.classList.toggle("reading", reading && playing && !paused);
+  updateTimerBtn();
+  var note = "";
+  if (sleepFired && playing) note = "이 책이 끝나면 멈춰요 🌙";
+  else if (paused) note = "일시정지 · ▶ 를 누르면 이어서 읽어요";
+  $("#pNote").textContent = note;
+}
+
+/* ---------- 이벤트 ---------- */
+function wire(){
+  $("#q").addEventListener("input", function(e){
+    state.q = e.target.value;
+    render();
+  });
+  $("#qClear").addEventListener("click", function(){
+    state.q = ""; $("#q").value = ""; render(); $("#q").focus();
+  });
+  $("#resetBtn").addEventListener("click", function(){
+    state.q = ""; state.cat = "all"; state.level = "all"; state.favOnly = false; state.doneOnly = false;
+    $("#q").value = "";
+    renderChips(); render();
+  });
+  $("#heroContinue").addEventListener("click", function(){
+    var last = parseInt(loadStr(LS.last, "-1"), 10);
+    var idx = (isFinite(last) && last >= 0 && last < BOOKS.length) ? last : 0;
+    cont = true; save(LS.cont, "1");
+    playIdx(idx);
+    toast("이어서 읽어줄게요 ▶");
+  });
+  $("#heroStart").addEventListener("click", function(){
+    cont = true; save(LS.cont, "1");
+    playIdx(0);
+    toast("1번 책부터 연속으로 읽어줄게요 ▶");
+  });
+  $("#pClose").addEventListener("click", function(){ stopAll(true); });
+  $("#btnPlay").addEventListener("click", togglePlay);
+  $("#btnNext").addEventListener("click", function(){ nextBook(false); });
+  $("#btnPrev").addEventListener("click", function(){ prevBook(); });
+
+  $("#btnSpeed").addEventListener("click", function(){
+    openPop("읽는 속도", SPEEDS.map(function(s){
+      return {
+        label: s === 1 ? "1.0x 보통" : (s === 0.85 ? "0.85x 잠자리" : "0.75x 느리게"),
+        side: speed === s ? "사용 중" : "",
+        active: speed === s,
+        onPick: function(){
+          speed = s; save(LS.speed, String(s));
+          if (playing || paused) speak();
+          updatePlayer();
+        }
+      };
+    }));
+  });
+
+  $("#btnTimer").addEventListener("click", function(){
+    var items = SLEEPS.map(function(m){
+      return {label: m + "분", side: sleepMin === m ? "사용 중" : "", active: sleepMin === m,
+              onPick: function(){ setSleep(m); updatePlayer(); }};
+    });
+    items.push({label:"끄기", active: !sleepMin, onPick: function(){ setSleep(0); updatePlayer(); }});
+    openPop("수면 타이머", items);
+  });
+
+  $("#btnCont").addEventListener("click", function(){
+    cont = !cont; save(LS.cont, cont ? "1" : "0");
+    updatePlayer();
+    toast(cont ? "연속 재생 켜짐 🔁 책이 끝나면 다음 책으로 넘어가요" : "연속 재생 꺼짐");
+  });
+
+  $("#btnNight").addEventListener("click", function(){ night = !night; applyNight(); });
+  $("#nightTop").addEventListener("click", function(){ night = !night; applyNight(); });
+
+  $("#btnVoice").addEventListener("click", function(){
+    if (!synth){ toast("이 브라우저는 음성 읽기를 지원하지 않아요."); return; }
+    refreshVoices();
+    var items = [{label:"자동 (가장 좋은 영어 음성)", side: voiceURI ? "" : "사용 중", active: !voiceURI,
+                  onPick: function(){ voiceURI = ""; save(LS.voice, ""); if (playing || paused) speak(); }}];
+    if (!voices.length){
+      items.push({label:"영어 음성을 찾는 중이에요…", side:"", active:false, onPick:function(){}});
+    }
+    voices.forEach(function(v){
+      items.push({
+        label: v.name, side: (v.lang || "") + (v.default ? " · 기본" : ""),
+        active: (v.voiceURI || v.name) === voiceURI,
+        onPick: function(){ voiceURI = v.voiceURI || v.name; save(LS.voice, voiceURI); if (playing || paused) speak(); toast(v.name + " 목소리로 바꿨어요"); }
+      });
+    });
+    openPop("목소리 고르기", items);
+  });
+
+  document.addEventListener("keydown", function(e){
+    if (e.key === "Escape") closePop();
+  });
+
+  document.addEventListener("click", function(e){
+    var p = $("#pop");
+    if (p.hidden) return;
+    if (!p.contains(e.target) && !e.target.closest(".tbtn")) closePop();
+  });
+
+  if (synth){
+    refreshVoices();
+    if (typeof synth.onvoiceschanged !== "undefined"){
+      synth.addEventListener("voiceschanged", refreshVoices);
+      synth.onvoiceschanged = refreshVoices;
+    }
+    setTimeout(refreshVoices, 400);
+    setTimeout(refreshVoices, 1500);
+  }
+
+  document.addEventListener("visibilitychange", function(){
+    if (document.hidden || !synth) return;
+    silenceSince = 0;
+    if (playing && !paused && !synth.speaking && !synth.pending){
+      try{ speak(); }catch(e){}
+    }
+  });
+
+  window.addEventListener("beforeunload", function(){ try{ synth && synth.cancel(); }catch(e){} });
+}
+
+/* ---------- 데이터 자체 점검(콘솔) ---------- */
+function checkData(){
+  var seen = {}, dup = [];
+  BOOKS.forEach(function(b){
+    var k = norm(b.title);
+    if (seen[k]) dup.push(b.title);
+    seen[k] = 1;
+    if (!(b.ar >= 1.0 && b.ar <= 2.9)) console.warn("AR 범위 밖:", b.title, b.ar);
+    if (!CATMAP[b.cat]) console.warn("cat 오류:", b.title, b.cat);
+    if (!b.ko) console.warn("한국어 설명 없음:", b.title);
+  });
+  if (dup.length) console.warn("중복 제목:", dup);
+  console.info("BOOKS:", BOOKS.length, "권 / 장르:", CATS.slice(1).map(function(c){ return c.label + " " + BOOKS.filter(function(b){ return b.cat === c.id; }).length; }).join(" · "));
+}
+
+/* ---------- 시작 ---------- */
+function init(){
+  $("#updatedTxt").textContent = UPDATED_AT + " 업데이트";
+  applyNight();
+  renderChips();
+  render();
+  updatePlayer();
+  wire();
+  startWatchdog();
+  if (sleepMin){ setSleep(sleepMin, true); }
+  checkData();
+}
+
+/* =========================================================
+   책 목록 (여기에 한 줄 추가하면 앱에 바로 반영됩니다)
+   cat: animals | funny | bedtime | daily | mystery | fantasy
+   ========================================================= */
+const BOOKS = [
+  {title: "Frog and Toad Are Friends", ko: "개구리와 두꺼비의 우정", author: "Arnold Lobel", ar: 2.9, cat: "animals", narration: "Frog and Toad are best friends. Frog wakes up and runs to Toad's house. Toad is still in bed. Frog says that spring is here. Toad smiles and gets up. Friends make every day better."},
+  {title: "Frog and Toad Together", ko: "개구리와 두꺼비, 함께라서 좋아", author: "Arnold Lobel", ar: 2.9, cat: "animals", narration: "Frog and Toad do everything together. They plant seeds and make lists. Toad tries to be brave on a dark walk. Frog bakes a big batch of cookies. They share the last one. Being together is the best part."},
+  {title: "Frog and Toad All Year", ko: "사계절을 함께 보낸 두 친구", author: "Arnold Lobel", ar: 2.6, cat: "animals", narration: "Spring, summer, fall, and winter come to Frog and Toad. In winter Toad loses Frog on a sled. In summer Frog finds a lost button. One cold night Frog brings Toad a warm present. The friends stay close all year long."},
+  {title: "Days with Frog and Toad", ko: "오늘도 함께 노는 개구리와 두꺼비", author: "Arnold Lobel", ar: 2.5, cat: "animals", narration: "Toad cannot find Frog. He looks everywhere. Then he sees a note on his door. It says: I am outside. Frog is flying a kite just for fun. Toad laughs and runs out to play."},
+  {title: "Mouse Tales", ko: "아빠 생쥐의 일곱 가지 이야기", author: "Arnold Lobel", ar: 2.5, cat: "animals", narration: "A father mouse has seven children. Every night he tells them a story. One mouse swims in the sea. One mouse meets a funny old woman. The last story is just for sleeping. Seven little mice fall asleep happy."},
+  {title: "Mouse Soup", ko: "생쥐의 꾀 많은 수프 이야기", author: "Arnold Lobel", ar: 2.4, cat: "animals", narration: "A mouse is caught by a weasel. The weasel wants mouse soup. The mouse says the soup needs a story. So he tells four little stories. The weasel runs off to find the things in the stories. The mouse goes home safe."},
+  {title: "Owl at Home", ko: "부엉이의 포근한 집", author: "Arnold Lobel", ar: 2.5, cat: "animals", narration: "Owl lives in a snug little house. He invites winter in for tea. He tries to be two owls at once. He is afraid of bumps in the night. In the end Owl stays warm and safe at home."},
+  {title: "Uncle Elephant", ko: "코끼리 삼촌과 조카", author: "Arnold Lobel", ar: 2.6, cat: "animals", narration: "A little elephant loses his parents for a while. His uncle takes care of him. They sail a log boat and sing songs. Uncle Elephant says magic words. Then the parents come home. Everyone hugs."},
+  {title: "Hi! Fly Guy", ko: "벅스의 애완 파리, 플라이 가이", author: "Tedd Arnold", ar: 1.5, cat: "animals", narration: "A boy named Buzz is looking for a pet. He finds a fly with big eyes. The fly can say his name. Buzz calls him Fly Guy. Now the fly is Buzz's best friend. Everyone is surprised."},
+  {title: "Shoo, Fly Guy!", ko: "배고픈 플라이 가이", author: "Tedd Arnold", ar: 1.7, cat: "animals", narration: "Fly Guy is hungry. He looks for lunch everywhere. A lady shoos him away again and again. At last Buzz has a snack. Fly Guy finds something sweet to eat. Yummy!"},
+  {title: "Fly Guy Meets Fly Girl!", ko: "플라이 가이가 여자 친구를 만났어요", author: "Tedd Arnold", ar: 1.5, cat: "animals", narration: "Fly Guy meets a girl fly at the park. She can fly as fast as he can. They zoom and bump. Buzz says they are friends now. Fly Guy is very happy. Two flies make a great team."},
+  {title: "There Was an Old Lady Who Swallowed a Fly!", ko: "할머니가 파리를 삼켰어요!", author: "Lucille Colandro", ar: 1.9, cat: "animals", narration: "An old lady swallows a fly. It buzzes in her tummy. So she swallows a spider to catch it. Then a bird, then a cat. Her tummy gets very full. What silly fun!"},
+  {title: "There Was an Old Lady Who Swallowed a Bat!", ko: "할로윈에 박쥐를 삼킨 할머니", author: "Lucille Colandro", ar: 2.2, cat: "animals", narration: "On Halloween night an old lady swallows a bat. She swallows a cat to catch the bat. Then a ghost and a goblin. Something big pops out of her tummy. Happy Halloween, says the old lady!"},
+  {title: "The Very Hungry Caterpillar", ko: "배고픈 애벌레가 나비가 되기까지", author: "Eric Carle", ar: 2.9, cat: "animals", narration: "A tiny caterpillar is very hungry. On Monday he eats one apple. Every day he eats more. Then he builds a small house called a cocoon. He waits inside for a long time. One day he comes out as a beautiful butterfly."},
+  {title: "The Very Busy Spider", ko: "바쁜 거미가 만든 거미줄", author: "Eric Carle", ar: 1.7, cat: "animals", narration: "A spider spins her web on a fence. A horse asks her to play. A cow asks her to eat. The spider does not stop. She pulls a line and spins a thread. At last she rests and catches a fly."},
+  {title: "The Mixed-Up Chameleon", ko: "욕심 많은 카멜레온", author: "Eric Carle", ar: 2.5, cat: "animals", narration: "A chameleon can change colors. He visits the zoo and sees many animals. He wishes for a bit of each one. Soon he has flippers, wings, and horns. He cannot catch a fly. Then he feels like himself again, and he catches the fly!"},
+  {title: "Brown Bear, Brown Bear, What Do You See?", ko: "갈색 곰, 무엇을 보니?", author: "Bill Martin Jr.", ar: 1.5, cat: "animals", narration: "Brown Bear sees a red bird. The red bird sees a yellow duck. The duck sees a blue horse. The horse sees a green frog, and on and on the colors go. At the end the children see all the animals. What a colorful world!"},
+  {title: "Polar Bear, Polar Bear, What Do You Hear?", ko: "북극곰, 무엇을 들리니?", author: "Bill Martin Jr.", ar: 1.6, cat: "animals", narration: "Polar Bear hears a lion roar, and the lion hears a hippo snort. The hippo hears a flamingo flute. The flamingo hears a zebra bray. Each animal makes its own sound. Then the zookeeper hears the children. Can you make that sound too?"},
+  {title: "Panda Bear, Panda Bear, What Do You See?", ko: "판다 곰, 무엇을 보니?", author: "Bill Martin Jr.", ar: 1.7, cat: "animals", narration: "Panda Bear sees a bald eagle, and the eagle sees a water buffalo. The buffalo sees a spider monkey. The monkey sees a green sea turtle. All the animals are wild and free. Then the children see the panda. What do you see?"},
+  {title: "Baby Bear, Baby Bear, What Do You See?", ko: "아기 곰, 무엇을 보니?", author: "Bill Martin Jr.", ar: 1.8, cat: "animals", narration: "Baby Bear sees a red fox. The red fox sees a gray fox. The gray fox sees a strutting turkey. The turkey sees a mountain goat. The goat leads everyone home. Good night, Baby Bear."},
+  {title: "Are You My Mother?", ko: "아기 새가 엄마를 찾아요", author: "P.D. Eastman", ar: 1.6, cat: "animals", narration: "A baby bird falls out of his nest. He looks for his mother. He asks a kitten and a dog. He asks a cow and a boat, and he asks a big red truck. The truck lifts him up to his nest. Mother is home!"},
+  {title: "Go, Dog. Go!", ko: "강아지들, 달려라!", author: "P.D. Eastman", ar: 1.2, cat: "animals", narration: "Many dogs are on the move. Some dogs go fast, and some dogs go slow. They go up and down. They play and have a party under a tree. Then they all go to sleep. Good night, dogs."},
+  {title: "The Best Nest", ko: "새 부부의 새집 찾기", author: "P.D. Eastman", ar: 2.1, cat: "animals", narration: "Mr. Bird and Mrs. Bird need a new home. They look at a shoe and a flowerpot. They try a mailbox and a clock. None of them is right. At last they find a cozy tree. A simple nest is best."},
+  {title: "Sammy the Seal", ko: "동물원을 탈출한 물개 새미", author: "Syd Hoff", ar: 2.0, cat: "animals", narration: "Sammy the seal lives in the zoo. He is curious about the city. So he sneaks out for a day. He visits a school and eats lunch. Then he rides the bus back. The zoo is home."},
+  {title: "Grizzwold", ko: "숲을 잃은 큰 곰 그리즈월드", author: "Syd Hoff", ar: 2.0, cat: "animals", narration: "Grizzwold is a big bear. People cut down his trees. So he looks for a new home. He tries the city and the snow. Then he finds a quiet forest. This is home at last."},
+  {title: "Clifford the Big Red Dog", ko: "커다란 빨간 강아지 클리퍼드", author: "Norman Bridwell", ar: 1.4, cat: "animals", narration: "Emily has a very small puppy. She loves him very much. Her love makes him grow. Soon Clifford is huge, bigger than a house. He is too big for the bed. But there is always room in her heart."},
+  {title: "Clifford the Small Red Puppy", ko: "아주 작았던 클리퍼드", author: "Norman Bridwell", ar: 1.9, cat: "animals", narration: "Once Clifford was tiny. He fit in a basket. He ran around the yard. Emily gave him a red ball. Every day he grew and grew. Now look at him!"},
+  {title: "Clifford's Good Deeds", ko: "클리퍼드의 착한 일", author: "Norman Bridwell", ar: 2.2, cat: "animals", narration: "Clifford likes to help. He saves a kite from a tree. He stops a runaway cart. He finds a lost little boy. Everyone claps. Clifford just wags his big red tail."},
+  {title: "Clifford Takes a Trip", ko: "클리퍼드가 여행을 떠나요", author: "Norman Bridwell", ar: 1.9, cat: "animals", narration: "The family goes on a summer trip. Clifford stays home with a neighbor. But he misses everyone. So Clifford runs to the beach. He digs a giant hole and makes everyone laugh. Next time he comes along!"},
+  {title: "Biscuit", ko: "강아지 비스킷, 잘 자!", author: "Alyssa Satin Capucilli", ar: 1.1, cat: "animals", narration: "It is time for Biscuit to go to bed. Biscuit wants a snack, and he wants a drink of water. He wants his blanket, and he barks and whines. At last his little girl gives him a hug. Now Biscuit is ready. Sweet dreams!"},
+  {title: "Biscuit Finds a Friend", ko: "비스킷이 새 친구를 만났어요", author: "Alyssa Satin Capucilli", ar: 1.0, cat: "animals", narration: "Biscuit finds a little duck in the yard. The duck is lost. Biscuit wants to play, so does his new friend. They waddle and splash together. Then the duck finds its mother. Biscuit barks goodbye."},
+  {title: "Biscuit's Big Friend", ko: "비스킷의 큰 친구 샘", author: "Alyssa Satin Capucilli", ar: 1.3, cat: "animals", narration: "Biscuit meets a big dog named Sam. Sam can run and jump very high. Biscuit is small, and he cannot do what Sam does. Then Sam gets stuck in a fence. Biscuit helps him out. Small dogs are good friends too."},
+  {title: "Biscuit Goes to School", ko: "비스킷이 학교에 갔어요", author: "Alyssa Satin Capucilli", ar: 1.2, cat: "animals", narration: "Biscuit follows the girl to school. He is not allowed inside. But he wants to see the class. He peeks in at the door. The children laugh and wave. The teacher says he can visit."},
+  {title: "Bathtime for Biscuit", ko: "비스킷 목욕시키기", author: "Alyssa Satin Capucilli", ar: 1.1, cat: "animals", narration: "It is bathtime. Biscuit runs away, and he hides under the flowers. He rolls in the mud. The girl chases him everywhere. At last she picks him up. Biscuit has a bubbly bath."},
+  {title: "Kitten's First Full Moon", ko: "아기 고양이의 첫 보름달", author: "Kevin Henkes", ar: 2.0, cat: "animals", narration: "A little kitten sees the moon. She thinks it is a bowl of milk. She tries to reach it from a tree, and she falls and rolls. Then she runs to the pond to drink. The moon shakes in the water. At home, a real bowl of milk is waiting."},
+  {title: "A Color of His Own", ko: "카멜레온의 나만의 색", author: "Leo Lionni", ar: 2.0, cat: "animals", narration: "A chameleon has no color of his own. He turns red with the leaves. He turns yellow with the lemons, and he wants one color forever. Then he meets another chameleon. They stay together and change colors. Now he is never alone."},
+  {title: "Inch by Inch", ko: "한 뼘씩 재는 인치웜", author: "Leo Lionni", ar: 1.8, cat: "animals", narration: "A little inchworm measures birds. He measures a robin and a flamingo. He measures a toucan's beak. Then a hungry nightingale says: measure my song! The inchworm thinks, and he measures the song inch by inch. And he moves far away."},
+  {title: "Caps for Sale", ko: "모자 장수와 원숭이", author: "Esphyr Slobodkina", ar: 2.5, cat: "animals", narration: "A peddler sells caps on his head, and he walks and calls out. Then he sits under a tree to rest. When he wakes, his caps are gone. Monkeys in the tree wear them. He stamps his feet, and so do the monkeys. He throws his cap down, and so do they, and now he has all his caps."},
+  {title: "The Napping House", ko: "낮잠 자는 집", author: "Audrey Wood", ar: 1.6, cat: "animals", narration: "In a cozy house everyone is sleeping. A granny sleeps in a bed, and a child sleeps on the granny. A dog sleeps on the child, and a cat sleeps on the dog. A mouse sleeps on the cat. Then a flea bites the mouse. Everyone wakes up, and now the sun shines."},
+  {title: "Five Little Monkeys Jumping on the Bed", ko: "다섯 마리 원숭이 침대에서 점프", author: "Eileen Christelow", ar: 1.6, cat: "animals", narration: "Five little monkeys jump on the bed. One falls off and bumps his head. Mama calls the doctor. The doctor says: no more jumping on the bed! Then four monkeys jump, and one falls. Then three, then two, then one, and at last all five are asleep."},
+  {title: "Is Your Mama a Llama?", ko: "네 엄마는 라마니?", author: "Deborah Guarino", ar: 1.6, cat: "animals", narration: "A little llama asks a goose about her mother. The goose says her mother swims. A cow says his mother gives milk. A seal says her mother swims too. Then the llama finds his own mother. She is a llama!"},
+  {title: "The Little Mouse, the Red Ripe Strawberry, and the Big Hungry Bear", ko: "작은 생쥐와 커다란 딸기", author: "Don and Audrey Wood", ar: 1.4, cat: "animals", narration: "A little mouse finds a strawberry. It is red and ripe. Then he hears about a big hungry bear. So the mouse hides it, and he digs and builds. He puts on a disguise, and at last he shares it with you. Now the bear cannot find it!"},
+  {title: "The Three Billy Goats Gruff", ko: "세 마리 염소와 트롤", author: "Paul Galdone", ar: 2.1, cat: "animals", narration: "Three goats want to cross a bridge. A troll lives under it. The first little goat says: my brother is bigger. The second says the same. Then the big goat comes, and he butts the troll away. Now all three goats eat sweet grass."},
+  {title: "George and Martha", ko: "하마 친구 조지와 마사", author: "James Marshall", ar: 2.6, cat: "animals", narration: "George and Martha are friends. They are very different. George sneezes in Martha's soup. Martha tells a silly story. Sometimes friends need time apart. Then they say sorry, and now they are back together."},
+  {title: "Owl Babies", ko: "아기 부엉이 삼남매", author: "Martin Waddell", ar: 2.0, cat: "animals", narration: "Three baby owls wake up at night. Their mother is gone. They think she will come back. They sit on a branch and wait. They get worried, and then Mother Owl flies home. They all say: I love you, Mother."},
+  {title: "Mr. Gumpy's Outing", ko: "검피 아저씨의 보트 나들이", author: "John Burningham", ar: 1.8, cat: "animals", narration: "Mr. Gumpy goes out in his boat, and two children ask to come. A rabbit, a cat, and a dog come too. A pig and a goat and a chicken join. Do not squabble, says Mr. Gumpy. But they do, and the boat tips over! Everyone swims and laughs."},
+  {title: "Hattie and the Fox", ko: "암탉 해티와 여우", author: "Mem Fox", ar: 1.6, cat: "animals", narration: "Hattie the hen sees a fox. He is hiding in the bushes. She tells the other animals. They do not listen, and the fox comes closer. Hattie says it again and again. At last the cow says Moo, and the fox runs away."},
+  {title: "Where Is the Green Sheep?", ko: "초록 양은 어디에?", author: "Mem Fox", ar: 1.3, cat: "animals", narration: "Here is a blue sheep, and here is a red sheep. Here is a thin sheep, and here is a wide sheep. We see many kinds of sheep. But where is the green sheep? Look under the bush. Here it is, fast asleep!"},
+  {title: "There Is a Bird on Your Head!", ko: "네 머리에 새가 앉았어!", author: "Mo Willems", ar: 1.0, cat: "funny", narration: "Piggie and Gerald are friends. A bird lands on Gerald's head, and then another bird comes. They build a nest, and then they lay eggs. Gerald is very sad. Piggie says they are moving! Now there are birds on Piggie's head."},
+  {title: "We Are in a Book!", ko: "우리는 책 속에 살아!", author: "Mo Willems", ar: 1.0, cat: "funny", narration: "Gerald and Piggie find out they are in a book. They can see the reader. Piggie says the reader will turn the page. Please do not turn it yet! Then the book ends. They shout: Banana!"},
+  {title: "I Am Invited to a Party!", ko: "나 파티에 초대받았어!", author: "Mo Willems", ar: 1.1, cat: "funny", narration: "Piggie is invited to a party. She does not know what to wear. Gerald says: wear a costume. So they wear fancy clothes. They dance and sing. Everyone is ready for a party!"},
+  {title: "Can I Play Too?", ko: "나도 같이 놀아도 돼?", author: "Mo Willems", ar: 1.0, cat: "funny", narration: "Gerald and Piggie play catch. Snake wants to play too. But Snake has no arms, and they try a long throw. Snake still cannot catch, and then Gerald throws Snake. Snake catches the ball! Everybody laughs."},
+  {title: "Watch Me Throw the Ball!", ko: "내가 공 던지는 거 봐!", author: "Mo Willems", ar: 1.1, cat: "funny", narration: "Gerald is very good at throwing. Piggie wants to try, and she throws the ball behind her. She does not even look. Gerald says that was not good. But Piggie says it was fun! Fun is the best part."},
+  {title: "Let's Go for a Drive!", ko: "드라이브하러 가자!", author: "Mo Willems", ar: 1.0, cat: "funny", narration: "Piggie and Gerald want to go for a drive. They need a car, and they need a map. They need sunglasses, and they need a suitcase. They get ready for hours. Then it starts to rain. They stay home and play."},
+  {title: "Should I Share My Ice Cream?", ko: "내 아이스크림 나눠 먹을까?", author: "Mo Willems", ar: 1.2, cat: "funny", narration: "Gerald gets a big ice cream. Piggie wants some. Gerald thinks: should I share? He waits and thinks, and the ice cream melts. Piggie brings him a new one. Sharing is easy with a friend."},
+  {title: "Waiting Is Not Easy!", ko: "기다리는 건 힘들어!", author: "Mo Willems", ar: 1.1, cat: "funny", narration: "Piggie has a surprise for Gerald. He must wait. Gerald does not like waiting. He counts and stomps, and then he sees the sky. The sunset is beautiful. Waiting was worth it."},
+  {title: "Don't Let the Pigeon Drive the Bus!", ko: "비둘기야, 버스 운전하지 마!", author: "Mo Willems", ar: 1.0, cat: "funny", narration: "A bus driver asks you one thing. Do not let the pigeon drive the bus. The pigeon asks you again and again. He says he will be careful, and he gives excuses. Do not let him drive! Yay!"},
+  {title: "The Pigeon Finds a Hot Dog!", ko: "비둘기가 핫도그를 찾았어!", author: "Mo Willems", ar: 1.0, cat: "funny", narration: "The pigeon finds a hot dog. He is very happy. A little duck wants a taste. The pigeon says no, and the duck asks questions. Then the pigeon makes a deal. Two friends share a hot dog."},
+  {title: "The Pigeon Wants a Puppy!", ko: "비둘기는 강아지를 원해!", author: "Mo Willems", ar: 1.2, cat: "funny", narration: "The pigeon wants a puppy. He promises to take care of it. He says he will water it, and then a real puppy shows up. The puppy is big and toothy. The pigeon changes his mind. Maybe a walrus next time."},
+  {title: "The Duckling Gets a Cookie!?", ko: "아기 오리가 쿠키를 받았어!?", author: "Mo Willems", ar: 1.0, cat: "funny", narration: "The duckling gets a cookie with nuts. The pigeon is angry. He asks for a cookie. He says please, and nothing happens. Then the duckling gives her cookie to the pigeon. The pigeon is surprised."},
+  {title: "The Pigeon Needs a Bath!", ko: "비둘기는 목욕이 필요해!", author: "Mo Willems", ar: 1.1, cat: "funny", narration: "The pigeon smells, and a bath is ready. The pigeon says he is clean. He hides and runs. He says baths are scary. Then he steps in, and he loves the bath! He will not come out."},
+  {title: "Click, Clack, Moo: Cows That Type", ko: "소가 타자기를 두드려요", author: "Doreen Cronin", ar: 2.3, cat: "funny", narration: "Farmer Brown hears moo. The cows want electric blankets. The farmer says no, so the cows stay out. Farmer Brown makes a deal, and the cows get blankets. Then the ducks want a diving board. Oh dear."},
+  {title: "Giggle, Giggle, Quack", ko: "웃음이 나는 농장", author: "Doreen Cronin", ar: 2.3, cat: "funny", narration: "Farmer Brown leaves notes for his brother. The animals make their own plans. The pigs get pizza, and the cats get a movie. The brother does what the notes say. Farmer Brown is surprised. The farm is a fun place."},
+  {title: "Diary of a Worm", ko: "지렁이의 일기", author: "Doreen Cronin", ar: 2.8, cat: "funny", narration: "A worm tells about his days. He goes to school with ants. He cannot do the hula hoop. He helps the garden grow. His best friend is a spider. Worms are busy and useful, And they love mud."},
+  {title: "Diary of a Spider", ko: "거미의 일기", author: "Doreen Cronin", ar: 2.5, cat: "funny", narration: "A spider writes about his week. He goes to gym class. He learns to stand still, and he plays with a fly. His mom says: be careful. He is a good spider. Spiders have busy lives too."},
+  {title: "Diary of a Fly", ko: "파리의 일기", author: "Doreen Cronin", ar: 2.7, cat: "funny", narration: "A fly tells his story. On Monday he learns to fly. On Tuesday he eats something sweet. On Wednesday he nearly becomes a snack. He makes friends with a worm. Flies are fast and clever, And they love to buzz."},
+  {title: "Sheep in a Jeep", ko: "지프를 탄 양 다섯 마리", author: "Nancy Shaw", ar: 1.3, cat: "funny", narration: "Five sheep go for a ride in a jeep. The jeep goes up a hill. Then it stops. The sheep push and pull. The jeep rolls down, and what a mess! The sheep need a big drink."},
+  {title: "Sheep in a Shop", ko: "양들이 쇼핑을 가요", author: "Nancy Shaw", ar: 1.2, cat: "funny", narration: "Seven sheep go shopping. They want a birthday gift. They pick a ball and a teddy. Their money falls out. So they give some wool. The sheep get the gift, and everyone is happy."},
+  {title: "Giraffes Can't Dance", ko: "기린은 춤을 못 춰", author: "Giles Andreae", ar: 2.4, cat: "funny", narration: "Gerald the giraffe cannot dance. His legs are long and thin. At the jungle dance all the animals laugh. Gerald walks away sadly. A cricket tells him to listen to his own music. Gerald dances beautifully, and everyone cheers."},
+  {title: "Bark, George", ko: "조지, 짖어 봐!", author: "Jules Feiffer", ar: 1.4, cat: "funny", narration: "George is a puppy. His mother says: Bark, George! George opens his mouth, and out comes a meow. Out comes a quack, and out comes a moo. Then out comes a pig! George barks at last."},
+  {title: "The True Story of the 3 Little Pigs", ko: "아기 돼지 삼형제의 진짜 이야기", author: "Jon Scieszka", ar: 2.9, cat: "funny", narration: "Alexander Wolf says the old story is wrong. He was only hunting for a birthday cake. He asked his neighbors for sugar. He had a cold and he sneezed. The little houses fell down, and it was not his fault. Who knew?"},
+  {title: "Bad Kitty", ko: "나쁜 고양이", author: "Nick Bruel", ar: 2.2, cat: "funny", narration: "Bad Kitty is a cat with a bad mood. When there is no dog food, she gets angry. She tears the curtains. She scares the child, and she is very bad. Then the family brings good food. Now Kitty is nice again."},
+  {title: "Bad Kitty Gets a Bath", ko: "나쁜 고양이, 목욕하다", author: "Nick Bruel", ar: 2.4, cat: "funny", narration: "It is time for Kitty's bath. Kitty does not want one. Kitty runs upstairs and hides. The family chases her all around the house. At last Kitty is in the tub. Now Kitty is clean and soft, but Kitty is not happy."},
+  {title: "Splat the Cat", ko: "학교에 간 고양이 스플랫", author: "Rob Scotton", ar: 2.3, cat: "funny", narration: "Splat the cat is going to school for the first time. He hides his tail under his hat. He feels scared in the class. He sits by the water fountain. Nothing goes right, and then Splat makes a friend. School is fun after all."},
+  {title: "No, David!", ko: "안 돼, 데이비드!", author: "David Shannon", ar: 1.0, cat: "funny", narration: "David is a little boy with many rules. Sit down, David. Do not put that in your mouth. Do not jump on the bed. Do not play with your food. David gets in trouble all day, and then his mother hugs him: I love you, David!"},
+  {title: "David Goes to School", ko: "데이비드가 학교에 갔어요", author: "David Shannon", ar: 1.1, cat: "funny", narration: "David has a busy day at school. He chews gum in class. He speaks without raising his hand. He runs in the hall, and he draws on the desk. He stays after school. Then his teacher gives him a sticker."},
+  {title: "Duck on a Bike", ko: "오리 자전거 타기", author: "David Shannon", ar: 1.8, cat: "funny", narration: "Duck sees a bike and rides it. All the animals watch, and the cat says it is silly. The cow says it is fun. Duck rides by each animal. Then the animals find bikes. They ride together, and what a day!"},
+  {title: "This Is Not My Hat", ko: "이건 내 모자 아니야", author: "Jon Klassen", ar: 1.6, cat: "funny", narration: "A little fish has a hat on. He says: this is not my hat, and he swims away. A big fish wakes and looks for his hat. The little fish hides in the weeds, and he thinks he is safe. Hmm. Maybe not."},
+  {title: "I Want My Hat Back", ko: "내 모자 돌려줘", author: "Jon Klassen", ar: 1.4, cat: "funny", narration: "Bear has lost his hat. He asks a fox and a frog. He asks a rabbit. The rabbit says he did not see a hat. Bear thinks, and then he runs back. He finds the hat, And the rabbit is gone."},
+  {title: "Sam and Dave Dig a Hole", ko: "샘과 데이브가 구덩이를 팠어요", author: "Mac Barnett", ar: 1.9, cat: "funny", narration: "Sam and Dave dig a hole. They want to find something big. They dig deeper and deeper. A dog digs beside them, and they miss a huge diamond. They come out in a new place. Then they say: that was fun."},
+  {title: "Dragons Love Tacos", ko: "타코를 좋아하는 용", author: "Adam Rubin", ar: 2.4, cat: "funny", narration: "Dragons love tacos. They love chicken tacos and beef tacos. But they hate spicy salsa. It makes smoke come from their noses. A boy gives the dragons a party, and he makes mild salsa. Then one funny thing drops in, and the house is gone."},
+  {title: "The Book with No Pictures", ko: "그림이 없는 책", author: "B.J. Novak", ar: 1.8, cat: "funny", narration: "This book has no pictures. You must read the words out loud. The words say silly things. You have to make funny sounds. You have to sing a silly song. The child laughs a lot, and no pictures needed."},
+  {title: "Pete the Cat: I Love My White Shoes", ko: "하얀 운동화를 사랑한 고양이 피트", author: "Eric Litwin", ar: 2.0, cat: "funny", narration: "Pete the cat loves his white shoes. He walks down the street singing. He steps in strawberries, and his shoes turn red. Then blue, then brown. Pete just sings a song. Because it is all good."},
+  {title: "We Don't Eat Our Classmates", ko: "우리는 친구를 먹지 않아", author: "Ryan T. Higgins", ar: 2.3, cat: "funny", narration: "Penelope is a dinosaur. She goes to school for the first time. The children are not noodles, not lunch. Penelope wants to eat them. She must not, and it is hard to be good. A small fish helps Penelope, and now she has friends."},
+  {title: "Goodnight Moon", ko: "잘 자, 달님", author: "Margaret Wise Brown", ar: 1.8, cat: "bedtime", narration: "A little bunny says good night. The room is quiet and dark. Good night to the moon, and good night to the stars. Good night to the old lady, and good night to the house. Good night to you too. Sweet dreams."},
+  {title: "Llama Llama Red Pajama", ko: "빨간 잠옷 입은 라마", author: "Anna Dewdney", ar: 1.6, cat: "bedtime", narration: "Baby Llama is in bed. Mama is downstairs. Baby Llama calls for her. He waits, and he feels scared. Mama comes up quickly, and she says she is always near. Good night, baby llama."},
+  {title: "Time for Bed", ko: "이제 잘 시간", author: "Mem Fox", ar: 1.6, cat: "bedtime", narration: "It is time for bed. Mother cat says good night to her little cat. Mother goose says good night to her goose. Mother sheep says good night to her lamb. Everyone gets a kiss, and now it is your turn. Good night, sleep tight."},
+  {title: "Don't Let the Pigeon Stay Up Late!", ko: "비둘기야, 늦게 자지 마!", author: "Mo Willems", ar: 1.1, cat: "bedtime", narration: "The pigeon does not want to go to bed. He asks for five more minutes. He says he is not sleepy. He tries to stay awake. His eyes close, and he falls asleep. Do not let him stay up too long!"},
+  {title: "Interrupting Chicken", ko: "이야기를 방해하는 병아리", author: "David Ezra Stein", ar: 1.9, cat: "bedtime", narration: "Papa reads a bedtime story. Little Red Chicken interrupts, and she warns the characters. Do not go in there, and the story is ruined every time. Papa laughs. Then Papa wants one story without any trouble. Good night, little chicken."},
+  {title: "Goodnight, Goodnight, Construction Site", ko: "잘 자요, 공사장 트럭들", author: "Sherri Duskey Rinker", ar: 2.0, cat: "bedtime", narration: "The sun is down, and the construction site is quiet. The crane says good night. The cement mixer says good night. They wash their big machines. Then they close their eyes. Good night, you working trucks."},
+  {title: "Steam Train, Dream Train", ko: "꿈을 싣는 기차", author: "Sherri Duskey Rinker", ar: 2.0, cat: "bedtime", narration: "A steam train rolls in the night. The animals are the crew. Elephants load the cars with paint. Monkeys stack ice cream, and they fill the train with toys. Then the train goes to the dream station. Good night, train."},
+  {title: "Little Blue Truck", ko: "꼬마 파란 트럭", author: "Alice Schertle", ar: 1.6, cat: "bedtime", narration: "Little Blue Truck drives down the road. He says hello to the animals. A big dump truck pushes past. He is not friendly. Then the dump truck gets stuck in the mud. Little Blue helps him, and now they are friends."},
+  {title: "Little Blue Truck Leads the Way", ko: "꼬마 파란 트럭이 길을 열어요", author: "Alice Schertle", ar: 1.7, cat: "bedtime", narration: "Little Blue Truck goes to the city. There are cars and buses everywhere. Everyone is in a hurry. Little Blue is not, and he helps a taxi, and he helps a bus. Then everyone works together. Slow and steady is good."},
+  {title: "How Do Dinosaurs Say Good Night?", ko: "공룡은 어떻게 잘 자요?", author: "Jane Yolen", ar: 1.6, cat: "bedtime", narration: "How do dinosaurs say good night? They do not pout or cry. They do not throw their toys. They do not slam the door. They hug and kiss, and they go to bed. Dinosaurs are very good at bedtime."},
+  {title: "How Do Dinosaurs Get Well Soon?", ko: "공룡은 어떻게 병이 나아요?", author: "Jane Yolen", ar: 1.9, cat: "bedtime", narration: "What do dinosaurs do when they are sick? They do not fuss. They open their mouths for the doctor. They take their medicine. They rest in bed, and then they feel better. Good dinosaurs get well soon."},
+  {title: "Ten, Nine, Eight", ko: "열, 아홉, 여덟", author: "Molly Bang", ar: 1.9, cat: "bedtime", narration: "Ten little toes on the floor. Nine soft toys near the bed. Eight shoes in a row. The count goes down. A child gets ready for bed. Good night, ten little toes."},
+  {title: "Kiss Good Night", ko: "잘 자, 뽀뽀 한 번", author: "Amy Hest", ar: 1.5, cat: "bedtime", narration: "It is a big dark bear night. Mrs. Bear puts Little Bear to bed. She gives him a glass of milk. She reads him a book, and she tucks him in. But she forgets something. One more kiss good night."},
+  {title: "Guess How Much I Love You", ko: "얼마나 사랑하는지 알아?", author: "Sam McBratney", ar: 2.8, cat: "bedtime", narration: "Little Nutbrown Hare says: I love you this much. He holds his arms wide. Big Nutbrown Hare holds his arms wider. Little Hare hops so high. Big Hare hops higher. Then one says: I love you to the moon, And back."},
+  {title: "The Runaway Bunny", ko: "도망가는 아기 토끼", author: "Margaret Wise Brown", ar: 2.7, cat: "bedtime", narration: "A little bunny says he will run away. His mother says she will follow. If he is a fish, she will be a fisher. If he is a bird, she will be a tree. He can run anywhere. His mother is always near."},
+  {title: "Big Red Barn", ko: "커다란 빨간 헛간", author: "Margaret Wise Brown", ar: 1.9, cat: "bedtime", narration: "The big red barn sits in the sun. The animals live inside. Horses and cows and sheep, and the mice play in the hay. The children play outside. At night everyone is quiet. Good night, big red barn."},
+  {title: "Goodnight Already!", ko: "벌써 잘 시간이야?", author: "Jory John", ar: 1.4, cat: "bedtime", narration: "Bear is very tired, and he wants to sleep. Duck is not tired at all. Duck knocks on the door. Duck wants to talk, and he makes tea, and he reads a story. Bear cannot sleep. Then Duck falls asleep on Bear's couch."},
+  {title: "I Love You, Stinky Face", ko: "냄새나는 얼굴도 사랑해", author: "Lisa McCourt", ar: 1.9, cat: "bedtime", narration: "A child asks his mother a question. What if I were a scary monster? She says she would love him still. What if I were a skunk? A stinky face, and she says she would. Mothers love their children always."},
+  {title: "The Going to Bed Book", ko: "잠자리에 드는 책", author: "Sandra Boynton", ar: 1.0, cat: "bedtime", narration: "The sun is down, and the animals go to bed. They take a bath, and they brush their teeth. They put on pajamas. They do exercises first. Then they rock on the sea. Good night, sleepy animals."},
+  {title: "Pajama Time!", ko: "파자마 타임!", author: "Sandra Boynton", ar: 1.2, cat: "bedtime", narration: "It is pajama time. Everyone puts on pajamas. Blue pajamas, red pajamas. Silly pajamas, and they jump and dance. Then they say nighty night. Shhh, it is sleep time."},
+  {title: "Little Owl's Night", ko: "아기 부엉이의 밤", author: "Divya Srinivasan", ar: 1.9, cat: "bedtime", narration: "Little Owl wakes when the sun goes down. He flies in the dark forest. He sees a raccoon and a skunk. He sees the moon and the stars. Then the sky gets light. Good night, little owl, and it is time for sleep."},
+  {title: "Happy Birthday, Moon", ko: "생일 축하해, 달님", author: "Frank Asch", ar: 1.6, cat: "bedtime", narration: "Bear finds the moon above the trees. He thinks it is his friend, and he asks the moon questions. The moon answers like an echo. Bear gives the moon a hat. Then the wind blows it away. Good night, Moon."},
+  {title: "Milk and Cookies", ko: "우유와 쿠키", author: "Frank Asch", ar: 1.7, cat: "bedtime", narration: "Bear visits his grandma. There are milk and cookies. Grandma says: wash your hands first. Bear eats too many cookies, and then his tummy hurts. Grandma gives him a hug. Next time he will share."},
+  {title: "Bear Snores On", ko: "곰이 쿨쿨 자요", author: "Karma Wilson", ar: 1.8, cat: "bedtime", narration: "Bear sleeps in his cave. It is cold outside. A mouse comes in and makes a fire. More animals come in, and they eat and laugh. Bear wakes up, and he is not alone. They all eat together."},
+  {title: "Bear Wants More", ko: "곰은 더 먹고 싶어", author: "Karma Wilson", ar: 2.2, cat: "bedtime", narration: "Bear wakes up from a long sleep. He is very hungry, and he eats berries and clover. He is still hungry. His friends make a big lunch. Then Bear wants more! But he cannot fit through the door."},
+  {title: "Bear Feels Sick", ko: "곰이 아파요", author: "Karma Wilson", ar: 2.0, cat: "bedtime", narration: "Bear is sick, and his head hurts. His friends come to help. They bring soup and tea. They sing to him softly, and they keep him warm. Bear feels better, and then his friends get sick. Now Bear helps them."},
+  {title: "The Full Moon at the Napping House", ko: "낮잠 집의 보름달", author: "Audrey Wood", ar: 2.4, cat: "bedtime", narration: "The house is quiet in the moonlight. A flea is hopping on a mouse. Then a child moves and the cat growls. The whole house wakes up. They run outside to see the full moon. Everyone laughs and dances, and then they sleep again."},
+  {title: "Jamberry", ko: "베리 숲 산책", author: "Bruce Degen", ar: 1.9, cat: "bedtime", narration: "A boy and a bear walk in berry land. They pick berries everywhere. Berries in a dish and in a river. A berry band plays. They eat a big berry pie. What a sweet, sweet walk."},
+  {title: "A Book of Sleep", ko: "잠자는 동물들의 책", author: "Il Sung Na", ar: 1.5, cat: "bedtime", narration: "When the sun goes away, animals go to sleep. Some sleep in the tall grass, and some sleep in a tree. Some sleep with one eye open. Some sleep all day, and the owl stays awake. Then the sun comes up. Good morning."},
+  {title: "Sleep Like a Tiger", ko: "호랑이처럼 자요", author: "Mary Logue", ar: 2.5, cat: "bedtime", narration: "A little girl does not want to go to bed. Her parents say: how do tigers sleep, and she thinks. Tigers curl up and close their eyes. So do whales and stars. At last the girl curls up. Good night, little tiger."},
+  {title: "Knuffle Bunny", ko: "트리시와 토끼 인형", author: "Mo Willems", ar: 1.6, cat: "daily", narration: "Trixie goes to the laundromat with her dad. She brings her favorite toy. Something goes wrong on the way home. Trixie tries to tell her dad, but she cannot speak yet. She cries and cries, and then they run back. Knuffle Bunny was there!"},
+  {title: "Knuffle Bunny Too", ko: "토끼 인형이 둘이야!", author: "Mo Willems", ar: 2.4, cat: "daily", narration: "Trixie takes Knuffle Bunny to school. Another girl has the same toy. The bunnies get mixed up. Trixie is sad at home. That night her dad calls the other dad. They meet in the middle, and now the toys go home again."},
+  {title: "Pete the Cat: Rocking in My School Shoes", ko: "학교 신발 신은 피트", author: "Eric Litwin", ar: 2.2, cat: "daily", narration: "Pete puts on his school shoes. He sings as he walks. He sees a library and a lunchroom. He is not scared, and he reads and eats and plays. He keeps singing. School is cool."},
+  {title: "Pete the Cat and His Four Groovy Buttons", ko: "피트의 단추 네 개", author: "Eric Litwin", ar: 2.2, cat: "daily", narration: "Pete has four buttons on his shirt. One pops off, and he keeps singing. Three buttons, then two, then one. All the buttons are gone. Then his belly button shows. Pete still sings: buttons come and buttons go."},
+  {title: "The Snowy Day", ko: "눈 내린 날", author: "Ezra Jack Keats", ar: 1.9, cat: "daily", narration: "Peter wakes up to snow, and the city is white. He walks and makes tracks. He slides down a hill. He makes a snowman. He takes a snowball home in his pocket. It melts, but the snow will come again."},
+  {title: "Peter's Chair", ko: "피터의 의자", author: "Ezra Jack Keats", ar: 1.8, cat: "daily", narration: "Peter has a new sister. Everything is pink now, and his old chair is painted pink. Peter does not want that. He takes his chair and sits outside. Then he thinks, and he sits in a bigger chair. He gives his small chair to his sister."},
+  {title: "Whistle for Willie", ko: "피터의 휘파람", author: "Ezra Jack Keats", ar: 2.5, cat: "daily", narration: "Peter wants to whistle for his dog. He tries to whistle all day. He tries while he runs, and he tries in a box. Then one day he whistles. Willie runs to him. Peter is so proud."},
+  {title: "Just for You", ko: "엄마, 그건 너를 위한 거예요", author: "Mercer Mayer", ar: 1.9, cat: "daily", narration: "Little Critter tries to help his mother. He brings flowers. He drops them on the way. He makes breakfast, and it burns. He tries to be good. His mother says: you are wonderful just for you."},
+  {title: "All by Myself", ko: "혼자서도 잘해요", author: "Mercer Mayer", ar: 1.3, cat: "daily", narration: "Little Critter can do many things alone. He can put on his socks. He can brush his hair, and he can brush his teeth. He can even dress his little sister. Now he is proud. Where is he?"},
+  {title: "I Just Forgot", ko: "깜빡 잊었어요", author: "Mercer Mayer", ar: 1.9, cat: "daily", narration: "Little Critter forgets some things. He remembers to feed the fish. He forgets to clean his room. He remembers his lunch, and he forgets his coat. His mother says: that is okay. Just try again."},
+  {title: "The New Baby", ko: "아기가 생겼어요", author: "Mercer Mayer", ar: 1.9, cat: "daily", narration: "Little Critter has a new sister. She is small and loud, and everyone loves her. Little Critter helps with the baby. He gives her a toy. He tries to be gentle. Being a big brother is hard but good."},
+  {title: "Froggy Gets Dressed", ko: "개구리야, 옷 입자", author: "Jonathan London", ar: 2.0, cat: "daily", narration: "Froggy wakes up to snow. He wants to play, so he gets dressed. Then he remembers something. He goes back inside again and again. Boots, coat, hat, and scarf. Then he plays in the snow."},
+  {title: "Froggy Goes to School", ko: "개구리의 첫 학교생활", author: "Jonathan London", ar: 2.4, cat: "daily", narration: "Froggy is worried. It is his first day at school. He forgets his backpack. He wears his underwear outside! Everyone laughs, and the teacher laughs too. Then Froggy has a very good day."},
+  {title: "The Kissing Hand", ko: "뽀뽀하는 손", author: "Audrey Penn", ar: 2.7, cat: "daily", narration: "Chester the raccoon is starting school. He wants to stay home. His mother kisses his hand. Now he has a secret. When he misses her, he will press his hand to his cheek. That is her love."},
+  {title: "Miss Bindergarten Gets Ready for Kindergarten", ko: "유치원 가는 날", author: "Joseph Slate", ar: 2.2, cat: "daily", narration: "The teacher gets ready for school. She puts up pencils and paper. The children get ready for school. They brush their teeth and pack bags. The class is ready. Now they will learn and play."},
+  {title: "Bedtime for Frances", ko: "프란시스의 잠자리", author: "Russell Hoban", ar: 2.7, cat: "daily", narration: "Frances is a little badger, and it is bedtime. She asks for a glass of milk. She asks for another story. She sees a ghost in her room. Her parents come and say good night. At last Frances sleeps."},
+  {title: "Bread and Jam for Frances", ko: "빵과 잼만 먹을래", author: "Russell Hoban", ar: 2.5, cat: "daily", narration: "Frances loves bread and jam, and she eats it every day. She says she will never eat anything else. Her mother agrees. Now Frances eats bread and jam for every meal. Soon she is tired of it, and she tries something new. Yum!"},
+  {title: "A Bargain for Frances", ko: "프란시스의 거래", author: "Russell Hoban", ar: 2.5, cat: "daily", narration: "Frances and Thelma are friends. Thelma sells Frances a pen, and it is a trick. Frances thinks about it. She makes a fair trade. Thelma is surprised. Now they can play nicely together."},
+  {title: "Wemberly Worried", ko: "걱정 많은 웸버리", author: "Kevin Henkes", ar: 2.7, cat: "daily", narration: "Wemberly worries about everything. She worries about school. She worries about her doll, and her parents say: try it. Wemberly goes to school. She meets a girl who worries too. Now school is a good place."},
+  {title: "Owen", ko: "오웬의 담요", author: "Kevin Henkes", ar: 2.5, cat: "daily", narration: "Owen carries his blanket everywhere. His parents say he cannot take it to school. Owen and his blanket do everything together. Then his mother has an idea. She cuts the blanket into many small pieces. Now Owen can always keep it."},
+  {title: "Sheila Rae, the Brave", ko: "용감한 실라 래", author: "Kevin Henkes", ar: 2.3, cat: "daily", narration: "Sheila Rae is not afraid of anything. She walks home through the dark. She says she is brave. Then she gets lost. Her little sister knows the way. Sometimes brave means asking for help."},
+  {title: "The Family Book", ko: "우리 가족 이야기", author: "Todd Parr", ar: 1.7, cat: "daily", narration: "Families come in many kinds. Some families are big, and some are small. Some have one mom or two. Some live up high, some far away. All families like to hug. All families are special."},
+  {title: "It's Okay to Be Different", ko: "달라도 괜찮아", author: "Todd Parr", ar: 1.8, cat: "daily", narration: "It is okay to have a different nose. It is okay to need a wheelchair. It is okay to be a different color. It is okay to have a bad day. Everyone is different. And that is okay."},
+  {title: "The Doorbell Rang", ko: "초인종이 울려요", author: "Pat Hutchins", ar: 1.9, cat: "daily", narration: "Mother makes cookies, and the children share them. The doorbell rings, and six friends come in. Then more friends come. There are fewer cookies each time. Then the doorbell rings again. Grandma brings more cookies, and now everyone gets one."},
+  {title: "Titch", ko: "꼬마 티치", author: "Pat Hutchins", ar: 1.4, cat: "daily", narration: "Titch is the smallest, and his brother has a big bike. His sister has a big kite. Titch has nothing big. But Titch has a small seed. He waters it and waits. It grows into a big sunflower."},
+  {title: "Mercy Watson to the Rescue", ko: "돼지 머시가 구했어요", author: "Kate DiCamillo", ar: 2.7, cat: "daily", narration: "Mercy the pig loves toast. She lives with Mr. and Mrs. Watson. One night the bed breaks. Mercy runs to the neighbors. They think it is a monster. Then everyone follows her, and she is a hero!"},
+  {title: "Mercy Watson Goes for a Ride", ko: "머시가 운전을 해요", author: "Kate DiCamillo", ar: 2.8, cat: "daily", narration: "Mr. Watson drives the car to town. Mercy wants to drive. She climbs in the front, and the car goes fast! A police dog stops them. Mercy honks the horn. Then they go home for toast."},
+  {title: "Mercy Watson Fights Crime", ko: "머시가 도둑을 잡았어요", author: "Kate DiCamillo", ar: 2.9, cat: "daily", narration: "A thief comes into the kitchen. He takes the silver. Mercy sees the toast. The thief smells the toast. Mercy wants toast too, and the thief runs away. Mercy saves the day."},
+  {title: "Mercy Watson: Princess in Disguise", ko: "공주로 변장한 머시", author: "Kate DiCamillo", ar: 2.8, cat: "daily", narration: "It is Halloween. Mrs. Watson makes Mercy a princess costume. Mercy does not want it. She goes to her friends' house. They give her a treat. Everyone sees her costume, and what a princess!"},
+  {title: "Junie B. Jones and the Stupid Smelly Bus", ko: "주니 B.와 시끄러운 버스", author: "Barbara Park", ar: 2.9, cat: "daily", narration: "Junie B, and is going to kindergarten. She is scared of the bus. The bus is loud and smelly. She does not want to get on. She hides in the school, and the teacher finds her. Now the bus is not so bad."},
+  {title: "Horrible Harry in Room 2B", ko: "2반의 무서운 해리", author: "Suzy Kline", ar: 2.9, cat: "daily", narration: "Harry is in second grade. He is small but he is trouble. He is funny in class. He hides in a box, and he makes faces. His friend Doug likes him. Room 2B is never boring."},
+  {title: "Little Bear", ko: "곰돌이의 이야기", author: "Else Holmelund Minarik", ar: 2.4, cat: "daily", narration: "Little Bear wants a story. Mother Bear is busy. So he plays in the snow, and he meets friends. He brings home a new friend. At night Mother Bear has a story for him. Good night, Little Bear."},
+  {title: "Nate the Great", ko: "탐정 네이트", author: "Marjorie Weinman Sharmat", ar: 2.0, cat: "mystery", narration: "Nate is a boy detective. He solves cases in his neighborhood. Annie has lost a picture. Nate looks for clues, and he finds a cat and a lot of paint. Then the picture is found. Case closed!"},
+  {title: "Nate the Great Goes Undercover", ko: "잠복 수사에 나선 네이트", author: "Marjorie Weinman Sharmat", ar: 2.4, cat: "mystery", narration: "A monster is in the garbage can. Someone is eating the trash at night. Nate goes undercover. He hides and waits. A big raccoon is in the can. Another case solved."},
+  {title: "Nate the Great and the Sticky Case", ko: "끈적끈적 사건", author: "Marjorie Weinman Sharmat", ar: 2.6, cat: "mystery", narration: "Rosamond has a sticky problem. Her stamp is missing. Nate looks at the stamps and the glue. The stamp is on the bottom of a shoe. Nate says: sticky, sticky. Done."},
+  {title: "Nate the Great and the Lost List", ko: "잃어버린 목록", author: "Marjorie Weinman Sharmat", ar: 2.5, cat: "mystery", narration: "Annie lost her shopping list. It was in the supermarket. Nate and his dog Sludge look around. Sludge finds the list. Then Nate has a new case."},
+  {title: "Nate the Great and the Missing Key", ko: "사라진 열쇠", author: "Marjorie Weinman Sharmat", ar: 2.5, cat: "mystery", narration: "Annie loses her house key. Nate looks at the door. He looks at the mailbox. A snake has the key. Nate runs home. He finds his own key inside his shoe."},
+  {title: "Nate the Great and the Phony Clue", ko: "가짜 단서", author: "Marjorie Weinman Sharmat", ar: 2.2, cat: "mystery", narration: "A note says: Y-U-F. Nate reads it, and it makes no sense. He looks again. The note is backwards. Now the clue is clear. Case closed!"},
+  {title: "Young Cam Jansen and the Missing Cookie", ko: "사라진 쿠키", author: "David A. Adler", ar: 1.9, cat: "mystery", narration: "Cam has a good memory. Her friend loses a cookie. Cam closes her eyes. She remembers everything in the room. She says the cookie is in the jar. And it is!"},
+  {title: "Young Cam Jansen and the Dinosaur Game", ko: "공룡 게임의 비밀", author: "David A. Adler", ar: 2.0, cat: "mystery", narration: "The class plays a dinosaur game. Someone moves the head. Cam says: click. She remembers where the head was. The class finds it. Cam is a great detective."},
+  {title: "Young Cam Jansen and the Library Mystery", ko: "도서관의 수수께끼", author: "David A. Adler", ar: 1.9, cat: "mystery", narration: "The books are missing from the cart. Cam and her friends look for clues. They see a messy shelf. They find the books in a box. Now the library is tidy."},
+  {title: "Young Cam Jansen and the Substitute Mystery", ko: "대리 선생님의 비밀", author: "David A. Adler", ar: 2.1, cat: "mystery", narration: "A new teacher comes to class. She leaves the key in the door. Cam looks at her memory. She finds out the teacher is not a stranger. She is the old school nurse. Mystery solved."},
+  {title: "King & Kayla and the Case of the Missing Dog Treats", ko: "강아지 간식 도난 사건", author: "Dori Hillestad Butler", ar: 1.9, cat: "mystery", narration: "King the dog likes treats. Someone eats them. Kayla and King look for clues. They find flour on the floor. The cat did it. Time for new treats."},
+  {title: "King & Kayla and the Case of the Lost Tooth", ko: "잃어버린 이빨", author: "Dori Hillestad Butler", ar: 1.9, cat: "mystery", narration: "Kayla loses her tooth. King looks for it. It is not under the bed. King finds it in his bed. Kayla is happy. King is a good dog."},
+  {title: "King & Kayla and the Case of the Secret Code", ko: "비밀 암호", author: "Dori Hillestad Butler", ar: 2.1, cat: "mystery", narration: "A note with a secret code is on the door. Kayla and King work it out. It is a party invitation. Now they need cake."},
+  {title: "King & Kayla and the Case of the Mysterious Mouse", ko: "수수께끼 쥐", author: "Dori Hillestad Butler", ar: 2.0, cat: "mystery", narration: "Kayla and King hear a scratch. Something is under the bed. King finds a little mouse. The mouse has a home. They leave it alone. Mystery solved quietly."},
+  {title: "Inspector Hopper", ko: "메뚜기 형사", author: "Doug Cushman", ar: 2.2, cat: "mystery", narration: "Inspector Hopper is a grasshopper. He works with his helper McBee. A spider's web is broken. Who did it, and they look for clues. The wind did it. The case is closed."},
+  {title: "Inspector Hopper's Mystery Year", ko: "형사의 한 해", author: "Doug Cushman", ar: 2.4, cat: "mystery", narration: "Inspector Hopper has many cases. A missing lunch, and a lost shoe. A noisy neighbor. He and McBee look at each clue. They find the answers. Every day is a mystery."},
+  {title: "Aunt Eater's Mystery Vacation", ko: "개미핥기 이모의 휴가", author: "Doug Cushman", ar: 2.5, cat: "mystery", narration: "Aunt Eater loves a mystery. She goes to a quiet hotel. Someone takes her bag. She follows clues. The bag is in the kitchen. Another mystery solved."},
+  {title: "Aunt Eater Loves a Mystery", ko: "수수께끼를 사랑한 이모", author: "Doug Cushman", ar: 2.3, cat: "mystery", narration: "Aunt Eater is an anteater. She finds a lost hat. She finds a missing key. She looks for answers. She asks everyone questions. She loves to be a detective."},
+  {title: "The Case of the Missing Monkey", ko: "사라진 원숭이", author: "Cynthia Rylant", ar: 2.5, cat: "mystery", narration: "Bunny and Jack are detectives. They live in an apartment building. A monkey toy is missing. They find footprints and a clue on a table. Now the monkey is back with its owner. Case closed."},
+  {title: "The Case of the Puzzling Possum", ko: "수상한 주머니쥐", author: "Cynthia Rylant", ar: 2.4, cat: "mystery", narration: "Something is stealing food at night. Bunny and Jack watch the stairs. A possum is playing a harmonica. Now they know who took the snack. The mystery is over."},
+  {title: "The Case of the Fidgety Fox", ko: "안절부절 여우", author: "Cynthia Rylant", ar: 2.5, cat: "mystery", narration: "Someone has taken a toy from the school. Bunny and Jack look at a fox who cannot sit still. They find the toy in his bag. The fox says sorry. Now everyone is friends."},
+  {title: "Detective Dinosaur", ko: "공룡 탐정", author: "James Skofield", ar: 2.0, cat: "mystery", narration: "Detective Dinosaur is a little dinosaur. He finds a lost hat. He finds a missing ball. Every case is easy for him. He is very proud. He says: mystery solved!"},
+  {title: "Jigsaw Jones: The Case of the Smelly Sneaker", ko: "냄새나는 운동화 사건", author: "James Preller", ar: 2.9, cat: "mystery", narration: "A smelly sneaker is in the class. Jigsaw Jones takes the case. He follows the smell. He finds the owner. The sneaker goes home for a wash."},
+  {title: "Bones and the Doghouse Mystery", ko: "개집의 수수께끼", author: "David A. Adler", ar: 2.2, cat: "mystery", narration: "Bones and his dog find a mystery. Someone sleeps in the doghouse. They leave a note. They find a blanket. A cat made it cozy. Now the cat can stay."},
+  {title: "Danny and the Dinosaur", ko: "대니와 공룡", author: "Syd Hoff", ar: 2.3, cat: "fantasy", narration: "Danny goes to the museum. He sees a big dinosaur, and the dinosaur is alive! Danny and the dinosaur walk out. They play with the children. They eat lunch together. Then the dinosaur goes back to the museum."},
+  {title: "Happy Birthday, Danny and the Dinosaur!", ko: "대니와 공룡의 생일 파티", author: "Syd Hoff", ar: 2.0, cat: "fantasy", narration: "It is Danny's birthday. A dinosaur is his friend. They play games and eat cake. The dinosaur brings a big gift. Everyone sings. What a party!"},
+  {title: "Danny and the Dinosaur Go to Camp", ko: "공룡과 함께 캠프에", author: "Syd Hoff", ar: 1.9, cat: "fantasy", narration: "Danny goes to camp with the dinosaur. They hike and swim. The dinosaur can make a big slide. He helps everyone. Camp is fun with a big friend."},
+  {title: "Magic Tree House: Dinosaurs Before Dark", ko: "마법의 나무집: 공룡 시대", author: "Mary Pope Osborne", ar: 2.6, cat: "fantasy", narration: "Jack and Annie find a tree house full of books. Jack points at a dinosaur. The tree house starts to spin. They are in a land of dinosaurs. They must get home before dark. The magic works, and they are safe."},
+  {title: "Magic Tree House: The Knight at Dawn", ko: "새벽의 기사", author: "Mary Pope Osborne", ar: 2.9, cat: "fantasy", narration: "Jack and Annie go back to the tree house. They see a knight on a horse. The armor shines. The castle is dark. They help the knight. Then they find their way home."},
+  {title: "Magic Tree House: Mummies in the Morning", ko: "아침의 미라", author: "Mary Pope Osborne", ar: 2.7, cat: "fantasy", narration: "Jack and Annie find a pyramid. They meet a queen. She needs a book. They help her find it. Then they say goodbye. Back home, they read about the queen."},
+  {title: "Magic Tree House: Pirates Past Noon", ko: "정오의 해적", author: "Mary Pope Osborne", ar: 2.8, cat: "fantasy", narration: "A pirate ship sails in. The captain wants a treasure. Jack and Annie find the map. They hide on the island, and then they dig. The treasure is in the tree house? Time to go home."},
+  {title: "Press Start! Game Over, Super Rabbit Boy!", ko: "슈퍼 래빗 보이", author: "Thomas Flintham", ar: 2.5, cat: "fantasy", narration: "Super Rabbit Boy is in a game. King Viking causes trouble. Super Rabbit Boy runs fast. He jumps and kicks. He saves the day. Game over, and he wins!"},
+  {title: "Press Start! Super Rabbit Racers!", ko: "슈퍼 래빗 레이서", author: "Thomas Flintham", ar: 2.6, cat: "fantasy", narration: "Super Rabbit Boy drives a car. The race goes through the city. Cars bump and spin. Super Rabbit Boy keeps going. He gets to the finish line. What a race!"},
+  {title: "Kung Pow Chicken: Let's Get Cracking!", ko: "쿵파우 치킨", author: "Cyndi Marko", ar: 2.4, cat: "fantasy", narration: "Gordon is a chicken. When danger comes, he becomes Kung Pow Chicken. He fights bad guys. He moves fast. Everyone cheers. The city is safe."},
+  {title: "Owl Diaries: Eva's Treetop Festival", ko: "올빼미 일기: 나무 위 축제", author: "Rebecca Elliott", ar: 2.9, cat: "fantasy", narration: "Eva plans a festival in her tree. All her friends help. They make decorations. But the birds are angry. Eva fixes the problem, and now everyone comes. The festival is a big success."},
+  {title: "Owl Diaries: Eva Sees a Ghost", ko: "올빼미 일기: 유령을 봤어요", author: "Rebecca Elliott", ar: 2.8, cat: "fantasy", narration: "Eva sees something white in the trees. She thinks it is a ghost. She gets help. The white thing is a paper lantern. Now Eva can play in the woods."},
+  {title: "Ricky Ricotta's Mighty Robot", ko: "리키와 거대 로봇", author: "Dav Pilkey", ar: 2.9, cat: "fantasy", narration: "Ricky is a little mouse. He is lonely. A robot comes to help him. The robot is huge and friendly. They fight monsters and save the city. Now Ricky has a best friend."},
+  {title: "Dog Man", ko: "도그맨", author: "Dav Pilkey", ar: 2.5, cat: "fantasy", narration: "Dog Man is part dog and part police officer. He stops bad guys. Petey the cat makes trouble. Dog Man chases him. There is a lot of silly action. Good wins again."},
+  {title: "The Adventures of Beekle: The Unimaginary Friend", ko: "상상 친구 비클", author: "Dan Santat", ar: 2.9, cat: "fantasy", narration: "Beekle is a little creature. He waits to be chosen. He wants a friend. So he sails to the real world. He looks everywhere. Then a girl sees him, and they are friends."},
+  {title: "Harold and the Purple Crayon", ko: "해럴드와 보라색 크레용", author: "Crockett Johnson", ar: 2.9, cat: "fantasy", narration: "Harold has a purple crayon. He draws a line and walks. He draws the moon and the sea. He draws a dragon and a boat. Then he draws his window and his bed. Good night, Harold."},
+  {title: "Freight Train", ko: "화물 열차", author: "Donald Crews", ar: 1.0, cat: "fantasy", narration: "A freight train rolls down the track. Red and orange cars. Green and blue cars, and the engine puffs smoke. The train goes through a tunnel. Over a bridge, and into the night. Bye-bye, train."},
+  {title: "Truck", ko: "커다란 트럭", author: "Donald Crews", ar: 1.0, cat: "fantasy", narration: "A big truck drives on the road. It carries things day and night. It goes through rain and sun. Cars zoom past. Then it arrives. Time to unload."},
+  {title: "School Bus", ko: "학교 버스", author: "Donald Crews", ar: 1.0, cat: "fantasy", narration: "A school bus drives in the morning. It stops for children, and they climb in. The bus goes down the street. It passes trees and houses. Then it reaches the school. Time to learn!"},
+  {title: "Cars and Trucks and Things That Go", ko: "자동차와 트럭의 나라", author: "Richard Scarry", ar: 2.5, cat: "fantasy", narration: "The pigs take a drive in a car. They see cars of every kind. A pickle car and a shoe car. A banana car, and the car goes bump. Then they all go home. What a funny drive."},
+  {title: "Katy and the Big Snow", ko: "눈을 치우는 캐티", author: "Virginia Lee Burton", ar: 2.9, cat: "fantasy", narration: "Katy is a big red snow plow. The snow falls and falls, and the city is stuck. Katy pushes the snow. She makes a way for the bus. She saves the town. Everyone cheers for Katy."},
+  {title: "If I Built a Car", ko: "내가 차를 만든다면", author: "Chris Van Dusen", ar: 2.7, cat: "fantasy", narration: "A boy imagines a car he would build. It has a pool and a robot driver. It flies up in the sky. It can go anywhere. Then it would be the best car ever."},
+  {title: "If I Built a House", ko: "내가 집을 만든다면", author: "Chris Van Dusen", ar: 2.8, cat: "fantasy", narration: "A boy dreams about a new house. It has a trampoline room. It has a big art nook. It has a roller coaster. Everything is fun. But he still likes his own room."},
+  {title: "How I Became a Pirate", ko: "내가 해적이 된 이야기", author: "Melinda Long", ar: 2.7, cat: "fantasy", narration: "Jeremy goes to the beach. A pirate ship comes in. The pirates ask him to join. He says yes, and they dig for treasure. Then they lose the treasure. Jeremy is happy to go home."},
+  {title: "Aliens Love Underpants", ko: "팬티를 좋아하는 외계인", author: "Claire Freedman", ar: 2.0, cat: "fantasy", narration: "Aliens fly to Earth, and they want underpants. They find them on clotheslines. Big ones and small ones. They fly around all night. Then they go home with their pants. What silly aliens!"},
+  {title: "Tuesday", ko: "화요일 밤의 개구리", author: "David Wiesner", ar: 1.6, cat: "fantasy", narration: "On Tuesday night something funny happens. Frogs fly in the sky. They ride on lily pads. They fly over houses and across town. Then morning comes, and the frogs hop home. Who will fly next Tuesday?"},
+  {title: "The Gingerbread Man", ko: "진저브레드 맨", author: "Jim Aylesworth", ar: 2.5, cat: "fantasy", narration: "A little old woman bakes a gingerbread man. He pops out of the oven, and he runs away! He runs past a cow and a horse. He runs to a river. A fox offers a ride. Then the fox eats him, and that is the end."},
+  {title: "The Three Little Pigs", ko: "아기 돼지 삼형제", author: "Paul Galdone", ar: 2.9, cat: "fantasy", narration: "Three pigs build houses. One uses straw. One uses sticks. One uses bricks. A wolf comes and blows down the straw house, and then the stick house. He cannot blow down the brick house."},
+  {title: "Chicken Little", ko: "하늘을 두려워한 병아리", author: "Steven Kellogg", ar: 2.6, cat: "fantasy", narration: "An acorn hits Chicken Little. He thinks the sky is falling. He tells his friends. They run to warn the king. A fox leads them to his cave. They escape and run home, and the sky is fine."},
+  {title: "The Knight and the Dragon", ko: "기사와 용의 우정", author: "Tomie dePaola", ar: 2.5, cat: "fantasy", narration: "A knight has no idea how to fight a dragon. A dragon has no idea how to fight a knight. They try, and they both fail. Then they read books. They learn to be friends. Now they make a pizza together."}
+];
+var updatedAt = UPDATED_AT;
+
+init();
+window.__AR = { BOOKS: BOOKS, state: state, filterBooks: filterBooks, CATS: CATS, LEVELS: LEVELS, updatedAt: updatedAt };
+</script>
+</body>
+</html>
