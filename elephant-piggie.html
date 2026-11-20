@@ -76,6 +76,7 @@
   .card.read{border-color:rgba(123,188,214,.5)}
   .thumb{width:78px;height:78px;border-radius:14px;overflow:hidden;background:var(--stage);display:block;position:relative;padding:0;border:0}
   .thumb svg{width:100%;height:100%;display:block}
+  .thumb img{width:100%;height:100%;display:block;object-fit:cover}
   .thumb .num{position:absolute;left:5px;top:4px;background:rgba(255,255,255,.88);color:#3a2a22;font-size:10px;font-weight:900;border-radius:7px;padding:1px 5px;line-height:1.5}
   .card h3{margin:0;font-size:14.5px;font-weight:900;line-height:1.25;letter-spacing:-.02em;display:flex;gap:5px;align-items:baseline;flex-wrap:wrap}
   .ar{display:inline-block;padding:1px 6px;border-radius:6px;background:var(--soft);color:var(--accent);font-size:10px;font-weight:900;letter-spacing:0}
@@ -105,7 +106,9 @@
   .r-body{padding:10px 12px 26px;max-width:720px;width:100%;margin:0 auto}
   .stage{position:relative;border-radius:20px;overflow:hidden;background:var(--stage);box-shadow:var(--shadow);border:1px solid var(--line)}
   .stage svg{display:block;width:100%;height:auto;aspect-ratio:400/280}
+  .stage img{display:block;width:100%;height:auto;aspect-ratio:400/280;object-fit:cover;background:var(--stage)}
   body.night .stage svg{filter:brightness(.86) saturate(.94)}
+  body.night .stage img{filter:brightness(.86) saturate(.94);transition:filter .25s}
   @media (orientation:landscape) and (max-height:560px){
     .r-body{max-width:1000px;display:grid;grid-template-columns:minmax(220px,38%) 1fr;
             gap:8px 16px;align-items:start;padding:8px 14px 16px}
@@ -301,6 +304,9 @@ var TABS = [
   {id:"done", label:"✓ 들은 책"},
   {id:"todo", label:"아직 안 들은 책"}
 ];
+
+/* ---------- 그림(플랫 벡터 일러스트) ---------- */
+function artSrc(n){ return "ep-img/ep-" + (n < 10 ? "0" : "") + n + ".jpg"; }
 
 /* ---------- 저장 ---------- */
 function $(s, r){ return (r || document).querySelector(s); }
@@ -843,9 +849,9 @@ function render(){
     var card = document.createElement("div");
     card.className = "card" + (has(dones, k) ? " read" : "");
     card.setAttribute("data-n", String(b.n));
-    var cover = b.pages && b.pages[0] ? b.pages[0].scene : {};
     card.innerHTML =
-      '<button class="thumb" aria-label="#'+b.n+' '+b.en+' 열기">' + sceneSVG(cover, "coverart") +
+      '<button class="thumb" aria-label="#'+b.n+' '+b.en+' 열기">' +
+        '<img src="' + artSrc(b.n) + '" alt="" width="720" height="576" loading="lazy" decoding="async">' +
         '<span class="num">#' + b.n + '</span></button>' +
       '<div class="body">' +
         '<h3>' + b.en + '<span class="ar">AR ' + b.ar.toFixed(1) + '</span></h3>' +
@@ -856,6 +862,12 @@ function render(){
           '<button class="flag ' + (has(dones, k) ? "done" : "off") + '" data-act="done">' + (has(dones, k) ? "✓ 다 읽음" : "✓ 읽음 표시") + '</button>' +
         '</div>' +
       '</div>';
+    var cardImg = card.querySelector(".thumb img");
+    if (cardImg) cardImg.onerror = function(){
+      var box = document.createElement("span");
+      box.innerHTML = sceneSVG(b.pages && b.pages[0] ? b.pages[0].scene : {}, "coverart");
+      if (box.firstChild) cardImg.parentNode.replaceChild(box.firstChild, cardImg);
+    };
     card.onclick = function(ev){
       var act = ev.target.getAttribute && ev.target.getAttribute("data-act");
       if (act === "fav"){
@@ -896,7 +908,9 @@ function renderReader(){
 function renderPage(){
   var b = curBook(), p = curPage();
   if (!b || !p) return;
-  $("#rArt").innerHTML = sceneSVG(p.scene, "scene");
+  $("#rArt").innerHTML = '<img src="' + artSrc(b.n) + '" alt="' + b.en.replace(/"/g, "") + ' 삽화" width="720" height="576" decoding="async">';
+  var rImg = $("#rArt img");
+  if (rImg) rImg.onerror = function(){ $("#rArt").innerHTML = sceneSVG(p.scene, "scene"); };
   $("#rPage").textContent = (page + 1) + " / " + b.pages.length;
   var dots = $("#rDots");
   dots.innerHTML = "";
