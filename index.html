@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>우리 가족 구미시립도서관</title>
+<style>
+  :root {
+    --bg: #f6f7f9;
+    --card: #ffffff;
+    --text: #191f28;
+    --muted: #6b7684;
+    --line: #e5e8eb;
+    --primary: #2f7d4e;
+    --primary-bg: #eaf5ee;
+    --warn: #d97706;
+    --warn-bg: #fef3c7;
+    --danger: #dc2626;
+    --danger-bg: #fee2e2;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.45;
+  }
+  .wrap { max-width: 820px; margin: 0 auto; padding: 16px 14px 48px; }
+  header { margin-bottom: 14px; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  .sub { font-size: 12px; color: var(--muted); }
+  .tabs { display: flex; gap: 8px; margin: 14px 0; }
+  .tab {
+    flex: 1; padding: 11px 12px; border: 1px solid var(--line); border-radius: 12px;
+    background: var(--card); font-size: 14px; font-weight: 600; cursor: pointer; text-align: center;
+  }
+  .tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+  .stat { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; }
+  .stat .label { font-size: 11px; color: var(--muted); }
+  .stat .val { font-size: 18px; font-weight: 700; margin-top: 2px; }
+  .alert {
+    background: var(--warn-bg); border: 1px solid #fde68a; border-radius: 12px;
+    padding: 11px 13px; margin-bottom: 12px; font-size: 13px;
+  }
+  .alert strong { color: #92400e; }
+  .controls { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+  input[type="search"] {
+    width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px;
+    font-size: 14px; background: var(--card);
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    padding: 6px 11px; border-radius: 999px; border: 1px solid var(--line);
+    background: var(--card); font-size: 12px; cursor: pointer; color: var(--text);
+  }
+  .chip.active { background: #191f28; color: #fff; border-color: #191f28; }
+  .list { display: flex; flex-direction: column; gap: 8px; }
+  .item {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 12px 13px; display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;
+  }
+  .item-main { min-width: 0; flex: 1; }
+  .title { font-size: 14px; font-weight: 600; word-break: keep-all; }
+  .meta { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .badge {
+    flex-shrink: 0; font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 8px; white-space: nowrap;
+  }
+  .b-ok { background: var(--primary-bg); color: var(--primary); }
+  .b-warn { background: var(--warn-bg); color: var(--warn); }
+  .b-no { background: var(--danger-bg); color: var(--danger); }
+  .b-gray { background: #f2f4f6; color: var(--muted); }
+  .count { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+  .note { font-size: 12px; color: var(--muted); margin-top: 16px; padding: 10px 12px; background: var(--card); border-radius: 10px; border: 1px solid var(--line); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>📚 우리 가족 구미시립도서관</h1>
+    <div class="sub">기준일시: 2026-11-20 09:35 · 지현님 가족 계정 · 양포·산동·작은도서관</div>
+  </header>
+
+  <div class="tabs">
+    <button class="tab active" id="tab-loans" onclick="switchTab('loans')">📖 빌린 책 (125권)</button>
+    <button class="tab" id="tab-new" onclick="switchTab('new')">✨ 어린이자료실 신간 (95권)</button>
+  </div>
+
+  <div id="view-loans">
+    <div class="summary">
+      <div class="stat"><div class="label">전체 대출</div><div class="val">125권</div></div>
+      <div class="stat"><div class="label">양포 (일반대출)</div><div class="val">10권</div></div>
+      <div class="stat"><div class="label">중앙 (장기대출)</div><div class="val">115권</div></div>
+    </div>
+    <div class="alert">
+      <strong>⏰ 반납 임박 (양포도서관)</strong><br>
+      · 11/21(내일): (정승제의) 수학 대모험. 3 (지현)<br>
+      · 11/22(모레): (정승제의) 수학 대모험. 1, 2 (지현)
+    </div>
+    <div class="controls">
+      <input type="search" id="loan-q" placeholder="책 제목, 가족 이름(지현/만근), 도서관 검색..." oninput="renderLoans()">
+      <div class="chips" id="loan-chips">
+        <button class="chip active" onclick="setLoanFilter('all', this)">전체 (125)</button>
+        <button class="chip" onclick="setLoanFilter('양포', this)">양포 단기 (10)</button>
+        <button class="chip" onclick="setLoanFilter('중앙', this)">중앙 장기 (115)</button>
+        <button class="chip" onclick="setLoanFilter('만근', this)">만근 (5)</button>
+        <button class="chip" onclick="setLoanFilter('지현', this)">지현 (120)</button>
+      </div>
+    </div>
+    <div class="count" id="loan-count"></div>
+    <div class="list" id="loan-list"></div>
+  </div>
+
+  <div id="view-new" style="display:none">
+    <div class="summary">
+      <div class="stat"><div class="label">양포 어린이신간</div><div class="val">54권</div></div>
+      <div class="stat"><div class="label">산동 어린이(2층)</div><div class="val">34권</div></div>
+      <div class="stat"><div class="label">작은도서관(일부)</div><div class="val">7권</div></div>
+    </div>
+    <div class="controls">
+      <input type="search" id="new-q" placeholder="신간 제목, 저자, 출판사, 청구기호 검색..." oninput="renderNew()">
+      <div class="chips" id="new-lib-chips">
+        <button class="chip active" onclick="setNewLib('all', this)">전체</button>
+        <button class="chip" onclick="setNewLib('양포', this)">양포 (54)</button>
+        <button class="chip" onclick="setNewLib('산동', this)">산동 (34)</button>
+        <button class="chip" onclick="setNewLib('작은', this)">작은도서관 (7)</button>
+      </div>
+      <div class="chips" id="new-status-chips">
+        <button class="chip active" onclick="setNewStatus('all', this)">전체 상태</button>
+        <button class="chip" onclick="setNewStatus('가능', this)">대출가능만</button>
+        <button class="chip" onclick="setNewStatus('대출중', this)">대출중/예약</button>
+      </div>
+    </div>
+    <div class="count" id="new-count"></div>
+    <div class="list" id="new-list"></div>
+    <div class="note">
+      * 신착 도서 조회 기준: 2026-10-21 ~ 2026-11-20. 작은도서관은 별도 어린이자료실 필터가 없어 통합 자료실(해평누리·평생자료실 등) 기준 확인된 아동·유아 도서만 포함했습니다.
+    </div>
+  </div>
+</div>
+
+<script>
+const LOANS = [
+  {who:"만근", title:"(흔한남매) 이상한 나라의 고전 읽기. 10", lib:"구미시양포도서관", loan:"2026-11-18", due:"2026-12-02"},
+  {who:"만근", title:"(만화로 배우는 어린이 경제) 돈의 대모험. 1", lib:"구미시양포도서관", loan:"2026-11-18", due:"2026-12-02"},
+  {who:"만근", title:"(설민석의) 그리스 로마 신화 대모험. 16, 에로스와 프시케의 사랑", lib:"구미시양포도서관", loan:"2026-11-18", due:"2026-12-02"},
+  {who:"지현", title:"(썰레임)꿈의 악마 : 꿈을 파는 가게 . 6", lib:"구미시양포도서관", loan:"2026-11-18", due:"2026-12-02"},
+  {who:"만근", title:"그리스 로마 신화", lib:"구미시양포도서관", loan:"2026-11-18", due:"2026-12-02"},
+  {who:"만근", title:"(설민석의) 그리스 로마 신화 대모험. 17, 자신을 사랑한 나르키소스", lib:"구미시양포도서관", loan:"2026-11-18", due:"2026-12-02"},
+  {who:"지현", title:"(정승제의) 수학 대모험. 4, 분수와 소수 : 승재네 피자 가게", lib:"구미시양포도서관", loan:"2026-11-17", due:"2026-12-01"},
+  {who:"지현", title:"(정승제의) 수학 대모험. 2, 덧셈과 뺄셈 : 웰컴 투 루트리아", lib:"구미시양포도서관", loan:"2026-11-08", due:"2026-11-22"},
+  {who:"지현", title:"(정승제의) 수학 대모험. 1, 덧셈과 뺄셈 : 웰컴 투 루트리아", lib:"구미시양포도서관", loan:"2026-11-08", due:"2026-11-22"},
+  {who:"지현", title:"(정승제의) 수학 대모험. 3, 곱셈과 나눗셈", lib:"구미시양포도서관", loan:"2026-11-07", due:"2026-11-21"},
+  ...[
+    "(흔한남매)별난 세계 여행. 1, 세계 유명 박물관",
+    "(흔한남매)별난 세계 여행. 2, 고대 도시",
+    "(흔한남매)별난 세계 여행 . 4 , 세계 유명 궁",
+    "(흔한남매)별난 세계 여행 . 3 , 세계 축제",
+    "(흔한남매)별난 세계 여행 . 5 , 세계 자연유산",
+    "태쁘의 세계 여행: 세계 역사 문화 탐험 학습 만화. 2, 이탈리아 편",
+    "(에그 박사의) 이건 누구 똥?! . 4",
+    "(에그박사의) 이건 누구 똥?! . 3",
+    "태쁘의 세계 여행: 세계 역사 문화 탐험 학습 만화. 1, 영국 편",
+    "우리들의 MBTI: 나의 성격을 이해하고 더 멋진 내가 되는. 5, 진로 선택",
+    "(어쩔뚱땡!)고구마머리 TV. 1, 우주탐험 1",
+    "(어쩔뚱땡!)고구마머리 TV . 7 , 우주 탐험 3: 외계 행성의 비밀",
+    "(어쩔뚱땡!)고구마머리 TV . 9 , 외계 추격전: 공룡이 나타났다!",
+    "(어쩔뚱땡!)고구마머리 TV . 8 , 외계 미션: 고구마머리호를 찾아라!",
+    "슈뻘맨의 숨은 과학 찾기: 엉뚱 도전 속에 숨은 과학 상식. 2",
+    "(읽으면서 바로 써먹는) 어린이 신체 관용구",
+    "무적 이순신 . 4 , 운명의 상대와의 대결",
+    "무적 이순신 . 5 , 영웅의 첫걸음",
+    "에그박사. 8",
+    "에그박사 : 자연 생물 관찰 만화 . 1",
+    "에그박사 . 12",
+    "에그박사 : 자연 생물 관찰 만화 . 4",
+    "에그박사 : 자연 생물 관찰 만화 . 3",
+    "(읽다 보면 저절로 알게 되는)신비한 자율·책임 사전",
+    "(에그박사의)이건 누구 똥?!. 1",
+    "무적 이순신 . 1 , 승리를 계획하다!",
+    "무적 이순신 . 3 , 팔도 무술 대회의 시작!",
+    "무적 이순신 . 2 , 돌아오겠다는 약속",
+    "(읽으면서 바로 써먹는)어린이 세계사 퀴즈",
+    "(읽다 보면 저절로 알게 되는)신비한 동의·거절 사전",
+    "슈뻘맨의 숨은 생물 찾기 : 관찰하며 배우는 생물 지식 . 1",
+    "에그박사 : 자연 생물 관찰 만화 . 2",
+    "에그박사 : 자연 생물 관찰 만화 . 11",
+    "에그박사: 자연 생물 관찰 만화. 9",
+    "환생학교 요괴반 . 7",
+    "환생학교 요괴반 . 5",
+    "환생학교 요괴반 . 6",
+    "환생학교 요괴반 . 4",
+    "환생학교 요괴반. 2",
+    "환생학교 요괴반. 1",
+    "환생학교 요괴반 . 3",
+    "명탐정 셜록 홈스",
+    "(읽으면서 바로 써먹는) 어린이 공포의 수학 퍼즐 . 1",
+    "(읽으면서 바로 써먹는) 어린이 수수께끼. [3], 공포 특급",
+    "괴도 신사 아르센 뤼팽",
+    "플랜더스의 개",
+    "이상한 나라의 앨리스",
+    "소공녀",
+    "알프스 소녀 하이디",
+    "빨간 머리 앤",
+    "키다리 아저씨",
+    "오즈의 마법사",
+    "80일간의 세계일주",
+    "안네의 일기",
+    "(읽으면서 바로 써먹는)어린이 사자성어",
+    "(바로 알고, 바로 쓰는)빵빵한 사자성어",
+    "(읽으면서 바로 써먹는) 어린이 한국사 퀴즈. 2",
+    "(읽으면서 바로 써먹는) 어린이 한국사 퀴즈. 1",
+    "(읽으면서 바로 써먹는)어린이 감정 표현",
+    "민쩌미 백쩜만쩜 수수께끼",
+    "마루는 강쥐 . 2",
+    "말이야와 친구들 : 본격 가족 명랑 시트콤 만화 . 6",
+    "말이야와 친구들 : 본격 가족 명랑 시트콤 만화 . 5",
+    "마루는 강쥐. 1",
+    "(어쩔뚱땡!)고구마머리 TV. 2, 우주탐험 2",
+    "슈뻘맨의 숨은 과학 찾기 . 4",
+    "슈뻘맨의 숨은 과학 찾기 . 6",
+    "슈뻘맨의 숨은 과학 찾기 . 5",
+    "슈뻘맨의 숨은 과학 찾기. 3",
+    "(흔한남매) 수수께끼 어드벤처 . 3",
+    "(흔한남매) 이무기: 이해하면 무서운 이야기. 1",
+    "(흔한 남매) 이무기 : 이해하면 무서운 이야기 . 3",
+    "(읽으면서 바로 써먹는)어린이 속담. [2], 바이러스 편",
+    "(흔한남매) 이무기 : 이해하면 무서운 이야기 . 2",
+    "(흔한남매) 이상한 나라의 고전 읽기 . 5 , 장화홍련전·사시남정기·이춘풍전",
+    "(흔한남매) 이상한 나라의 고전 읽기 . 8 , 해님 달님·호질·장끼전",
+    "(흔한남매)이상한 나라의 고전 읽기 . 6 , 흥부전·자청비 신화·인현왕후전",
+    "(흔한남매)이상한 나라의 고전 읽기. 4",
+    "(흔한남매) 이상한 나라의 고전 읽기 . 7 , 심청전·여우 누이 설화·서동지전",
+    "(흔한남매)이상한 나라의 고전 읽기. 1, 춘향전·토끼전·옹고집전",
+    "(흔한남매)별난 방탈출 . 3",
+    "(흔한남매)별난 방탈출. 2",
+    "슈뻘맨의 숨은 생물 찾기 : 관찰하며 배우는 생물 지식 . 2",
+    "(흔한남매)흔한 게임 . 2",
+    "(흔한남매)수수께끼 어드벤처 . 2",
+    "(흔한남매)흔한 게임 . 3",
+    "(흔한남매)별난 방탈출 . 5",
+    "(흔한남매)수수께끼 어드벤처 . 1",
+    "(흔한남매)별난 방탈출 . 4",
+    "슈뻘맨의 슈퍼 상식 월드컵 . 3 , 최강의 공룡",
+    "(읽으면서 바로 써먹는)어린이 세계사 퀴즈. 2",
+    "슈뻘맨의 슈퍼 상식 월드컵 . 2 , 최강의 곤충",
+    "슈뻘맨의 슈퍼 상식 월드컵 . 1 , 최강의 육상 동물",
+    "(읽으면서 바로 써먹는)어린이 맞춤법 행성",
+    "마루는 강쥐 . 8",
+    "마루는 강쥐 . 6",
+    "마루는 강쥐 . 7",
+    "마루는 강쥐 . 5",
+    "말이야와 친구들 : 본격 가족 명랑 시트콤 만화 . 7",
+    "(처음 읽는) 삼국지 . 2 , 혼돈에 맞선 자들",
+    "말이야와 친구들 : 본격 가족 명랑 시트콤 만화 . 9",
+    "말이야와 친구들 : 본격 가족 명랑 시트콤 만화 . 8",
+    "(에그박사의) 이건 누구 똥?! . 2",
+    "(읽다 보면 저절로 알게 되는)신비한 공감말 사전",
+    "태쁘의 세계 여행: 세계 역사 문화 탐험 학습 만화. 3, 프랑스 편",
+    "마루는 강쥐 . 4",
+    "마루는 강쥐 . 3",
+    "말이야와 친구들 : 본격 가족 명랑 시트콤 만화 . 10",
+    "(읽으면서 바로 써먹는)어린이 세계여행",
+    "(어쩔뚱땡!)고구마머리 TV. 3, 지구불시착",
+    "(어쩔뚱땡!)고구마머리 TV . 5 , 지구 탐험 2: 출발! 지구 여행",
+    "말이야와 친구들 : 본격 가족 명랑 시트콤 만화 . 4",
+    "(어쩔뚱땡!)고구마머리 TV. 4, 지구 탐험 1-지구를 구하라!",
+    "(어쩔뚱땡!)고구마머리 TV . 6 , 화성 여행: 우주 해적단 등장!",
+    "흔한남매 흔한 MBTI : 믿거나 말거나 나에게 어울리는 직업"
+  ].map(t => ({who:"지현", title:t, lib:"구미시립중앙도서관", loan:"2026-06-16", due:"2028-06-15"}))
+];
+
+const NEW_BOOKS = [
+  // 양포 54권
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"그리스 로마 신화", author:"러셀 펀터 외 / 비룡소", call:"아219.2-펀터ㄱㅇ", status:"대출중", due:"2026-12-02"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"기네스 세계 기록 2025: 70주년 기념판", author:"기네스 세계기록 / 비룡소", call:"아001-기네스ㄱ", status:"대출중", due:"2026-12-03"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"우주로 가는 라디오", author:"카렌 쾰러 / 다산어린이", call:"아853-쾰러ㅇㅅ", status:"대출중", due:"2026-11-27"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"알렉산더 이야기 : 단 하나의 의로운 법을 찾아 떠난 소년의 7일", author:"페르디난트 폰 쉬라흐 / 다산어린이", call:"아853-쉬라흐ㅇㅇ", status:"대출가능"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"우리 동네 줍기 철학자: 이빛 창작동화", author:"이빛 / 사계절", call:"아813.6-이빛ㅇ", status:"대출가능"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"나쁜 일이 있어도 나쁜 날은 아니야", author:"정문정 / 서교책방", call:"유181-정문정ㄴ", status:"대출중", due:"2026-11-27"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"종이 소녀", author:"케릴 루이스 / 그림씨", call:"유843-루이스ㅈㄱ", status:"대출가능"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"오승리, 호찌민에 가다", author:"박경희 / 이지북", call:"아813.6-박경희ㅇ", status:"대출가능"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"문제는 뇌야! : 나에게 일어나는 모든 일에는 이유가 있다!", author:"김희정 / 와이즈만Books", call:"아511.1813-김희정ㅁ", status:"대출중", due:"2026-11-25"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"(계절마다 더 똑똑해지는) 어린이 가을말 사전", author:"방주현 / Fika Junior", call:"아710-방주현ㅇ", status:"대출가능"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"죽은나무숲의 죽다 만 여우", author:"오브리 하트먼 / 위즈덤하우스", call:"아843-하트먼ㅈㅎ", status:"대출중", due:"2026-11-28"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"나는 고양이지만", author:"도요후쿠 마키코 / 천개의바람", call:"유833.6-도요후ㄴㄱ", status:"대출중", due:"2026-11-26"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"어린이 겉과 속이 다른 말 사전", author:"박세랑 / Fika Junior", call:"아714-박세랑ㅇㄱ", status:"대출중", due:"2026-11-29"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"축구 월클 도감 : 어제도 오늘도 레전드 50", author:"장민석 / 후즈갓마이테일", call:"아695.4-장민석ㅊ", status:"대출가능"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"창덕궁에 호랑이가 왔다", author:"정명섭 / 모알보알", call:"유813.6-정명섭ㅊ", status:"대출가능"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"(신기한 맛) 도깨비 식당. 11", author:"김용세·김병섭 / 꿈터", call:"아813.6-김용세ㄷ-11", status:"대출중", due:"2026-11-27"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"바이킹 타면 과학 드립니다", author:"정윤선 / 풀빛", call:"아404-정윤선ㅂ", status:"대출중(예약1)", due:"2026-11-25"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"나는 오늘도 새를 관찰합니다", author:"지젤 클라크슨 / 판퍼블리싱", call:"아498-클라크ㄴㅅ", status:"대출가능"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"만나고, 부딪치고, 단단해지고", author:"김보일 / 붕붕", call:"아199.4-김보일ㅁ", status:"대출중", due:"2026-11-25"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"지구에서 '아니요'가 사라진다면", author:"다그마 가이슬러 / 윌마", call:"유853-가이슬ㅈㅇ", status:"대출중", due:"2026-11-28"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"어제 입은 후드 티, 오늘 먹은 급식은 누가 만들었을까?", author:"안미란 / 우리학교", call:"아321-안미란ㅇ", status:"대출가능"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"모두가 눈부신 파랑 : 르네 왓슨 장편동화", author:"르네 왓슨 / 책읽는곰", call:"아841-왓슨ㅁㅅ", status:"대출가능"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"기똥찬 귀 할아버지 : 엄마는 거짓말쟁이", author:"신양진 / 잇츠북어린이", call:"아813.6-신양진ㄱ", status:"대출중", due:"2026-11-27"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"우주 최강 발명가 구하랑", author:"이수용 / 잇츠북어린이", call:"아813.6-이수용ㅇㅈ", status:"대출중", due:"2026-11-27"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"그래서 이런 명언이 생겼대요", author:"우리누리 / 길벗스쿨", call:"아199.8-우리누ㄱ-[2]", status:"대출중", due:"2026-11-28"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"지구가 멈춘 날 . 1, 멸망 D-999", author:"이억주·정영훈 / 서울문화사", call:"아813.6-이억주ㅈ-1", status:"대출중", due:"2026-11-28"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"(읽으면서 바로 써먹는) 어린이 보물섬. 1, 사회·지리편", author:"한날 / 파란정원", call:"아714-한날ㅇㅂ-1", status:"대출중", due:"2026-11-27"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"우리 반 오랑우탄", author:"강효미 / 다른어린이", call:"아813.6-강효미ㅇㄹ", status:"대출중", due:"2026-11-29"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"하얀 밤에 나 홀로", author:"플로리앙 피제 / 책스며든", call:"유863-피제ㅎㅇ", status:"대출중", due:"2026-12-03"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"똥볶이 할멈 . 9, 우리는 라이벌 아닌 원 팀!", author:"강효미 / 슈크림북", call:"아813.6-강효미ㄸ-9", status:"대출가능"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"말 좀 합시다 : 신주선 동화", author:"신주선 / 책읽는곰", call:"아813.6-신주선ㅁ", status:"대출중", due:"2026-11-25"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"오디세이아", author:"호메로스 / 비룡소", call:"아892.1-호메로ㅇㅇ", status:"대출중", due:"2026-11-28"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"(반달이 뜨면 열리는) 몬스터 캠핑장. 2, 천 년의 원수", author:"정주영 / 비룡소", call:"아813.6-정주영ㅁ-2", status:"대출가능"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"(학교에서 바로 쓸 수 있는) 세계와 지리 2027", author:"내셔널지오그래픽 키즈 / 비룡소", call:"아980-내셔널ㅅㅅ-2027", status:"대출가능"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"세계 면 요리 경연 대회", author:"강민경 / 스콜라", call:"아381-강민경ㅅ", status:"대출가능"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"바다가 사라졌다!", author:"서휘 / 풀빛", call:"유813.6-서휘ㅂ", status:"대출중", due:"2026-11-24"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"다시 하면 되지 뭐 : 실패로 단단해지는 회복탄력성", author:"사라 린 룰 / 다봄", call:"유843-룰ㄷㅁ", status:"대출중", due:"2026-12-02"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"책은 마법이야", author:"아멜리 자보 / 소르베북스", call:"유180-자보ㅊㅂ", status:"대출가능"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"호랑나비 결혼식", author:"박윤희 / 아동문예", call:"아811.6-박윤희ㅎ", status:"대출가능"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"일리아스 = Ilias", author:"호메로스 / 마음이음", call:"아892.1-호메로ㅇ", status:"대출가능"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"단어의 선물", author:"피터 H. 레이놀즈 / 라이카", call:"유843-레이놀ㄷㄱ", status:"대출가능"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"달 목욕탕", author:"김상근 / 사계절", call:"유813.6-김상근ㄷ", status:"대출중", due:"2026-12-03"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"빵도둑과 사과 가면", author:"시바타 케이코 / 크래커", call:"유833.6-시바타ㅃㅎ-[7]", status:"대출중(예약1)", due:"2026-12-01"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"엉덩이의 문단속", author:"김승린 / 초록달팽이", call:"아811.6-김승린ㅇ", status:"대출가능"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"사이언스 2027", author:"내셔널지오그래픽 키즈 / 비룡소", call:"아404-내셔널ㅅ-[2027]", status:"대출중(예약2)", due:"2026-12-02"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"말랑하고 쫀득한 과학 이야기. 1", author:"존 그리빈·메리 그리빈 / 라임", call:"아404-그리빈ㅁㅇ-1", status:"대출가능"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"낭만 강아지 봉봉. 9, 출동! 하트 배달부", author:"홍민정 / 다산어린이", call:"아813.6-홍민정ㄴ-9", status:"대출중", due:"2026-12-02"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"낭만 강아지 봉봉. 10: 알쏭달쏭 가족 후보", author:"홍민정 / 다산어린이", call:"아813.6-홍민정ㄴ-10", status:"대출불가(예약2)"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"10대가 꼭 읽어야 할 세계대표 명작소설", author:"박광규 / 작은씨앗", call:"아808.9-박광규ㅅ", status:"대출가능"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"소원 송편 : 보름달 대작전", author:"김지현 / 길벗어린이", call:"유813.6-김지현ㅅ", status:"대출가능"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"엄마가 도망갔다", author:"소복이 / 나무의말", call:"유813.6-소복이ㅇㅁ", status:"대출중", due:"2026-12-02"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"(풀꽃 선생님의) 뻔한 표현 탈출 사전", author:"김수은 / 다산어린이", call:"아714-김수은ㅃ", status:"대출중", due:"2026-12-01"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"말랑콩떡 히어로. 1, 인절미 요원 학교를 지켜라!", author:"이승민 / 한빛에듀", call:"아813.6-이승민ㅁㅎ-1", status:"대출중", due:"2026-12-02"},
+  {lib:"양포", room:"신착자료코너(어린이자료실)", title:"코끼리 고모부", author:"윤여림 / 사과잼롱롱", call:"유813.6-윤여림ㅋ", status:"대출중", due:"2026-11-20"},
+
+  // 산동 34권
+  {lib:"산동", room:"어린이자료실(2층)", title:"(신기한 맛) 도깨비 식당. 11", author:"김용세·김병섭 / 꿈터", call:"아813.6-김용세ㄷ-11", status:"대출중", due:"2026-11-29"},
+  {lib:"산동", room:"어린이자료실(2층)", title:"스티커 마녀 또로롱", author:"장열음 / 보랏빛소 어린이", call:"아813.6-장열음ㅅ", status:"대출가능"},
+  {lib:"산동", room:"어린이자료실(2층)", title:"목마른 아이들", author:"바르샤 바자즈 / 다봄", call:"아843-바자즈ㅁㄱ", status:"대출가능"},
+  {lib:"산동", room:"어린이자료실(2층)", title:"교과서에 없는 진짜 디지털 성교육", author:"장예진 / 썬더키즈", call:"아334-장예진ㄱ", status:"대출중", due:"2026-11-29"},
+  {lib:"산동", room:"어린이자료실(2층)", title:"왜 유명한 거야, 이 건축?", author:"이재인 / 우리학교", call:"아549-이재인ㅇ", status:"대출중", due:"2026-11-27"},
+  {lib:"산동", room:"어린이자료실(2층)", title:"학교에서 로봇 키운 건 비밀이야!", author:"나가츠키 아리스 / 개암나무", call:"아833.6-나가츠ㅎㅁ", status:"대출중", due:"2026-11-29"},
+  {lib:"산동", room:"어린이자료실(2층)", title:"호미는 참지 않아. 1, 아이 돌보미 편", author:"정예란 / 소원나무", call:"아813.6-정예란ㅎ-1", status:"대출중", due:"2026-11-27"},
+  {lib:"산동", room:"어린이자료실(2층)", title:"(흔한남매의) 흔한 호기심. 1", author:"안치현 / 미래엔 아이세움", call:"아404-흔한남ㅎ-1", status:"대출중", due:"2026-11-27"},
+  {lib:"산동", room:"어린이자료실(2층)", title:"(질문하는 10대에게)주머니 쏙! 인권", author:"김예원 / 노란상상", call:"아342.1-김예원ㅈ", status:"대출중", due:"2026-11-27"},
+  {lib:"산동", room:"어린이자료실(2층)", title:"레 미제라블. 5, 엇갈린 약속과 정의", author:"빅토르 위고·안경순 / 아울북", call:"아863-위고ㄹㅇ-5", status:"대출가능"},
+  {lib:"산동", room:"어린이자료실(2층)", title:"맹공군의 용감한 도전", author:"김기정 / 아이음 Books", call:"아813.6-김기정ㅁ", status:"대출가능"},
+  {lib:"산동", room:"어린이자료실(2층)", title:"(반달이 뜨면 열리는)몬스터 캠핑장. 2, 천 년의 원수", author:"정주영 / 비룡소", call:"아813.6-정주영ㅁ-2", status:"대출가능"},
+  {lib:"산동", room:"어린이자료실(2층)", title:"엉덩이의 문단속", author:"김승린 / 초록달팽이", call:"아811.6-김승린ㅇ", status:"대출중", due:"2026-11-25"},
+  {lib:"산동", room:"어린이자료실(2층)", title:"의사 어벤저스. 27, 수면 장애, 편안한 사이가 돼라!", author:"고희정 / 가나", call:"아510.4-고희정ㅇ-27", status:"대출가능"},
+  {lib:"산동", room:"어린이자료실(2층)", title:"책 읽는 고양이 고고 선생. 3", author:"김지원 / 길벗스쿨", call:"아710-김지원ㅊ-3", status:"대출가능"},
+  {lib:"산동", room:"어린이자료실(2층)", title:"(최태성의) 한능검 한국사. 13, 조선 후기의 사회와 문화", author:"윤상석 / 다산어린이", call:"아911-윤상석ㅎ-13", status:"대출중", due:"2026-12-03"},
+  {lib:"산동", room:"어린이자료실(2층)", title:"(최태성의) 한능검 한국사. 14, 흥성 대원군의 정책과 개항", author:"윤상석 / 다산어린이", call:"아911-윤상석ㅎ-14", status:"대출중", due:"2026-12-03"},
+  {lib:"산동", room:"어린이자료실(2층)", title:"출동! 체험 학습 구조대", author:"심윤경 / 사계절", call:"아813.6-심윤경ㅊ", status:"대출가능"},
+  {lib:"산동", room:"어린이자료실(2층)", title:"타키 포오 코믹 어드벤처 . 12", author:"안도감 / 대원키즈", call:"아813.6-캐릭온ㅌ-12", status:"대출중(예약1)", due:"2026-11-30"},
+  {lib:"산동", room:"어린이자료실(2층)", title:"호랑나비 결혼식", author:"박윤희 / 아동문예", call:"아811.6-박윤희ㅎ", status:"대출가능"},
+  {lib:"산동", room:"어린이자료실(2층)", title:"똥볶이 할멈: K-히어로 판타지. 9", author:"강효미 / 슈크림북", call:"아813.6-강효미ㄸ-9", status:"대출불가(예약1)"},
+  {lib:"산동", room:"어린이자료실(2층)", title:"도면이 친절한 리얼 종이접기. 2, 멸종 생물 편", author:"가와하타 후미아키 / 에밀", call:"아634.9-가와하ㄷㅇ-2", status:"대출가능"},
+  {lib:"산동", room:"어린이자료실(2층)", title:"단짝 친구 차지하기 대작전", author:"심윤경 / 사계절", call:"아813.6-심윤경ㄷ", status:"대출가능"},
+  {lib:"산동", room:"어린이자료실(2층)", title:"다있소 과학. 3, 최고의 간식왕을 뽑아라", author:"윤자영 / 다른어린이", call:"아404-윤자영ㄷ-3", status:"대출불가(예약1)"},
+  {lib:"산동", room:"어린이자료실(2층)", title:"(나민애의)문해력 게임. 6", author:"나민애·김혜련 / 겜툰", call:"아813.6-나민애ㅁ-6", status:"대출불가(예약3)"},
+  {lib:"산동", room:"어린이자료실(2층)", title:"그래서 이런 맞춤법이 생겼대요", author:"우리누리 / 길벗스쿨", call:"아710-우리누ㄱ", status:"대출중", due:"2026-11-29"},
+  {lib:"산동", room:"어린이자료실(2층)", title:"그래서 이런 날이 생겼대요", author:"우리누리 / 길벗스쿨", call:"아386-우리누ㄱ", status:"대출불가(예약1)"},
+  {lib:"산동", room:"어린이자료실(2층)", title:"국어나라 용언도시. 1, 동사, 움직임을 찾아 줘!", author:"진정·신연수 / 주니어마리", call:"아715-진정ㄱ-1", status:"대출중(예약1)", due:"2026-11-24"},
+  {lib:"산동", room:"어린이자료실(2층)", title:"고지식 박사의 데칼코마니 스티커: 두 번째 발명품", author:"김미숙 / 뜨인돌어린이", call:"아813.6-김미숙ㄱ", status:"대출가능"},
+  {lib:"산동", room:"어린이자료실(2층)", title:"뼈뼈 사우루스. 1, 뼈뼈 티라노사우루스 '베베'의 모험", author:"암모나이트 / 미래엔", call:"아833.6-암모나ㅃㄱ-1", status:"대출중", due:"2026-11-27"},
+  {lib:"산동", room:"어린이자료실(2층)", title:"(타키포 오허징의 수상한)만물상점. 3", author:"안도감 / 대원씨아이", call:"아813.6-캐릭온ㅁ-3", status:"대출중(예약1)", due:"2026-11-25"},
+  {lib:"산동", room:"어린이자료실(2층)", title:"(타키포오 허징의 수상한)만물상점. 6", author:"안도감 / 대원키즈", call:"아813.6-캐릭온ㅁ-6", status:"대출중", due:"2026-12-03"},
+  {lib:"산동", room:"어린이자료실(2층)", title:"(타키포오 허징의 수상한)만물상점. 5", author:"김혜련 / 대원키즈", call:"아813.6-캐릭온ㅁ-5", status:"대출중", due:"2026-12-03"},
+  {lib:"산동", room:"어린이자료실(2층)", title:"(타키포오 허징의 수상한)만물상점. 4", author:"안도감 / 대원키즈", call:"아813.6-캐릭온ㅁ-4", status:"대출불가(예약1)"},
+
+  // 작은도서관 (1, 2, 4페이지 확인된 아동·유아 신간)
+  {lib:"작은", room:"[평생]자료실", title:"흔한남매. 23", author:"백난도 / 미래엔아이세움", call:"평아813.6-흔한남ㅎ-23", status:"대출가능"},
+  {lib:"작은", room:"[평생]자료실", title:"(만화로 보는) 그리스 로마 신화. 8, 오르페우스의 사랑", author:"토머스 불핀치 / 가나출판사", call:"평아219.21-불핀치ㄱ-8", status:"대출가능"},
+  {lib:"작은", room:"[평생]자료실", title:"푸른 사자 와니니. 7, 인간의 길에서", author:"이현 / 창비", call:"평아813.6-이현ㅍ-7", status:"대출가능"},
+  {lib:"작은", room:"[평생]자료실", title:"푸른 사자 와니니. 8, 갈라진 앞발들", author:"이현 / 창비", call:"평아813.6-이현ㅍ-8", status:"대출가능"},
+  {lib:"작은", room:"[해평]누리자료실", title:"구석구석 국립중앙박물관. 1, 선사·고대관", author:"박찬희 / 엘도브", call:"해아911-박찬희ㄱ-1", status:"대출가능"},
+  {lib:"작은", room:"[해평]누리자료실", title:"구석구석 국립중앙박물관. 2, 중·근세관", author:"박찬희 / 엘도브", call:"해아911-박찬희ㄱ-2", status:"대출가능"},
+  {lib:"작은", room:"[해평]누리자료실", title:"구석구석 국립중앙박물관. 3, 서화관", author:"박찬희 / 엘도브", call:"해아911-박찬희ㄱ-3", status:"대출가능"}
+];
+
+let loanFilter = 'all';
+let newLib = 'all';
+let newStatus = 'all';
+
+function switchTab(t) {
+  document.getElementById('tab-loans').classList.toggle('active', t === 'loans');
+  document.getElementById('tab-new').classList.toggle('active', t === 'new');
+  document.getElementById('view-loans').style.display = t === 'loans' ? '' : 'none';
+  document.getElementById('view-new').style.display = t === 'new' ? '' : 'none';
+}
+
+function setLoanFilter(f, el) {
+  loanFilter = f;
+  document.querySelectorAll('#loan-chips .chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderLoans();
+}
+
+function setNewLib(l, el) {
+  newLib = l;
+  document.querySelectorAll('#new-lib-chips .chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderNew();
+}
+
+function setNewStatus(s, el) {
+  newStatus = s;
+  document.querySelectorAll('#new-status-chips .chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderNew();
+}
+
+function renderLoans() {
+  const q = document.getElementById('loan-q').value.trim().toLowerCase();
+  const rows = LOANS.filter(x => {
+    if (loanFilter === '양포' && !x.lib.includes('양포')) return false;
+    if (loanFilter === '중앙' && !x.lib.includes('중앙')) return false;
+    if (loanFilter === '만근' && x.who !== '만근') return false;
+    if (loanFilter === '지현' && x.who !== '지현') return false;
+    if (q && !(x.title + x.who + x.lib).toLowerCase().includes(q)) return false;
+    return true;
+  });
+  document.getElementById('loan-count').textContent = `표시 중: ${rows.length}권`;
+  document.getElementById('loan-list').innerHTML = rows.map(x => {
+    const urgent = x.due <= '2026-11-23';
+    const badgeClass = urgent ? 'b-warn' : (x.lib.includes('양포') ? 'b-ok' : 'b-gray');
+    return `<div class="item">
+      <div class="item-main">
+        <div class="title">${x.title}</div>
+        <div class="meta">${x.who} · ${x.lib} · 대출 ${x.loan}</div>
+      </div>
+      <span class="badge ${badgeClass}">반납 ${x.due}</span>
+    </div>`;
+  }).join('');
+}
+
+function renderNew() {
+  const q = document.getElementById('new-q').value.trim().toLowerCase();
+  const rows = NEW_BOOKS.filter(x => {
+    if (newLib !== 'all' && x.lib !== newLib) return false;
+    if (newStatus === '가능' && x.status !== '대출가능') return false;
+    if (newStatus === '대출중' && x.status === '대출가능') return false;
+    if (q && !(x.title + x.author + x.call + x.room).toLowerCase().includes(q)) return false;
+    return true;
+  });
+  document.getElementById('new-count').textContent = `표시 중: ${rows.length}권`;
+  document.getElementById('new-list').innerHTML = rows.map(x => {
+    const cls = x.status === '대출가능' ? 'b-ok' : (x.status.startsWith('대출불가') ? 'b-no' : 'b-warn');
+    const dueTxt = x.due ? ` (${x.due.slice(5)})` : '';
+    return `<div class="item">
+      <div class="item-main">
+        <div class="title">${x.title}</div>
+        <div class="meta">${x.lib} · ${x.room} · ${x.author} · ${x.call}</div>
+      </div>
+      <span class="badge ${cls}">${x.status}${dueTxt}</span>
+    </div>`;
+  }).join('');
+}
+
+renderLoans();
+renderNew();
+</script>
+</body>
+</html>
