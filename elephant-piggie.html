@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#fff8ef" id="metaTheme">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>엘리펀트 앤 피기 25권 · 그림책 읽어주는 앱</title>
+<style>
+  :root{
+    --bg:#fff8ef; --card:#ffffff; --ink:#332a24; --muted:#8d7e72;
+    --line:#f0e2d2; --accent:#e8624a; --accent2:#7bbcd6; --accent-ink:#fff;
+    --soft:#fdeee7; --chip:#f7efe5; --chip-ink:#66584d;
+    --hl:#ffe27a; --hl-ink:#3a2a05;
+    --shadow:0 6px 20px rgba(140,90,50,.08);
+    --stage:#ffe9d6;
+  }
+  body.night{
+    --bg:#0f1420; --card:#18202f; --ink:#e9eefb; --muted:#93a0b8;
+    --line:#243046; --accent:#f49b7a; --accent2:#6fb6d6; --accent-ink:#1c120c;
+    --soft:#2a2436; --chip:#1c2536; --chip-ink:#c2cee2;
+    --hl:#ffcf5e; --hl-ink:#2a1d00;
+    --shadow:0 6px 22px rgba(0,0,0,.4);
+    --stage:#1c2740;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR","Segoe UI",Roboto,sans-serif;
+    line-height:1.45; letter-spacing:-.01em;
+    padding-bottom:calc(20px + env(safe-area-inset-bottom));
+    transition:background .25s ease,color .25s ease;
+    -webkit-text-size-adjust:100%;
+  }
+  button{font-family:inherit;color:inherit}
+  .wrap{max-width:720px;margin:0 auto;padding:16px 14px 10px}
+
+  header.top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:12px}
+  .brand{font-size:19px;font-weight:900;line-height:1.25;letter-spacing:-.03em}
+  .brand em{font-style:normal;color:var(--accent)}
+  .brand small{display:block;font-size:11.5px;font-weight:600;color:var(--muted);letter-spacing:0;margin-top:3px}
+  .nightbtn{flex:0 0 auto;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--card);font-size:17px;cursor:pointer}
+  .nightbtn.on{background:#243349;color:#ffd9a8;border-color:transparent}
+
+  .hero{border-radius:22px;padding:15px;margin-bottom:13px;background:linear-gradient(140deg,#fff1e2,#ffe3d6 55%,#ffe0ee);border:1px solid #f8dbcb;box-shadow:var(--shadow)}
+  body.night .hero{background:linear-gradient(140deg,#1b2740,#22304a 60%,#2b2a4a);border-color:#2b3a55}
+  .hero b{display:block;font-size:14.5px;font-weight:900;margin-bottom:8px;letter-spacing:-.02em}
+  .hero p{margin:0 0 11px;font-size:12.5px;color:#7d6455;line-height:1.5}
+  body.night .hero p{color:#a9b7cf}
+  .hero-row{display:flex;gap:8px;flex-wrap:wrap}
+  .cta{flex:1 1 150px;border:0;border-radius:14px;padding:13px 14px;font-size:14.5px;font-weight:900;background:var(--accent);color:#fff;cursor:pointer;box-shadow:0 6px 16px rgba(232,98,74,.26)}
+  body.night .cta{color:#20130d}
+  .cta.ghost{background:rgba(255,255,255,.75);color:#8a5138;box-shadow:none;border:1px solid rgba(232,98,74,.22);flex:0 1 auto;font-size:12.5px;padding:12px}
+  body.night .cta.ghost{background:#243150;color:#e9eefb;border-color:#33415e}
+
+  .sticky{position:sticky;top:0;z-index:20;background:var(--bg);padding:6px 0 6px;margin:0 -2px}
+  .search{position:relative}
+  .search input{width:100%;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:14px;padding:12px 40px 12px 38px;font-size:15px;outline:none;box-shadow:var(--shadow)}
+  .search input::placeholder{color:var(--muted)}
+  .search .ico{position:absolute;left:13px;top:11px;font-size:15px;opacity:.55}
+  .search .clr{position:absolute;right:8px;top:7px;width:28px;height:28px;border:0;background:var(--chip);color:var(--chip-ink);border-radius:50%;font-size:14px;cursor:pointer}
+  .chips{display:flex;gap:7px;overflow-x:auto;padding:9px 2px 2px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--chip-ink);border-radius:999px;padding:8px 12px;font-size:12.5px;font-weight:800;cursor:pointer;white-space:nowrap}
+  .chip.on{background:var(--accent);color:var(--accent-ink);border-color:transparent}
+  .countline{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);margin:9px 3px 9px}
+  .countline b{color:var(--ink)}
+
+  #list{display:grid;grid-template-columns:1fr;gap:11px}
+  @media(min-width:600px){#list{grid-template-columns:1fr 1fr}}
+  .card{display:grid;grid-template-columns:78px 1fr;gap:11px;align-items:start;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:10px;box-shadow:var(--shadow);cursor:pointer;transition:transform .12s,border-color .2s}
+  .card:active{transform:scale(.99)}
+  .card.read{border-color:rgba(123,188,214,.5)}
+  .thumb{width:78px;height:78px;border-radius:14px;overflow:hidden;background:var(--stage);display:block;position:relative;padding:0;border:0}
+  .thumb svg{width:100%;height:100%;display:block}
+  .thumb .num{position:absolute;left:5px;top:4px;background:rgba(255,255,255,.88);color:#3a2a22;font-size:10px;font-weight:900;border-radius:7px;padding:1px 5px;line-height:1.5}
+  .card h3{margin:0;font-size:14.5px;font-weight:900;line-height:1.25;letter-spacing:-.02em;display:flex;gap:5px;align-items:baseline;flex-wrap:wrap}
+  .ar{display:inline-block;padding:1px 6px;border-radius:6px;background:var(--soft);color:var(--accent);font-size:10px;font-weight:900;letter-spacing:0}
+  .card .ko{margin:3px 0 0;font-size:12.5px;font-weight:800;opacity:.9}
+  .card .intro{margin:2px 0 0;font-size:11.5px;color:var(--muted)}
+  .card .flags{display:flex;gap:6px;align-items:center;margin-top:7px;font-size:11px;color:var(--muted)}
+  .flag{border:1px solid var(--line);background:var(--chip);border-radius:999px;padding:2px 8px;font-size:10.5px;font-weight:800;color:var(--chip-ink);cursor:pointer}
+  .flag.fav{background:#ffe6ea;border-color:#ffd0d8;color:#c0435c}
+  body.night .flag.fav{background:#3a2230;border-color:#4d2c3c;color:#ff9ab0}
+  .flag.done{background:#e3f6ef;border-color:#c9ecdf;color:#227a5e}
+  body.night .flag.done{background:#173029;border-color:#22453a;color:#79d7b6}
+  .flag.off{opacity:.55}
+  .flag:active{transform:scale(.97)}
+  .empty{padding:30px 10px;text-align:center;color:var(--muted);font-size:13px}
+
+  /* ---------- reader ---------- */
+  #reader{position:fixed;inset:0;z-index:60;background:var(--bg);display:flex;flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch}
+  #reader[hidden]{display:none}
+  .r-top{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:8px;padding:calc(8px + env(safe-area-inset-top)) 10px 8px;background:var(--bg);border-bottom:1px solid var(--line)}
+  .r-back{border:1px solid var(--line);background:var(--card);border-radius:11px;padding:7px 10px;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap}
+  .r-head{flex:1;min-width:0;text-align:center}
+  .r-head b{display:block;font-size:13.5px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .r-head span{display:block;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .r-night{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--card);font-size:15px;cursor:pointer;flex:0 0 auto}
+  .r-night.on{background:#243349;color:#ffd9a8;border-color:transparent}
+
+  .r-body{padding:10px 12px 26px;max-width:720px;width:100%;margin:0 auto}
+  .stage{position:relative;border-radius:20px;overflow:hidden;background:var(--stage);box-shadow:var(--shadow);border:1px solid var(--line)}
+  .stage svg{display:block;width:100%;height:auto;aspect-ratio:400/280}
+  body.night .stage svg{filter:brightness(.86) saturate(.94)}
+  @media (orientation:landscape) and (max-height:560px){
+    .r-body{max-width:1000px;display:grid;grid-template-columns:minmax(220px,38%) 1fr;
+            gap:8px 16px;align-items:start;padding:8px 14px 16px}
+    .stage{grid-column:1;grid-row:1}
+    .booknav{grid-column:1;grid-row:2;margin:0;font-size:10.5px}
+    .booknav button{padding:4px 7px;font-size:10.5px;white-space:nowrap}
+    .booknav .mid{display:none}
+    .text{grid-column:2;grid-row:1;margin:0;font-size:18px;line-height:1.45}
+    .ctrl{grid-column:2;grid-row:2;margin:0}
+    .ctrl button{padding:11px 6px}
+    .ko{grid-column:2;grid-row:3;margin:0;font-size:13px}
+    .ctrl2{grid-column:2;grid-row:4;margin:0;gap:6px}
+    .ctrl2 .k{padding:6px 4px;font-size:10.5px}
+    .ctrl2 .k b{font-size:12px}
+    .yt{grid-column:2;grid-row:5;padding:10px;margin:0;font-size:12px}
+    .foot{display:none}
+  }
+  @media (max-height:460px){
+    .r-top{padding:6px 10px}
+    .r-head b{font-size:12.5px}
+    .r-head span{display:none}
+  }
+  .pagebadge{position:absolute;right:8px;top:8px;background:rgba(255,255,255,.9);color:#3a2a22;font-size:11px;font-weight:900;border-radius:999px;padding:3px 9px;letter-spacing:.02em}
+  body.night .pagebadge{background:rgba(20,28,44,.85);color:#e9eefb}
+  .dots{position:absolute;left:0;right:0;bottom:7px;display:flex;gap:5px;justify-content:center}
+  .dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.65);box-shadow:0 0 0 1px rgba(90,60,40,.12)}
+  .dot.on{background:#ff7b5e;width:16px;border-radius:4px}
+  .booknav{display:flex;justify-content:space-between;align-items:center;margin:8px 2px 0;font-size:11.5px;color:var(--muted)}
+  .booknav button{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:5px 9px;font-size:11.5px;font-weight:800;cursor:pointer}
+  .booknav button:disabled{opacity:.35;cursor:default}
+  .booknav .mid{font-size:11px;letter-spacing:.02em}
+
+  .text{margin:12px 2px 0;font-size:21px;line-height:1.62;font-weight:700;letter-spacing:-.005em;font-family:Georgia,"Times New Roman","Apple SD Gothic Neo",serif}
+  @media(min-width:520px){.text{font-size:24px}}
+  .sent{display:inline;padding:1px 2px;border-radius:5px;transition:background-color .18s ease,color .18s ease;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+  .sent.on{background:var(--hl);color:var(--hl-ink);padding:1px 5px;box-shadow:0 1px 0 rgba(0,0,0,.04)}
+  .ko{margin:11px 2px 0;padding:11px 13px;border-radius:14px;background:var(--soft);font-size:14px;line-height:1.6;color:var(--ink);display:none}
+  .ko.show{display:block}
+  body.night .ko{background:#221e2e}
+  .ko b{font-weight:900;font-size:11px;color:var(--accent);display:block;margin-bottom:3px;letter-spacing:.02em}
+
+  .ctrl2{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:12px}
+  .ctrl2 .k{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:8px 4px;font-size:11px;font-weight:800;cursor:pointer;color:var(--muted);text-align:center;line-height:1.3}
+  .ctrl2 .k b{display:block;font-size:12.5px;color:var(--ink);font-weight:900;margin-top:2px}
+  .ctrl2 .k.on{border-color:var(--accent);background:var(--soft);color:var(--accent)}
+  .ctrl2 .k.on b{color:var(--accent)}
+
+  .ctrl{display:grid;grid-template-columns:1fr 1.5fr 1fr;gap:8px;margin-top:10px}
+  .ctrl button{border:1px solid var(--line);background:var(--card);border-radius:16px;padding:14px 6px;font-size:13px;font-weight:900;cursor:pointer;box-shadow:var(--shadow)}
+  .ctrl button:disabled{opacity:.4;cursor:default}
+  .ctrl .play{background:var(--accent);color:#fff;border:0;font-size:15px;box-shadow:0 6px 18px rgba(232,98,74,.3)}
+  body.night .ctrl .play{color:#20130d}
+
+  .yt{display:block;text-align:center;margin-top:10px;padding:13px;border-radius:14px;border:1px dashed var(--line);background:var(--card);color:var(--accent);font-size:13px;font-weight:900;text-decoration:none}
+  .foot{margin:14px 4px 0;font-size:10.5px;color:var(--muted);line-height:1.6;text-align:center}
+
+  .pop{position:fixed;inset:0;z-index:90;background:rgba(30,20,15,.35);display:flex;align-items:flex-end;justify-content:center;padding:16px}
+  .pop[hidden]{display:none}
+  .pop .sheet{background:var(--card);border-radius:20px;padding:16px;width:100%;max-width:420px;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+  .pop h4{margin:0 0 10px;font-size:14px}
+  .pop .row{display:flex;gap:8px;flex-wrap:wrap}
+  .pop .row button{flex:1 1 90px;border:1px solid var(--line);background:var(--chip);color:var(--chip-ink);border-radius:12px;padding:12px 8px;font-size:13px;font-weight:800;cursor:pointer}
+  .pop .row button.on{background:var(--accent);color:#fff;border-color:transparent}
+
+  #toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);background:#332a24;color:#fff;font-size:12.5px;font-weight:700;padding:10px 16px;border-radius:999px;opacity:0;pointer-events:none;transition:.25s;z-index:120;max-width:86vw;text-align:center}
+  #toast.on{opacity:.96;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">🐷 엘리펀트 앤 피기 <em>25권</em><small>그림책처럼 크게 보고, 문장마다 읽어 줘요</small></div>
+    <button class="nightbtn" id="nightTop" title="밤 모드" aria-label="밤 모드">🌙</button>
+  </header>
+
+  <section class="hero">
+    <b>피기와 제럴드, 25권을 순서대로</b>
+    <p>그림이 크게 나오고, 지금 읽는 문장이 노랗게 빛나요. 5쪽씩 아주 짧은 이야기예요.</p>
+    <div class="hero-row">
+      <button class="cta" id="playAll">▶ 전체 연속 재생</button>
+      <button class="cta ghost" id="resumeBtn" hidden>이어 보기</button>
+    </div>
+  </section>
+
+  <div class="sticky">
+    <div class="search">
+      <span class="ico">🔍</span>
+      <input id="q" type="search" placeholder="책 제목으로 찾기 (예: fly, 파티)" autocomplete="off">
+      <button class="clr" id="qClear" hidden aria-label="검색 지우기">✕</button>
+    </div>
+    <div class="chips" id="chips"></div>
+    <div class="countline"><span id="count"></span><span id="progress"></span></div>
+  </div>
+
+  <div id="list"></div>
+</div>
+
+<div id="reader" hidden>
+  <div class="r-top">
+    <button class="r-back" id="rBack">‹ 책장</button>
+    <div class="r-head"><b id="rTitle">—</b><span id="rKo">—</span></div>
+    <button class="r-night" id="rNight" aria-label="밤 모드">🌙</button>
+  </div>
+  <div class="r-body">
+    <div class="stage">
+      <div id="rArt"></div>
+      <div class="pagebadge"><span id="rPage">1 / 5</span></div>
+      <div class="dots" id="rDots"></div>
+    </div>
+    <div class="booknav">
+      <button id="rPrevBook">◀ 이전 책</button>
+      <span class="mid" id="rNum">#1</span>
+      <button id="rNextBook">다음 책 ▶</button>
+    </div>
+    <div class="text" id="rSent"></div>
+    <div class="ko" id="rKoBox"><b>한국어 뜻</b><span id="rKoText"></span></div>
+    <div class="ctrl">
+      <button id="rPrev">◀ 이전 쪽</button>
+      <button class="play" id="rPlay">▶ 읽기</button>
+      <button id="rNext">다음 쪽 ▶</button>
+    </div>
+    <div class="ctrl2">
+      <button class="k" id="rSpeed">속도<b>1.0x</b></button>
+      <button class="k" id="rAuto">자동 넘김<b>켜짐</b></button>
+      <button class="k" id="rSleep">수면 타이머<b>끔</b></button>
+      <button class="k" id="rKoBtn">한국어 뜻<b>숨김</b></button>
+      <button class="k" id="rCont">다음 책 연속<b>켜짐</b></button>
+      <button class="k" id="rRestart">처음부터<b>1쪽</b></button>
+    </div>
+    <a class="yt" id="rYt" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">▶ 원서 유튜브 낭독 보기</a>
+    <p class="foot">원서의 그림과 글을 그대로 옮기지 않고, 각 권의 이야기에서 영감을 받아 새로 쓴 짧은 그림책이에요.<br>Mo Willems 의 「Elephant &amp; Piggie」 시리즈를 좋아하는 아이를 위해 만들었어요.</p>
+  </div>
+</div>
+
+<div class="pop" id="pop" hidden><div class="sheet" id="popSheet"></div></div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+/* =========================================================
+   엘리펀트 앤 피기 25권 · 그림책 읽어주는 웹앱
+   - 그림: 브라우저에서 직접 그리는 SVG (외부 이미지 없음)
+   - 소리: Web Speech API (브라우저 내장 음성)
+   - 저장: 즐겨찾기/들은 책/밤 모드/속도/한국어 뜻 → localStorage (ep_ 접두사)
+   ========================================================= */
+var UPDATED_AT = "2026-11-20";
+var BOOKS = [{"n":1,"en":"Today I Will Fly!","ko":"오늘 나는 날 거야!","intro":"돼지 피기의 엉뚱한 도전","ar":1.1,"pages":[{"en":["“Today I will fly,” said Piggie.","“Pigs cannot fly,” said Gerald."],"ko":"“오늘 나는 날 거야,” 피기가 말했어요. “돼지는 못 나는걸,” 제럴드가 말했어요.","scene":{"pk":"stand","pf":"grin","ek":"stand","ef":"worry","deco":["sun"]}},{"en":["Piggie jumped up high.","She waved her big ears.","“Up, up, up!”"],"ko":"피기가 높이 폴짝 뛰었어요. 커다란 귀를 파닥파닥 흔들었어요. “위로, 위로, 위로!”","scene":{"pk":"jump","pf":"grin","ek":"stand","ef":"surprised","deco":["cloud"]}},{"en":["Piggie did not go up.","She went down. Plop!","“Ouch,” said Piggie."],"ko":"피기는 올라가지 않았어요. 아래로 푹 내려갔어요. “아야,” 피기가 말했어요.","scene":{"pk":"sit","pf":"sad","ek":"stand","ef":"surprised"}},{"en":["A bird flew down.","“Can I help?” said the bird."],"ko":"새 한 마리가 날아왔어요. “내가 도와줄까?” 새가 말했어요.","scene":{"pk":"stand","pf":"happy","ek":"stand","ef":"surprised","props":[{"n":"bird","who":"sky"}]}},{"en":["Piggie held the bird’s feet.","“Look at me! I can fly!”"],"ko":"피기가 새의 발을 꼭 잡았어요. “나 봐! 나는 날 수 있어!”","scene":{"bg":"sky","pk":"fly","pf":"grin","ek":"wave","ef":"happy","props":[{"n":"bird","who":"p"}],"deco":["cloud","cloud2"]}}]},{"n":2,"en":"My Friend Is Sad","ko":"내 친구가 슬퍼요","intro":"슬픈 친구를 웃게 하려는 피기","ar":1.0,"pages":[{"en":["Gerald sat on a rock.","He was very sad.","“Oh, Gerald,” said Piggie."],"ko":"제럴드는 바위에 앉아 있었어요. 마음이 아주 슬펐어요. “제럴드,” 피기가 말했어요.","scene":{"ek":"sit","ef":"sad","pk":"stand","pf":"worry","props":[{"n":"rock","who":"far-l"}]}},{"en":["Piggie put on a cowboy hat.","“Howdy, partner!”","Gerald did not look up."],"ko":"피기가 카우보이 모자를 썼어요. “하우디, 친구!” 그래도 제럴드는 고개를 들지 않았어요.","scene":{"ek":"sit","ef":"sad","pk":"stand","pf":"grin","props":[{"n":"rock","who":"far-l"},{"n":"hat","who":"p-head"}]}},{"en":["Piggie did a silly dance.","“Wiggle, wiggle, wiggle!”","Gerald did not smile."],"ko":"피기가 웃긴 춤을 췄어요. “흔들흔들흔들!” 그래도 제럴드는 웃지 않았어요.","scene":{"ek":"sit","ef":"sad","pk":"dance","pf":"silly","props":[{"n":"rock","who":"far-l"}],"deco":["music"]}},{"en":["Piggie came back as a robot.","“Beep, boop, beep!”","Gerald looked up at last."],"ko":"피기가 로봇이 되어 돌아왔어요. “삐빅, 뿅, 삐빅!” 그때야 제럴드가 고개를 들었어요.","scene":{"ek":"sit","ef":"surprised","pk":"stand","pf":"silly","props":[{"n":"rock","who":"far-l"},{"n":"mask","who":"p-eyes"}]}},{"en":["“You are here!” said Gerald.","“Now I am happy.”","“I never left,” said Piggie."],"ko":"“네가 여기 있구나!” 제럴드가 말했어요. “이제 행복해.” “난 계속 여기 있었는데,” 피기가 말했어요.","scene":{"ek":"jump","ef":"grin","pk":"stand","pf":"happy","deco":["hearts"]}}]},{"n":3,"en":"I Am Invited to a Party!","ko":"나 파티에 초대받았어!","intro":"무엇을 입을지 고민하는 피기","ar":1.2,"pages":[{"en":["“I am invited to a party!” said Piggie.","“What should I wear?”"],"ko":"“나 파티에 초대받았어!” 피기가 말했어요. “뭘 입고 가야 하지?”","scene":{"pk":"jump","pf":"grin","ek":"stand","ef":"happy","props":[{"n":"gift","who":"p"}]}},{"en":["“Wear a hat and a bow tie,” said Gerald.","Piggie put them on."],"ko":"“모자랑 나비넥타이를 해,” 제럴드가 말했어요. 피기가 둘 다 했어요.","scene":{"pk":"stand","pf":"happy","ek":"point","ef":"happy","props":[{"n":"hat","who":"p-head"}]}},{"en":["“What if it is a pool party?” said Gerald.","Piggie put on her goggles."],"ko":"“수영장 파티면 어떡하지?” 제럴드가 말했어요. 피기가 물안경을 썼어요.","scene":{"bg":"pond","pk":"stand","pf":"grin","ek":"stand","ef":"surprised","props":[{"n":"goggles","who":"p-eyes"}]}},{"en":["“What if it is a costume party?”","Piggie put on a crown and a cape."],"ko":"“가면 파티면 어떡하지?” 피기가 왕관과 망토를 했어요.","scene":{"pk":"dance","pf":"silly","ek":"stand","ef":"surprised","props":[{"n":"crown","who":"p-head"},{"n":"cape","who":"p-back"}],"deco":["confetti"]}},{"en":["At the party, Piggie saw Gerald.","“You are the party!” she said.","“You are my best friend.”"],"ko":"파티에서 피기는 제럴드를 봤어요. “너야말로 파티야!” “넌 내 제일 친한 친구잖아.”","scene":{"bg":"party","pk":"jump","pf":"grin","ek":"wave","ef":"grin","props":[{"n":"crown","who":"p-head"}],"deco":["confetti","hearts"]}}]},{"n":4,"en":"There Is a Bird on Your Head!","ko":"네 머리에 새가 있어!","intro":"머리에 새 둥지가 생긴 제럴드","ar":1.1,"pages":[{"en":["“Gerald, there is a bird on your head,” said Piggie.","“A bird?” said Gerald. “On my head?”"],"ko":"“제럴드, 네 머리에 새가 있어,” 피기가 말했어요. “새? 내 머리에?” 제럴드가 말했어요.","scene":{"ek":"stand","ef":"happy","pk":"point","pf":"worry","props":[{"n":"bird","who":"e-top"}]}},{"en":["“A bird? On my head?”","“Yes. It is making a nest.”"],"ko":"“새? 내 머리에?” “응. 둥지를 짓고 있어.”","scene":{"ek":"stand","ef":"surprised","pk":"point","pf":"grin","props":[{"n":"bird","who":"e-top"},{"n":"nest","who":"e-nest"}]}},{"en":["“Bird, please go away,” said Gerald.","The bird sang a happy song."],"ko":"“새야, 저리 가 줘,” 제럴드가 말했어요. 새는 즐거운 노래를 불렀어요.","scene":{"ek":"stand","ef":"worry","pk":"stand","pf":"happy","props":[{"n":"bird","who":"e-top"},{"n":"nest","who":"e-nest"}],"deco":["music"]}},{"en":["“Now there are two birds,” said Piggie.","“And an egg!”"],"ko":"“이제 새가 두 마리야,” 피기가 말했어요. “알도 하나 있어!”","scene":{"ek":"sit","ef":"surprised","pk":"point","pf":"surprised","props":[{"n":"bird","who":"e-top"},{"n":"bird2","who":"e-top2"},{"n":"egg","who":"e-egg"}]}},{"en":["“Oh, no!” said Gerald.","“Oh, yes!” said the birds.","“We like it here!”"],"ko":"“어떡해!” 제럴드가 말했어요. “좋아!” 새들이 말했어요. “우린 여기가 좋아!”","scene":{"ek":"sit","ef":"silly","pk":"stand","pf":"grin","props":[{"n":"bird","who":"e-top"},{"n":"bird2","who":"e-top2"},{"n":"nest","who":"e-nest"}],"deco":["hearts"]}}]},{"n":5,"en":"I Love My New Toy!","ko":"내 새 장난감이 좋아!","intro":"부서진 장난감과 화해","ar":1.1,"pages":[{"en":["Piggie had a new toy.","It was round and red.","“I love it!” she said."],"ko":"피기에게 새 장난감이 생겼어요. 둥글고 빨갰어요. “정말 좋아!”","scene":{"pk":"hold","pf":"grin","ek":"stand","ef":"happy","props":[{"n":"ball","who":"p"}]}},{"en":["Gerald threw the toy.","It went up, up, up.","Then it went CRASH!"],"ko":"제럴드가 장난감을 던졌어요. 위로 위로 올라갔어요. 그러다가 와장창!","scene":{"ek":"hold","ef":"happy","pk":"stand","pf":"grin","props":[{"n":"ball","who":"sky"}]}},{"en":["The toy was in two parts.","“My toy!” cried Piggie.","“I am sorry,” said Gerald."],"ko":"장난감이 두 조각 났어요. “내 장난감!” 피기가 울었어요. “미안해,” 제럴드가 말했어요.","scene":{"pk":"sit","pf":"sad","ek":"stand","ef":"worry","props":[{"n":"toy2","who":"mid"}]}},{"en":["Piggie was mad.","Gerald was sad.","They sat far apart."],"ko":"피기는 화가 났어요. 제럴드는 슬펐어요. 둘은 멀리 떨어져 앉았어요.","scene":{"pk":"sit","pf":"angry","ek":"sit","ef":"sad"}},{"en":["Piggie put the toy together.","“It still works!” she said.","“Friends are better than toys.”"],"ko":"피기가 장난감을 맞췄어요. “아직 돼!” “친구가 장난감보다 좋아.”","scene":{"pk":"hold","pf":"happy","ek":"jump","ef":"grin","props":[{"n":"ball","who":"mid"}],"deco":["hearts"]}}]},{"n":6,"en":"I Will Surprise My Friend!","ko":"내가 친구를 깜짝 놀라게 할 거야!","intro":"숨바꼭질 소동","ar":1.2,"pages":[{"en":["“Let’s play hide-and-seek,” said Piggie.","“I will hide first.”"],"ko":"“숨바꼭질 하자,” 피기가 말했어요. “내가 먼저 숨을게.”","scene":{"pk":"point","pf":"grin","ek":"stand","ef":"happy"}},{"en":["Piggie hid behind a tree.","Gerald hid behind a rock.","They both waited."],"ko":"피기는 나무 뒤에 숨었어요. 제럴드는 바위 뒤에 숨었어요. 둘 다 기다렸어요.","scene":{"props":[{"n":"tree","who":"far-l"},{"n":"rock","who":"far-r"}],"ek":"sit","pk":"sit","ef":"happy","pf":"happy"}},{"en":["“Where is Piggie?” said Gerald.","“Where is Gerald?” said Piggie."],"ko":"“피기는 어디 있지?” “제럴드는 어디 있지?”","scene":{"props":[{"n":"tree","who":"far-l"},{"n":"rock","who":"far-r"}],"ek":"sit","ef":"worry","pk":"sit","pf":"worry"}},{"en":["They waited and waited.","The sun went down.","The stars came out."],"ko":"기다리고 또 기다렸어요. 해가 지고 별이 나왔어요.","scene":{"bg":"sunset","props":[{"n":"tree","who":"far-l"},{"n":"rock","who":"far-r"}],"ek":"sit","ef":"sleepy","pk":"sit","pf":"sleepy"}},{"en":["“Boo!” they said at the same time.","“You surprised me!”","They laughed and laughed."],"ko":"“깜짝!” 둘이 동시에 소리쳤어요. “깜짝 놀랐어!” 둘은 깔깔 웃었어요.","scene":{"bg":"sunset","ek":"jump","ef":"grin","pk":"jump","pf":"grin","deco":["hearts"]}}]},{"n":7,"en":"Are You Ready to Play Outside?","ko":"밖에서 놀 준비 됐어?","intro":"비 오는 날의 즐거움","ar":1.1,"pages":[{"en":["“Let’s play outside,” said Piggie.","Then it began to rain."],"ko":"“밖에서 놀자,” 피기가 말했어요. 그때 비가 내리기 시작했어요.","scene":{"bg":"rain","pk":"stand","pf":"grin","ek":"stand","ef":"worry"}},{"en":["“I do not like rain,” said Piggie.","“Rain is not fun.”"],"ko":"“비는 싫어,” 피기가 말했어요. “비는 하나도 안 재밌어.”","scene":{"bg":"rain","pk":"sit","pf":"sad","ek":"sit","ef":"sad"}},{"en":["Two worms came out.","They danced in the rain.","“Look at them!”"],"ko":"지렁이 두 마리가 나왔어요. 빗속에서 춤을 췄어요. “저것 봐!”","scene":{"bg":"rain","props":[{"n":"worm","who":"g1"},{"n":"worm","who":"g2"}],"pk":"stand","pf":"surprised","ek":"stand","ef":"surprised"}},{"en":["“Maybe rain is fun,” said Piggie.","She jumped in a puddle. SPLASH!"],"ko":"“비도 재밌을지 몰라,” 피기가 말했어요. 물웅덩이에 폴짝! 첨벙!","scene":{"bg":"rain","pk":"jump","pf":"grin","ek":"stand","ef":"happy","deco":["splash"]}},{"en":["“I love rain!” said Piggie.","Then the sun came out.","“Oh, no!”"],"ko":"“비 좋아!” 피기가 말했어요. 그때 해가 나왔어요. “어떡해!”","scene":{"pk":"jump","pf":"silly","ek":"stand","ef":"grin","deco":["sun"]}}]},{"n":8,"en":"Watch Me Throw the Ball!","ko":"내가 공 던지는 거 봐!","intro":"공 던지기 대결","ar":1.2,"pages":[{"en":["Gerald had a ball.","“Watch me throw!” he said.","The ball went far."],"ko":"제럴드에게 공이 있었어요. “내가 던지는 거 봐!” 공이 멀리 날아갔어요.","scene":{"ek":"hold","ef":"grin","pk":"stand","pf":"happy","props":[{"n":"ball","who":"sky"}]}},{"en":["“Wow!” said Piggie.","“Now watch me!”","Her ball went behind her."],"ko":"“와!” 피기가 말했어요. “이번엔 나 봐!” 피기의 공은 뒤로 갔어요.","scene":{"pk":"hold","pf":"grin","ek":"stand","ef":"surprised","props":[{"n":"ball","who":"far-l"}]}},{"en":["“That was not far,” said Gerald.","“But it was fun!” said Piggie."],"ko":"“별로 안 멀었는데,” 제럴드가 말했어요. “그래도 재밌었어!” 피기가 말했어요.","scene":{"ek":"stand","ef":"worry","pk":"dance","pf":"grin"}},{"en":["Piggie threw the ball up high.","It came down on her head.","BONK!"],"ko":"피기가 공을 높이 던졌어요. 공이 머리 위로 떨어졌어요. 똑!","scene":{"pk":"sit","pf":"surprised","ek":"stand","ef":"surprised","props":[{"n":"ball","who":"p-top"}],"deco":["stars"]}},{"en":["“I am the best thrower!” said Piggie.","“You are the best laugher,” said Gerald."],"ko":"“난 최고의 던지기야!” 피기가 말했어요. “넌 최고의 웃음꾼이야,” 제럴드가 말했어요.","scene":{"pk":"jump","pf":"grin","ek":"jump","ef":"grin","props":[{"n":"ball","who":"mid"}],"deco":["hearts"]}}]},{"n":9,"en":"Elephants Cannot Dance!","ko":"코끼리는 춤을 못 춰!","intro":"춤추는 코끼리 제럴드","ar":1.2,"pages":[{"en":["“Dance with me!” said Piggie.","“Elephants cannot dance,” said Gerald."],"ko":"“나랑 춤추자!” 피기가 말했어요. “코끼리는 춤을 못 춰,” 제럴드가 말했어요.","scene":{"pk":"dance","pf":"grin","ek":"stand","ef":"worry","deco":["music"]}},{"en":["Piggie showed him a step.","“Jump, jump, turn!”","Gerald jumped and fell."],"ko":"피기가 한 동작을 보여 줬어요. “폴짝, 폴짝, 돌기!” 제럴드는 넘어졌어요.","scene":{"pk":"point","pf":"happy","ek":"sit","ef":"surprised","deco":["stars"]}},{"en":["“Try again,” said Piggie.","Gerald wiggled his trunk.","He tripped on his feet."],"ko":"“다시 해 봐,” 피기가 말했어요. 제럴드는 코를 흔들었어요. 발에 걸려 넘어졌어요.","scene":{"pk":"stand","pf":"happy","ek":"dance","ef":"worry","deco":["music"]}},{"en":["Gerald took a deep breath.","He closed his eyes.","He danced his own way."],"ko":"제럴드는 깊게 숨을 쉬었어요. 눈을 감았어요. 자기만의 방식으로 춤을 췄어요.","scene":{"pk":"stand","pf":"surprised","ek":"dance","ef":"sleepy","deco":["music"]}},{"en":["“That is a new dance!” said Piggie.","And she danced it too."],"ko":"“새로운 춤이네!” 피기가 말했어요. 피기도 같이 췄어요.","scene":{"pk":"dance","pf":"grin","ek":"dance","ef":"grin","deco":["music","hearts"]}}]},{"n":10,"en":"Pigs Make Me Sneeze!","ko":"돼지 보면 재채기가 나!","intro":"재채기가 멈추지 않는 제럴드","ar":1.0,"pages":[{"en":["Piggie came close. “Hello, Gerald!”","AH-CHOO!","“Oh, no,” said Gerald."],"ko":"피기가 다가왔어요. “안녕, 제럴드!” 에취! “이런,” 제럴드가 말했어요.","scene":{"pk":"stand","pf":"grin","ek":"sneeze","ef":"silly","deco":["sparkle"]}},{"en":["“Do I make you sneeze?” said Piggie.","AH-CHOO!","“Yes, you do.”"],"ko":"“내가 재채기 나게 해?” 피기가 말했어요. 에취! “응, 그래.”","scene":{"pk":"stand","pf":"worry","ek":"sneeze","ef":"silly","deco":["sparkle"]}},{"en":["“Then I will go away,” said Piggie.","She sat far, far away."],"ko":"“그럼 난 멀리 갈게,” 피기가 말했어요. 아주 아주 멀리 앉았어요.","scene":{"pk":"sit","pf":"sad","ek":"sit","ef":"sad"}},{"en":["Gerald felt sad.","He walked to Piggie.","AH-CHOO! He sneezed again."],"ko":"제럴드는 마음이 슬펐어요. 피기에게 걸어갔어요. 에취! 또 재채기했어요.","scene":{"pk":"stand","pf":"sad","ek":"sneeze","ef":"sad","deco":["sparkle"]}},{"en":["“Maybe it is the flowers,” said Piggie.","A flower was in Gerald’s trunk.","AH-CHOO!"],"ko":"“어쩌면 꽃 때문일지도,” 피기가 말했어요. 꽃이 제럴드 코에 있었어요. “에취!”","scene":{"pk":"point","pf":"surprised","ek":"sneeze","ef":"silly","props":[{"n":"flowers","who":"e"}]}}]},{"n":11,"en":"I Am Going!","ko":"나 갈 거야!","intro":"떠난다고 말하는 피기","ar":1.0,"pages":[{"en":["“I am going,” said Piggie.","“Going where?” said Gerald."],"ko":"“나 갈게,” 피기가 말했어요. “어디에?” 제럴드가 물었어요.","scene":{"pk":"stand","pf":"happy","ek":"stand","ef":"worry"}},{"en":["“Away,” said Piggie.","“For how long?”","“A long, long time.”"],"ko":"“멀리,” 피기가 말했어요. “얼마나?” “아주 아주 오래.”","scene":{"pk":"point","pf":"happy","ek":"stand","ef":"sad"}},{"en":["Gerald’s ears drooped.","“I will miss you,” he said.","“I will miss you too.”"],"ko":"제럴드의 귀가 축 처졌어요. “보고 싶을 거야.” “나도 보고 싶을 거야.”","scene":{"pk":"stand","pf":"sad","ek":"sit","ef":"sad","deco":["hearts"]}},{"en":["Piggie walked to the door.","She stopped.","“Wait. I forgot something.”"],"ko":"피기가 문 쪽으로 걸어갔어요. 멈췄어요. “잠깐. 뭘 잊었어.”","scene":{"pk":"run","pf":"surprised","ek":"stand","ef":"surprised"}},{"en":["“What did you forget?” said Gerald.","“My lunch!” said Piggie.","“I am going to the kitchen!”"],"ko":"“뭘 잊었는데?” “내 도시락!” “난 부엌에 가는 거야!”","scene":{"pk":"hold","pf":"grin","ek":"jump","ef":"grin","props":[{"n":"bag","who":"p"}],"deco":["hearts"]}}]},{"n":12,"en":"Can I Play Too?","ko":"나도 같이 놀아도 돼?","intro":"팔이 없는 뱀과 공놀이","ar":1.1,"pages":[{"en":["Gerald and Piggie played catch.","A snake came by.","“Can I play too?”"],"ko":"제럴드와 피기가 공놀이를 했어요. 뱀이 왔어요. “나도 해도 돼?”","scene":{"ek":"hold","ef":"happy","pk":"hold","pf":"happy","props":[{"n":"ball","who":"sky"},{"n":"snake","who":"far-r"}]}},{"en":["“You have no arms,” said Gerald.","“I know,” said the snake."],"ko":"“넌 팔이 없잖아,” 제럴드가 말했어요. “알아,” 뱀이 말했어요.","scene":{"ek":"stand","ef":"worry","pk":"stand","pf":"worry","props":[{"n":"snake","who":"far-r"}]}},{"en":["The snake tried to catch the ball.","It hit him on the head.","BONK!"],"ko":"뱀이 공을 잡아 봤어요. 공이 머리에 맞았어요. 똑!","scene":{"ek":"stand","ef":"surprised","pk":"stand","pf":"surprised","props":[{"n":"snake","who":"far-r"},{"n":"ball","who":"far-r"}],"deco":["stars"]}},{"en":["“Let’s throw low,” said Piggie.","The snake caught it with his tail!"],"ko":"“낮게 던지자,” 피기가 말했어요. 뱀이 꼬리로 공을 잡았어요!","scene":{"ek":"hold","ef":"grin","pk":"point","pf":"grin","props":[{"n":"snake","who":"far-r"},{"n":"ball","who":"far-r"}]}},{"en":["“You are good at this!” said Gerald.","“Throw it again!” said the snake."],"ko":"“너 이거 잘한다!” 제럴드가 말했어요. “한 번 더!” 뱀이 말했어요.","scene":{"ek":"jump","ef":"grin","pk":"jump","pf":"grin","props":[{"n":"snake","who":"far-r"}],"deco":["hearts"]}}]},{"n":13,"en":"We Are in a Book!","ko":"우리는 책 속에 있어!","intro":"독자를 발견한 두 친구","ar":1.2,"pages":[{"en":["“Look,” said Gerald.","“Someone is looking at us.”","“That is a reader,” said Piggie."],"ko":"“봐,” 제럴드가 말했어요. “누가 우리를 보고 있어.” “저건 독자야,” 피기가 말했어요.","scene":{"ek":"stand","ef":"surprised","pk":"point","pf":"grin","props":[{"n":"book","who":"mid"}]}},{"en":["“Hello, reader!” said Piggie.","“We are in a book!”"],"ko":"“안녕, 독자!” 피기가 말했어요. “우린 책 속에 살아!”","scene":{"ek":"wave","ef":"grin","pk":"wave","pf":"grin","props":[{"n":"book","who":"mid"}]}},{"en":["“The reader turns the page,” said Gerald.","“Let’s make the reader laugh.”","They made silly faces."],"ko":"“독자가 쪽을 넘겨,” 제럴드가 말했어요. “독자를 웃겨 보자.” 둘은 우스꽝스러운 얼굴을 했어요.","scene":{"ek":"dance","ef":"silly","pk":"dance","pf":"silly","props":[{"n":"book","who":"mid"}],"deco":["music"]}},{"en":["“The book will end,” said Gerald.","“What will we do then?”","Piggie had an idea."],"ko":"“책이 끝나면 어떡하지?” 제럴드가 물었어요. “그다음엔 뭘 하지?” 피기에게 좋은 생각이 났어요.","scene":{"ek":"sit","ef":"worry","pk":"stand","pf":"surprised","props":[{"n":"book","who":"mid"}]}},{"en":["“Please read us again,” said Piggie.","“Again and again and again!”","The end. (For now.)"],"ko":"“우리를 다시 읽어 줘,” 피기가 말했어요. “또, 또, 또!” 끝. (지금은.)","scene":{"ek":"jump","ef":"grin","pk":"jump","pf":"grin","props":[{"n":"book","who":"mid"}],"deco":["hearts","confetti"]}}]},{"n":14,"en":"I Broke My Trunk!","ko":"내 코가 부러졌어!","intro":"길고도 긴 이야기","ar":1.2,"pages":[{"en":["“Gerald, what happened to your trunk?”","“It is a long story,” said Gerald."],"ko":"“제럴드, 네 코가 왜 그래?” “긴 이야기야,” 제럴드가 말했어요.","scene":{"ek":"stand","ef":"sad","pk":"point","pf":"worry"}},{"en":["“First I lifted a hippo.","Then I lifted two rhinos.”"],"ko":"“먼저 하마를 들어 올렸어. 그다음엔 코뿔소 두 마리를.”","scene":{"ek":"dance","ef":"grin","pk":"stand","pf":"surprised","props":[{"n":"hippo","who":"far-l"}]}},{"en":["“Then a piano and a whale and a tree!”","“Wow!” said Piggie."],"ko":"“그다음엔 피아노, 고래, 나무까지!” “와!” 피기가 말했어요.","scene":{"ek":"dance","ef":"grin","pk":"jump","pf":"grin","props":[{"n":"piano","who":"far-l"},{"n":"whale","who":"far-r"}]}},{"en":["“And then?” said Piggie.","“Then I tripped,” said Gerald."],"ko":"“그다음엔?” 피기가 물었어요. “그다음엔 넘어졌어,” 제럴드가 말했어요.","scene":{"ek":"sit","ef":"silly","pk":"stand","pf":"surprised","props":[{"n":"ball","who":"far-r"}]}},{"en":["“That is not a long story,” said Piggie.","“It is a funny story!” said Gerald."],"ko":"“그건 긴 이야기가 아니잖아,” 피기가 말했어요. “웃긴 이야기지!” 제럴드가 말했어요.","scene":{"ek":"jump","ef":"grin","pk":"dance","pf":"grin","deco":["hearts"]}}]},{"n":15,"en":"Should I Share My Ice Cream?","ko":"아이스크림을 나눠야 할까?","intro":"나눔을 고민하는 제럴드","ar":1.2,"pages":[{"en":["Gerald had ice cream.","It was pink and sweet.","Piggie was far away."],"ko":"제럴드에게 아이스크림이 있었어요. 분홍색이고 달콤했어요. 피기는 멀리 있었어요.","scene":{"ek":"hold","ef":"grin","pk":"stand","pf":"happy","props":[{"n":"icecream","who":"e"}]}},{"en":["“Should I share?” said Gerald.","“It is my ice cream.”","He took a lick."],"ko":"“나눠야 하나?” 제럴드가 말했어요. “내 아이스크림인데.” 한 입 핥았어요.","scene":{"ek":"hold","ef":"silly","pk":"stand","pf":"happy","props":[{"n":"icecream","who":"e"}]}},{"en":["He thought and thought.","The ice cream began to melt.","Drip, drip, drip."],"ko":"생각하고 또 생각했어요. 아이스크림이 녹기 시작했어요. 뚝, 뚝, 뚝.","scene":{"ek":"sit","ef":"worry","pk":"stand","pf":"worry","props":[{"n":"icecream","who":"e"}]}},{"en":["“Piggie!” he called.","He ran fast.","But the ice cream was gone."],"ko":"“피기!” 제럴드가 불렀어요. 빠르게 달렸어요. 하지만 아이스크림은 없어졌어요.","scene":{"ek":"run","ef":"worry","pk":"stand","pf":"surprised","props":[{"n":"icecream","who":"mid"}]}},{"en":["“I have a cookie,” said Piggie.","“Let’s share it.”","“Yes, please!” said Gerald."],"ko":"“난 쿠키가 있어,” 피기가 말했어요. “같이 먹자.” “좋아!” 제럴드가 말했어요.","scene":{"pk":"hold","pf":"grin","ek":"jump","ef":"grin","props":[{"n":"cookie","who":"p"}],"deco":["hearts"]}}]},{"n":16,"en":"Happy Pig Day!","ko":"행복한 돼지의 날!","intro":"모두를 위한 돼지의 날","ar":1.1,"pages":[{"en":["“Today is Happy Pig Day!” said Piggie.","“It is the best day!”"],"ko":"“오늘은 행복한 돼지의 날!” 피기가 말했어요. “최고의 날이야!”","scene":{"bg":"party","pk":"jump","pf":"grin","ek":"stand","ef":"happy","deco":["confetti"]}},{"en":["Piggie gave hats to all the pigs.","They sang and they danced."],"ko":"피기가 모든 돼지에게 모자를 나눠 줬어요. 다 같이 노래하고 춤췄어요.","scene":{"bg":"party","pk":"dance","pf":"grin","ek":"stand","ef":"happy","props":[{"n":"hat","who":"p-head"}],"deco":["confetti","music"]}},{"en":["Gerald stood alone.","“I am not a pig,” he said.","“I cannot join.”"],"ko":"제럴드는 혼자 서 있었어요. “난 돼지가 아니야,” 제럴드가 말했어요. “낄 수 없어.”","scene":{"bg":"party","ek":"sit","ef":"sad","pk":"dance","pf":"happy","deco":["confetti"]}},{"en":["Piggie came to him.","“Happy Pig Day is for everyone,” she said."],"ko":"피기가 제럴드에게 왔어요. “행복한 돼지의 날은 누구나의 날이야,” 피기가 말했어요.","scene":{"bg":"party","pk":"point","pf":"happy","ek":"stand","ef":"surprised","deco":["confetti"]}},{"en":["She put a hat on Gerald’s head.","“Happy Pig Day, Gerald!”","All the pigs cheered."],"ko":"피기가 제럴드 머리에 모자를 씌웠어요. “행복한 돼지의 날, 제럴드!” 모든 돼지가 환호했어요.","scene":{"bg":"party","pk":"jump","pf":"grin","ek":"wave","ef":"grin","props":[{"n":"hat","who":"e-head"}],"deco":["confetti","hearts"]}}]},{"n":17,"en":"Listen to My Trumpet!","ko":"내 트럼펫 소리 들어 봐!","intro":"시끄러운 트럼펫 연주","ar":1.2,"pages":[{"en":["“Listen to my trumpet!” said Piggie.","“I will play a song.”"],"ko":"“내 트럼펫 소리 들어 봐!” 피기가 말했어요. “노래를 연주할 거야.”","scene":{"pk":"hold","pf":"grin","ek":"stand","ef":"happy","props":[{"n":"trumpet","who":"p"}]}},{"en":["Piggie played. It sounded like a goose.","HONK!","“That is loud,” said Gerald."],"ko":"피기가 불었어요. 거위 소리 같았어요. 꽥! “시끄럽네,” 제럴드가 말했어요.","scene":{"pk":"hold","pf":"grin","ek":"stand","ef":"surprised","props":[{"n":"trumpet","who":"p"}],"deco":["music"]}},{"en":["Piggie played again. It sounded like a car.","BEEP!","“Try again,” said Gerald."],"ko":"피기가 또 불었어요. 자동차 소리 같았어요. 빵! “다시 해 봐,” 제럴드가 말했어요.","scene":{"pk":"hold","pf":"worry","ek":"stand","ef":"worry","props":[{"n":"trumpet","who":"p"}],"deco":["music"]}},{"en":["Piggie played a small, soft song.","It was beautiful.","Gerald smiled."],"ko":"피기가 작고 부드러운 노래를 연주했어요. 아름다웠어요. 제럴드가 웃었어요.","scene":{"pk":"hold","pf":"happy","ek":"sit","ef":"happy","props":[{"n":"trumpet","who":"p"}],"deco":["music","hearts"]}},{"en":["“That was wonderful!” said Gerald.","“Really?” said Piggie. HONK!","“No,” said Gerald."],"ko":"“정말 멋졌어!” 제럴드가 말했어요. “정말?” 피기가 불었어요. 꽥! “아니,” 제럴드가 말했어요.","scene":{"pk":"hold","pf":"silly","ek":"sit","ef":"silly","props":[{"n":"trumpet","who":"p"}],"deco":["music"]}}]},{"n":18,"en":"Let’s Go for a Drive!","ko":"드라이브 가자!","intro":"준비물은 많은데 차가 없네","ar":1.3,"pages":[{"en":["“Let’s go for a drive!” said Gerald.","“Yes!” said Piggie.","“I will get the car.”"],"ko":"“드라이브 가자!” 제럴드가 말했어요. “좋아!” 피기가 말했어요. “내가 차를 가져올게.”","scene":{"ek":"point","ef":"grin","pk":"jump","pf":"grin","props":[{"n":"car","who":"far-r"}]}},{"en":["“We need a map,” said Gerald.","“I have a map,” said Piggie."],"ko":"“지도가 필요해,” 제럴드가 말했어요. “나 지도 있어,” 피기가 말했어요.","scene":{"ek":"hold","ef":"happy","pk":"hold","pf":"happy","props":[{"n":"map","who":"mid"}]}},{"en":["“We need sunglasses and a hat.”","“We need an umbrella too!”"],"ko":"“선글라스랑 모자가 필요해.” “우산도 필요해!”","scene":{"ek":"hold","ef":"happy","pk":"hold","pf":"grin","props":[{"n":"glasses","who":"e-eyes"},{"n":"hat","who":"p-head"},{"n":"umbrella","who":"far-r"}]}},{"en":["They had the map and the hat.","They had the umbrella and the sunglasses.","But they had no car."],"ko":"지도도 모자도 있었어요. 우산도 선글라스도 있었어요. 그런데 차가 없었어요.","scene":{"ek":"sit","ef":"worry","pk":"sit","pf":"worry","props":[{"n":"map","who":"mid"},{"n":"hat","who":"p-head"},{"n":"umbrella","who":"far-r"}]}},{"en":["“We have no car,” said Piggie.","“So let’s walk,” said Gerald.","“That is a good plan!”"],"ko":"“우리 차가 없네,” 피기가 말했어요. “그럼 걸어가자,” 제럴드가 말했어요. “좋은 생각이야!”","scene":{"ek":"jump","ef":"grin","pk":"jump","pf":"grin","deco":["sun","hearts"]}}]},{"n":19,"en":"A Big Guy Took My Ball!","ko":"덩치 큰 녀석이 내 공을 가져갔어!","intro":"고래와 함께 노는 법","ar":1.2,"pages":[{"en":["Piggie was crying.","“A big guy took my ball!” she said."],"ko":"피기가 울고 있었어요. “덩치 큰 녀석이 내 공을 가져갔어!”","scene":{"pk":"sit","pf":"sad","ek":"stand","ef":"worry","props":[{"n":"ball","who":"far-r"}]}},{"en":["“I will get it back,” said Gerald.","The big guy was a whale."],"ko":"“내가 찾아올게,” 제럴드가 말했어요. 그 덩치 큰 녀석은 고래였어요.","scene":{"ek":"point","ef":"worry","pk":"stand","pf":"surprised","props":[{"n":"whale","who":"far-r"}]}},{"en":["“Excuse me,” said Gerald.","“That is my friend’s ball.”","“I found it,” said the whale."],"ko":"“실례합니다,” 제럴드가 말했어요. “그건 내 친구 공이에요.” “내가 주웠는데,” 고래가 말했어요.","scene":{"ek":"stand","ef":"worry","pk":"stand","pf":"worry","props":[{"n":"whale","who":"far-r"},{"n":"ball","who":"far-r"}]}},{"en":["“The ball is small for me,” said the whale.","“But the ocean is big.”","“Come and play!”"],"ko":"“내겐 공이 너무 작아,” 고래가 말했어요. “그런데 바다는 넓어.” “같이 놀자!”","scene":{"bg":"pond","ek":"stand","ef":"surprised","pk":"stand","pf":"surprised","props":[{"n":"whale","who":"far-r"}]}},{"en":["They all played in the water.","“Thank you, big guy!” said Piggie.","“You are welcome, small guys!”"],"ko":"모두 물에서 놀았어요. “고마워, 덩치 큰 친구!” 피기가 말했어요. “별말씀을, 작은 친구들!”","scene":{"bg":"pond","ek":"jump","ef":"grin","pk":"jump","pf":"grin","props":[{"n":"whale","who":"far-r"}],"deco":["hearts"]}}]},{"n":20,"en":"I’m a Frog!","ko":"나는 개구리야!","intro":"개구리 흉내를 내는 피기","ar":1.1,"pages":[{"en":["“I am a frog,” said Piggie.","“You are a pig,” said Gerald."],"ko":"“나는 개구리야,” 피기가 말했어요. “넌 돼지야,” 제럴드가 말했어요.","scene":{"pk":"stand","pf":"silly","ek":"stand","ef":"surprised"}},{"en":["“Ribbit, ribbit,” said Piggie.","She hopped. Hop, hop!"],"ko":"“개굴, 개굴,” 피기가 말했어요. 폴짝폴짝 뛰었어요!","scene":{"pk":"jump","pf":"grin","ek":"stand","ef":"surprised","props":[{"n":"frog","who":"mid"}]}},{"en":["“Frogs eat flies,” said Piggie.","“Ribbit!”","Gerald looked scared."],"ko":"“개구리는 파리를 먹어,” 피기가 말했어요. “개굴!” 제럴드는 무서운 얼굴을 했어요.","scene":{"pk":"jump","pf":"silly","ek":"sit","ef":"worry","props":[{"n":"frog","who":"mid"}]}},{"en":["“Can I be a frog too?” said Gerald.","“You are too big,” said Piggie.","“But you can be a hippo.”"],"ko":"“나도 개구리가 되면 안 돼?” “넌 너무 커,” 피기가 말했어요. “대신 하마가 될 수 있어.”","scene":{"ek":"jump","ef":"happy","pk":"point","pf":"grin","props":[{"n":"hippo","who":"far-r"}]}},{"en":["“I am a hippo!” said Gerald.","“Ribbit,” said Piggie.","“Hippos do not say ribbit!”"],"ko":"“나는 하마야!” 제럴드가 말했어요. “개굴,” 피기가 말했어요. “하마는 개굴 안 해!”","scene":{"ek":"dance","ef":"grin","pk":"dance","pf":"silly","deco":["music","hearts"]}}]},{"n":21,"en":"My New Friend Is So Fun!","ko":"내 새 친구는 정말 재밌어!","intro":"새 친구가 생긴 피기","ar":1.2,"pages":[{"en":["Piggie met a new pig.","They played and laughed.","Gerald watched."],"ko":"피기가 새 돼지 친구를 만났어요. 둘은 놀고 웃었어요. 제럴드는 지켜봤어요.","scene":{"pk":"point","pf":"happy","ek":"stand","ef":"worry","props":[{"n":"pig","who":"far-r"}]}},{"en":["“Piggie has a new friend,” said Gerald.","“Maybe she likes him more.”"],"ko":"“피기에게 새 친구가 생겼어,” 제럴드가 말했어요. “아마 날보다 그 애를 더 좋아하나 봐.”","scene":{"ek":"sit","ef":"sad","pk":"dance","pf":"grin","props":[{"n":"pig","who":"far-r"}]}},{"en":["Gerald sat alone.","He felt small.","He felt sad."],"ko":"제럴드는 혼자 앉았어요. 작아진 기분이었어요. 마음이 슬펐어요.","scene":{"ek":"sit","ef":"sad","pk":"stand","pf":"happy","props":[{"n":"pig","who":"far-r"}],"deco":["cloud"]}},{"en":["Piggie ran to him.","“Come and meet my new friend.”","“He is funny, like you.”"],"ko":"피기가 제럴드에게 달려왔어요. “와서 내 새 친구 만나 봐.” “너처럼 웃기다구.”","scene":{"pk":"run","pf":"grin","ek":"stand","ef":"surprised","props":[{"n":"pig","who":"far-r"}]}},{"en":["“Two friends are better than one,” said Piggie.","“Three friends are best!” said the new pig."],"ko":"“친구 둘이 하나보다 좋아,” 피기가 말했어요. “친구 셋이 제일 좋지!” 새 친구가 말했어요.","scene":{"pk":"jump","pf":"grin","ek":"jump","ef":"grin","props":[{"n":"pig","who":"far-r"}],"deco":["hearts"]}}]},{"n":22,"en":"Waiting Is Not Easy!","ko":"기다리는 건 힘들어!","intro":"밤하늘 깜짝 선물","ar":1.1,"pages":[{"en":["“I have a surprise for you,” said Piggie.","“But you must wait.”"],"ko":"“너에게 깜짝 선물이 있어,” 피기가 말했어요. “그런데 기다려야 해.”","scene":{"pk":"point","pf":"grin","ek":"stand","ef":"happy"}},{"en":["“How long?” said Gerald.","“A little while,” said Piggie.","He counted to ten."],"ko":"“얼마나?” 제럴드가 물었어요. “조금만,” 피기가 말했어요. 제럴드는 열까지 셌어요.","scene":{"ek":"sit","ef":"worry","pk":"stand","pf":"happy"}},{"en":["“Is it now?” said Gerald.","“No,” said Piggie.","He waited. He counted to one hundred."],"ko":"“이제야?” 제럴드가 물었어요. “아니,” 피기가 말했어요. 백까지 셌어요.","scene":{"ek":"lie","ef":"worry","pk":"stand","pf":"grin"}},{"en":["“I cannot wait!” said Gerald.","“Look up,” said Piggie.","The sky was full of stars."],"ko":"“못 기다리겠어!” 제럴드가 말했어요. “위를 봐,” 피기가 말했어요. 하늘이 별로 가득했어요.","scene":{"bg":"night","ek":"stand","ef":"surprised","pk":"point","pf":"grin","deco":["stars","moon"]}},{"en":["“Oh,” said Gerald.","“That was worth the wait.”"],"ko":"“와,” 제럴드가 말했어요. “기다린 보람이 있네.”","scene":{"bg":"night","ek":"lie","ef":"happy","pk":"lie","pf":"happy","deco":["stars","moon"]}}]},{"n":23,"en":"I Will Take a Nap!","ko":"나 낮잠 잘 거야!","intro":"조용한 낮잠 소동","ar":1.0,"pages":[{"en":["“I am tired,” said Gerald.","“I will take a nap.”","He lay down."],"ko":"“나 피곤해,” 제럴드가 말했어요. “낮잠 잘 거야.” 누웠어요.","scene":{"ek":"lie","ef":"sleepy","pk":"stand","pf":"happy","deco":["zzz"]}},{"en":["Piggie came by.","“Can I nap too?”","“Yes. But no talking.”"],"ko":"피기가 왔어요. “나도 자도 돼?” “응. 그런데 말하면 안 돼.”","scene":{"ek":"lie","ef":"sleepy","pk":"stand","pf":"grin"}},{"en":["“I am not talking,” said Piggie.","“You are talking now,” said Gerald."],"ko":"“나 말 안 했어,” 피기가 말했어요. “지금 말하고 있잖아,” 제럴드가 말했어요.","scene":{"ek":"lie","ef":"angry","pk":"point","pf":"silly"}},{"en":["“Let’s count sheep,” said Piggie.","“One sheep, two sheep…”","Gerald snored."],"ko":"“양을 세자,” 피기가 말했어요. “한 마리, 두 마리…” 제럴드가 코를 골았어요.","scene":{"ek":"lie","ef":"sleepy","pk":"lie","pf":"happy","deco":["zzz","cloud"]}},{"en":["Piggie covered him with a leaf.","“Good night, Gerald.”","Then she slept too."],"ko":"피기가 나뭇잎을 덮어 줬어요. “잘 자, 제럴드.” 그리고 피기도 잤어요.","scene":{"bg":"sunset","ek":"lie","ef":"sleepy","pk":"lie","pf":"sleepy","props":[{"n":"leaf","who":"e"}],"deco":["zzz"]}}]},{"n":24,"en":"I Really Like Slop!","ko":"난 슬롭이 정말 좋아!","intro":"초록색 음식 한 입","ar":1.2,"pages":[{"en":["Piggie had a bowl of slop.","“This is my favorite food,” she said."],"ko":"피기에게 슬롭 한 그릇이 있었어요. “이건 내가 제일 좋아하는 음식이야.”","scene":{"pk":"hold","pf":"grin","ek":"stand","ef":"happy","props":[{"n":"bowl","who":"p"}]}},{"en":["“Do you want to try it?” said Piggie.","“It looks… green,” said Gerald."],"ko":"“한번 먹어 볼래?” 피기가 말했어요. “색이… 초록색이네,” 제럴드가 말했어요.","scene":{"pk":"hold","pf":"happy","ek":"sit","ef":"worry","props":[{"n":"bowl","who":"mid"}]}},{"en":["Gerald took a small bite.","He made a funny face.","He held his nose."],"ko":"제럴드가 조그맣게 한 입 먹었어요. 이상한 얼굴을 했어요. 코를 막았어요.","scene":{"pk":"stand","pf":"surprised","ek":"hold","ef":"silly","props":[{"n":"bowl","who":"e"}],"deco":["sparkle"]}},{"en":["“I really like slop!” said Gerald.","“You do?” said Piggie.","“No. But I like you.”"],"ko":"“난 슬롭이 정말 좋아!” 제럴드가 말했어요. “정말?” “아니. 그치만 널 좋아해.”","scene":{"pk":"jump","pf":"grin","ek":"stand","ef":"grin","deco":["hearts"]}},{"en":["“I will eat it all,” said Piggie.","“I will watch,” said Gerald.","“From far away.”"],"ko":"“내가 다 먹을 거야,” 피기가 말했어요. “난 지켜볼게,” 제럴드가 말했어요. “아주 멀리서.”","scene":{"pk":"hold","pf":"grin","ek":"stand","ef":"worry","props":[{"n":"bowl","who":"p"}]}}]},{"n":25,"en":"The Thank You Book","ko":"고맙다고 말하는 책","intro":"모두에게 고마워","ar":1.1,"pages":[{"en":["“I will thank everyone,” said Piggie.","“Everyone who helped me.”"],"ko":"“모두에게 고맙다고 할 거야,” 피기가 말했어요. “나를 도와준 모두에게.”","scene":{"pk":"point","pf":"grin","ek":"stand","ef":"happy"}},{"en":["“Thank you, bird. Thank you, snake.”","“Thank you, whale.”"],"ko":"“고마워, 새야. 고마워, 뱀아.” “고마워, 고래야.”","scene":{"pk":"wave","pf":"happy","ek":"stand","ef":"happy","props":[{"n":"bird","who":"sky"},{"n":"snake","who":"far-l"},{"n":"whale","who":"far-r"}]}},{"en":["“Thank you, ice cream. Thank you, ball.”","“Thank you, slop.”"],"ko":"“고마워, 아이스크림. 고마워, 공아.” “고마워, 슬롭아.”","scene":{"pk":"point","pf":"silly","ek":"stand","ef":"grin","props":[{"n":"icecream","who":"mid"},{"n":"ball","who":"far-l"},{"n":"bowl","who":"far-r"}]}},{"en":["“And thank you, Gerald,” said Piggie.","“You are my best friend.”"],"ko":"“그리고 고마워, 제럴드,” 피기가 말했어요. “넌 내 제일 친한 친구야.”","scene":{"pk":"point","pf":"happy","ek":"stand","ef":"grin","deco":["hearts"]}},{"en":["“Thank you, Piggie,” said Gerald.","“Thank you for being you.”","And they hugged. The end."],"ko":"“고마워, 피기,” 제럴드가 말했어요. “너여서 고마워.” 그리고 둘은 꼭 안았어요. 끝.","scene":{"pk":"jump","pf":"grin","ek":"jump","ef":"grin","deco":["hearts","confetti","sun"]}}]}];
+
+var SPEEDS = [0.75, 0.85, 1.0];
+var SLEEPS = [15, 30, 45];
+var LS = {
+  fav: "ep_fav.v1", done: "ep_done.v1", night: "ep_night.v1", speed: "ep_speed.v1",
+  ko: "ep_ko.v1", auto: "ep_auto.v1", cont: "ep_cont.v1", last: "ep_last.v1", sleep: "ep_sleep.v1"
+};
+var TABS = [
+  {id:"all", label:"전체 25권"},
+  {id:"fav", label:"♥ 즐겨찾기"},
+  {id:"done", label:"✓ 들은 책"},
+  {id:"todo", label:"아직 안 들은 책"}
+];
+
+/* ---------- 저장 ---------- */
+function $(s, r){ return (r || document).querySelector(s); }
+function loadList(key){
+  try{ var v = JSON.parse(localStorage.getItem(key) || "[]"); return Array.isArray(v) ? v : []; }catch(e){ return []; }
+}
+function loadNum(key, def){
+  try{ var v = parseFloat(localStorage.getItem(key)); return isFinite(v) ? v : def; }catch(e){ return def; }
+}
+function loadBool(key, def){
+  try{ var v = localStorage.getItem(key); return v == null ? def : v === "1"; }catch(e){ return def; }
+}
+function save(key, v){
+  try{ localStorage.setItem(key, typeof v === "string" ? v : JSON.stringify(v)); }catch(e){}
+}
+function saveBool(key, on){ save(key, on ? "1" : "0"); }
+
+var favs = loadList(LS.fav);
+var dones = loadList(LS.done);
+var night = loadBool(LS.night, false);
+var speed = loadNum(LS.speed, 1.0);
+var koOn = loadBool(LS.ko, false);
+var autoOn = loadBool(LS.auto, true);
+var contOn = loadBool(LS.cont, true);
+var tab = "all";
+var query = "";
+
+var idx = -1, page = 0, sentIdx = -1;
+var playing = false, paused = false;
+var sleepMin = loadNum(LS.sleep, 0), sleepEndsAt = 0;
+
+function has(list, v){ return list.indexOf(v) !== -1; }
+function toggleIn(list, v){
+  var i = list.indexOf(v);
+  if (i === -1) list.push(v); else list.splice(i, 1);
+  return i === -1;
+}
+function bookKey(b){ return b.n + "|" + b.en; }
+
+/* ---------- 토스트 ---------- */
+var toastT = null;
+function toast(msg){
+  var t = $("#toast");
+  t.textContent = msg;
+  t.classList.add("on");
+  clearTimeout(toastT);
+  toastT = setTimeout(function(){ t.classList.remove("on"); }, 2200);
+}
+
+/* ---------- SVG 그림 ---------- */
+var uid = 0;
+function rnd(seed){ var x = Math.sin(seed * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); }
+function P(s){ return s; }
+var PAL = {
+  eBody:"#B9C2D1", eDark:"#7C879C", eEar:"#AAB5C7", eBelly:"#DDE3EC", eToe:"#98A3B6",
+  pBody:"#F6A9BE", pDark:"#D4738C", pBelly:"#FFD5DF", pSnout:"#EE93AC",
+  ink:"#3B3340", white:"#FFFFFF", mouth:"#7A3F49", tongue:"#F07E8E"
+};
+
+function eyes(kind, cx1, cx2, cy, r, dark){
+  var s = "";
+  function open(cx, r2, px, py){
+    return '<circle cx="'+cx+'" cy="'+cy+'" r="'+r2+'" fill="'+PAL.white+'"/>' +
+           '<circle cx="'+(cx+px)+'" cy="'+(cy+py)+'" r="'+(r2*0.55)+'" fill="'+PAL.ink+'"/>' +
+           '<circle cx="'+(cx+px-r2*0.22)+'" cy="'+(cy+py-r2*0.28)+'" r="'+(r2*0.18)+'" fill="#fff" opacity=".9"/>';
+  }
+  function closed(cx){
+    return '<path d="M'+(cx-r)+','+cy+' q'+r+','+(r*0.85)+' '+(2*r)+',0" fill="none" stroke="'+PAL.ink+'" stroke-width="2.6" stroke-linecap="round"/>';
+  }
+  if (kind === "sleepy" || kind === "sleep"){ return closed(cx1) + closed(cx2); }
+  if (kind === "silly"){ return closed(cx1) + open(cx2, r, 0, 0.5); }
+  if (kind === "surprised"){ return open(cx1, r*1.15, 0, 0) + open(cx2, r*1.15, 0, 0); }
+  return open(cx1, r, 0, 0.6) + open(cx2, r, 0, 0.6);
+}
+function brows(kind, cx1, cx2, cy, r, dark){
+  var d = r * 1.5, w = 2.6, s = "";
+  if (kind === "sad" || kind === "worry"){
+    s += '<path d="M'+(cx1-r-1)+','+(cy+d+2)+' L'+(cx1+r+1)+','+(cy+d-2)+'" stroke="'+dark+'" stroke-width="'+w+'" stroke-linecap="round"/>';
+    s += '<path d="M'+(cx2-r-1)+','+(cy+d-2)+' L'+(cx2+r+1)+','+(cy+d+2)+'" stroke="'+dark+'" stroke-width="'+w+'" stroke-linecap="round"/>';
+  } else if (kind === "angry"){
+    s += '<path d="M'+(cx1-r-1)+','+(cy+d-2)+' L'+(cx1+r+1)+','+(cy+d+3)+'" stroke="'+dark+'" stroke-width="'+w+'" stroke-linecap="round"/>';
+    s += '<path d="M'+(cx2-r-1)+','+(cy+d+3)+' L'+(cx2+r+1)+','+(cy+d-2)+'" stroke="'+dark+'" stroke-width="'+w+'" stroke-linecap="round"/>';
+  }
+  return s;
+}
+function mouth(kind, cx, cy, w){
+  var m = "";
+  if (kind === "grin" || kind === "silly" || kind === "happy"){
+    var rx = w * 0.52, ry = w * (kind === "grin" || kind === "silly" ? 0.42 : 0.26);
+    m += '<ellipse cx="'+cx+'" cy="'+(cy+ry*0.5)+'" rx="'+rx+'" ry="'+ry+'" fill="'+PAL.mouth+'"/>';
+    if (kind === "grin" || kind === "silly"){
+      m += '<ellipse cx="'+cx+'" cy="'+(cy+ry*1.15)+'" rx="'+(rx*0.62)+'" ry="'+(ry*0.42)+'" fill="'+PAL.tongue+'"/>';
+    }
+  } else if (kind === "surprised"){
+    m += '<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+(w*0.2)+'" ry="'+(w*0.26)+'" fill="'+PAL.mouth+'"/>';
+  } else if (kind === "sad" || kind === "worry" || kind === "angry"){
+    m += '<path d="M'+(cx-w*0.3)+','+cy+' q'+(w*0.3)+','+(-w*0.24)+' '+(w*0.6)+',0" fill="none" stroke="'+PAL.ink+'" stroke-width="2.6" stroke-linecap="round"/>';
+  } else if (kind === "sleepy" || kind === "sleep"){
+    m += '<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+(w*0.16)+'" ry="'+(w*0.2)+'" fill="'+PAL.mouth+'" opacity=".85"/>';
+  } else {
+    m += '<path d="M'+(cx-w*0.28)+','+cy+' q'+(w*0.28)+','+(w*0.32)+' '+(w*0.56)+',0" fill="none" stroke="'+PAL.ink+'" stroke-width="2.6" stroke-linecap="round"/>';
+  }
+  return m;
+}
+
+function elephant(pose, face, x, y, s, flip){
+  var c = PAL, g = '<g transform="translate('+x+','+y+') scale('+(flip?-s:s)+','+s+')">';
+  var dy = 0, rot = 0, legL = "", legR = "", armL = "", armR = "";
+  if (pose === "jump" || pose === "fly") dy = -20;
+  if (pose === "sit") dy = 12;
+  if (pose === "lie") dy = 24;
+  if (pose === "dance") rot = 6;
+  if (pose === "run") rot = -6;
+  if (pose === "fly") rot = -12;
+  if (pose === "sneeze") rot = -3;
+
+  // 다리
+  if (pose === "sit" || pose === "lie"){
+    legL = '<ellipse cx="-24" cy="34" rx="18" ry="11" fill="'+c.eBody+'" stroke="'+c.eDark+'" stroke-width="3"/>';
+    legR = '<ellipse cx="20" cy="35" rx="18" ry="11" fill="'+c.eBody+'" stroke="'+c.eDark+'" stroke-width="3"/>';
+  } else if (pose === "jump" || pose === "fly"){
+    legL = '<ellipse cx="-22" cy="40" rx="13" ry="10" fill="'+c.eBody+'" stroke="'+c.eDark+'" stroke-width="3" transform="rotate(-18 -22 40)"/>';
+    legR = '<ellipse cx="18" cy="41" rx="13" ry="10" fill="'+c.eBody+'" stroke="'+c.eDark+'" stroke-width="3" transform="rotate(16 18 41)"/>';
+  } else {
+    legL = '<rect x="-30" y="24" width="22" height="28" rx="10" fill="'+c.eBody+'" stroke="'+c.eDark+'" stroke-width="3"/>';
+    legR = '<rect x="8" y="24" width="22" height="28" rx="10" fill="'+c.eBody+'" stroke="'+c.eDark+'" stroke-width="3"/>';
+  }
+  if (pose === "run"){
+    legL = '<rect x="-36" y="22" width="22" height="28" rx="10" fill="'+c.eBody+'" stroke="'+c.eDark+'" stroke-width="3" transform="rotate(16 -26 26)"/>';
+    legR = '<rect x="14" y="22" width="22" height="28" rx="10" fill="'+c.eBody+'" stroke="'+c.eDark+'" stroke-width="3" transform="rotate(-16 24 26)"/>';
+  }
+
+  // 팔
+  var AW = 13;
+  function arm(d){ // d = 1 오른쪽, -1 왼쪽
+    var x0 = 38 * d, y0 = 4;
+    var x1 = 56 * d, y1 = 12;
+    if (pose === "wave" && d > 0){ x1 = 58; y1 = -30; }
+    if (pose === "hold"){ x1 = 62 * d; y1 = -6; }
+    if (pose === "point" && d > 0){ x1 = 70; y1 = -2; }
+    if (pose === "dance"){ x1 = 54 * d; y1 = -34; }
+    if (pose === "fly"){ x1 = 60 * d; y1 = -20; }
+    if (pose === "lie"){ x1 = 52 * d; y1 = 24; }
+    return '<path d="M'+x0+','+y0+' L'+x1+','+y1+'" stroke="'+c.eBody+'" stroke-width="'+AW+'" stroke-linecap="round"/>' +
+           '<path d="M'+x0+','+y0+' L'+x1+','+y1+'" stroke="'+c.eDark+'" stroke-width="'+(AW+5)+'" stroke-linecap="round" opacity="0"/>';
+  }
+  armL = arm(-1); armR = arm(1);
+  if (pose === "sneeze") dy = -4;
+
+  g += '<g transform="translate(0,'+dy+') rotate('+rot+')">';
+  // 꼬리
+  g += '<path d="M-46,-2 q-16,6 -13,20" fill="none" stroke="'+c.eDark+'" stroke-width="3.4" stroke-linecap="round"/>';
+  // 귀
+  g += '<ellipse cx="-41" cy="-22" rx="22" ry="27" fill="'+c.eEar+'" stroke="'+c.eDark+'" stroke-width="3" transform="rotate(-13 -41 -22)"/>';
+  g += '<ellipse cx="41" cy="-22" rx="22" ry="27" fill="'+c.eEar+'" stroke="'+c.eDark+'" stroke-width="3" transform="rotate(13 41 -22)"/>';
+  // 다리
+  g += legL + legR;
+  // 몸통
+  g += '<ellipse cx="0" cy="0" rx="47" ry="46" fill="'+c.eBody+'" stroke="'+c.eDark+'" stroke-width="3"/>';
+  g += '<ellipse cx="0" cy="13" rx="31" ry="29" fill="'+c.eBelly+'"/>';
+  // 코
+  var trunk = 'M7,19 C9,44 6,62 -12,66 C-28,69 -36,56 -31,47';
+  g += '<path d="'+trunk+'" fill="none" stroke="'+c.eDark+'" stroke-width="23" stroke-linecap="round"/>';
+  g += '<path d="'+trunk+'" fill="none" stroke="'+c.eBody+'" stroke-width="17" stroke-linecap="round"/>';
+  g += '<circle cx="-30" cy="47" r="7" fill="'+c.eBody+'" stroke="'+c.eDark+'" stroke-width="2.4"/>';
+  // 얼굴
+  g += eyes(face, -16, 16, -14, 9, c.eDark);
+  g += brows(face, -16, 16, -14, 9, c.eDark);
+  if (face === "sneeze") { g += '<ellipse cx="-1" cy="7" rx="9" ry="7" fill="'+PAL.mouth+'"/>'; }
+  else g += mouth(face, -1, 2, 24);
+  // 볼
+  if (face === "happy" || face === "grin" || face === "silly"){
+    g += '<ellipse cx="-30" cy="4" rx="7" ry="5" fill="#F2A0A8" opacity=".45"/>';
+    g += '<ellipse cx="30" cy="4" rx="7" ry="5" fill="#F2A0A8" opacity=".45"/>';
+  }
+  g += armL + armR;
+  g += '</g></g>';
+  return g;
+}
+
+function pig(pose, face, x, y, s, flip){
+  var c = PAL, g = '<g transform="translate('+x+','+y+') scale('+(flip?-s:s)+','+s+')">';
+  var dy = 0, rot = 0, legL = "", legR = "";
+  if (pose === "jump" || pose === "fly") dy = -22;
+  if (pose === "sit") dy = 10;
+  if (pose === "lie") dy = 20;
+  if (pose === "dance") rot = 7;
+  if (pose === "run") rot = -5;
+  if (pose === "fly") rot = -14;
+
+  if (pose === "sit" || pose === "lie"){
+    legL = '<ellipse cx="-16" cy="28" rx="13" ry="8.5" fill="'+c.pBody+'" stroke="'+c.pDark+'" stroke-width="2.6"/>';
+    legR = '<ellipse cx="15" cy="29" rx="13" ry="8.5" fill="'+c.pBody+'" stroke="'+c.pDark+'" stroke-width="2.6"/>';
+  } else if (pose === "jump" || pose === "fly"){
+    legL = '<ellipse cx="-15" cy="33" rx="10" ry="7.5" fill="'+c.pBody+'" stroke="'+c.pDark+'" stroke-width="2.6" transform="rotate(-20 -15 33)"/>';
+    legR = '<ellipse cx="14" cy="34" rx="10" ry="7.5" fill="'+c.pBody+'" stroke="'+c.pDark+'" stroke-width="2.6" transform="rotate(18 14 34)"/>';
+  } else {
+    legL = '<rect x="-20" y="18" width="15" height="22" rx="7.5" fill="'+c.pBody+'" stroke="'+c.pDark+'" stroke-width="2.6"/>';
+    legR = '<rect x="6" y="18" width="15" height="22" rx="7.5" fill="'+c.pBody+'" stroke="'+c.pDark+'" stroke-width="2.6"/>';
+  }
+  if (pose === "run"){
+    legL = '<rect x="-25" y="16" width="15" height="22" rx="7.5" fill="'+c.pBody+'" stroke="'+c.pDark+'" stroke-width="2.6" transform="rotate(20 -18 20)"/>';
+    legR = '<rect x="11" y="16" width="15" height="22" rx="7.5" fill="'+c.pBody+'" stroke="'+c.pDark+'" stroke-width="2.6" transform="rotate(-20 18 20)"/>';
+  }
+
+  var AW = 11;
+  function arm(d){
+    var x0 = 30 * d, y0 = 2, x1 = 45 * d, y1 = 9;
+    if (pose === "wave" && d > 0){ x1 = 47; y1 = -26; }
+    if (pose === "hold"){ x1 = 50 * d; y1 = -3; }
+    if (pose === "point" && d > 0){ x1 = 56; y1 = -1; }
+    if (pose === "dance"){ x1 = 44 * d; y1 = -28; }
+    if (pose === "fly"){ x1 = 48 * d; y1 = -18; }
+    if (pose === "lie"){ x1 = 42 * d; y1 = 18; }
+    return '<path d="M'+x0+','+y0+' L'+x1+','+y1+'" stroke="'+c.pBody+'" stroke-width="'+AW+'" stroke-linecap="round"/>';
+  }
+
+  g += '<g transform="translate(0,'+dy+') rotate('+rot+')">';
+  // 귀
+  g += '<path d="M-22,-27 q2,-15 15,-13 q4,10 -6,16 z" fill="'+c.pBody+'" stroke="'+c.pDark+'" stroke-width="2.6" stroke-linejoin="round"/>';
+  g += '<path d="M14,-28 q10,-13 19,-5 q-2,11 -14,13 z" fill="'+c.pBody+'" stroke="'+c.pDark+'" stroke-width="2.6" stroke-linejoin="round"/>';
+  // 몸통
+  g += legL + legR;
+  g += '<ellipse cx="0" cy="0" rx="36" ry="34" fill="'+c.pBody+'" stroke="'+c.pDark+'" stroke-width="2.8"/>';
+  g += '<ellipse cx="0" cy="10" rx="24" ry="20" fill="'+c.pBelly+'"/>';
+  // 주둥이
+  g += '<ellipse cx="0" cy="6" rx="14" ry="10.5" fill="'+c.pSnout+'" stroke="'+c.pDark+'" stroke-width="2.4"/>';
+  g += '<ellipse cx="-5" cy="5" rx="2.4" ry="3.4" fill="'+c.pDark+'"/>';
+  g += '<ellipse cx="5" cy="5" rx="2.4" ry="3.4" fill="'+c.pDark+'"/>';
+  // 눈
+  g += eyes(face, -13, 13, -12, 7.5, c.pDark);
+  g += brows(face, -13, 13, -12, 7.5, c.pDark);
+  // 입
+  if (face === "grin" || face === "silly"){
+    g += '<path d="M-8,15 q8,7 16,0" fill="'+PAL.mouth+'" stroke="'+c.pDark+'" stroke-width="1.6" stroke-linejoin="round"/>';
+    g += '<ellipse cx="0" cy="18" rx="4" ry="3" fill="'+PAL.tongue+'"/>';
+  } else if (face === "surprised"){
+    g += '<ellipse cx="0" cy="17" rx="3.6" ry="4.4" fill="'+PAL.mouth+'"/>';
+  } else if (face === "sad" || face === "worry" || face === "angry"){
+    g += '<path d="M-7,18 q7,-5 14,0" fill="none" stroke="'+c.pDark+'" stroke-width="2.4" stroke-linecap="round"/>';
+  } else if (face === "sleepy" || face === "sleep"){
+    g += '<ellipse cx="0" cy="17" rx="3" ry="3.6" fill="'+c.pDark+'" opacity=".7"/>';
+  } else {
+    g += '<path d="M-7,16 q7,6 14,0" fill="none" stroke="'+c.pDark+'" stroke-width="2.4" stroke-linecap="round"/>';
+  }
+  if (face === "happy" || face === "grin" || face === "silly"){
+    g += '<ellipse cx="-24" cy="2" rx="6" ry="4.5" fill="#E8627E" opacity=".35"/>';
+    g += '<ellipse cx="24" cy="2" rx="6" ry="4.5" fill="#E8627E" opacity=".35"/>';
+  }
+  g += arm(-1) + arm(1);
+  g += '</g></g>';
+  return g;
+}
+
+/* ---------- 소품 ---------- */
+function drawProp(name, who, extraS){
+  var pos = {
+    "e": [190, 196], "p": [216, 200], "mid": [200, 202], "sky": [200, 74],
+    "far-l": [58, 198], "far-r": [322, 196], "e-top": [132, 110], "e-top2": [156, 114], "e-nest": [132, 126], "e-egg": [112, 124], "p-top": [270, 128],
+    "e-head": [132, 126], "p-head": [270, 148], "e-eyes": [132, 162], "p-eyes": [270, 172],
+    "e-back": [102, 216], "p-back": [298, 206], "g1": [136, 242], "g2": [258, 244],
+    "mid2": [200, 96], "ground": [200, 240]
+  };
+  var p = pos[who] || pos.mid;
+  var x = p[0], y = p[1], s = (extraS || 1);
+  var c = PAL.ink;
+  function wrap(inner, k){ return '<g transform="translate('+x+','+y+') scale('+(k || 1)+')">' + inner + '</g>'; }
+
+  switch (name){
+    case "ball":
+      return wrap('<circle r="17" fill="#E8564B" stroke="#B63A34" stroke-width="2.6"/><path d="M-13,-9 q13,9 26,0" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/><circle cx="-6" cy="-8" r="3.4" fill="#fff" opacity=".55"/>');
+    case "toy2":
+      return wrap('<g transform="rotate(-16)"><path d="M-19,0 a19,17 0 0 1 17,-16 l0,16 z" fill="#E8564B" stroke="#B63A34" stroke-width="2.4"/><path d="M3,17 a19,17 0 0 1 -18,0 l18,-1 z" fill="#E8564B" stroke="#B63A34" stroke-width="2.4" transform="translate(16,0)"/></g>');
+    case "icecream":
+      return wrap('<path d="M-9,2 L0,26 L9,2 z" fill="#E3B471" stroke="#B98A4E" stroke-width="2.2" stroke-linejoin="round"/><circle cx="0" cy="-4" r="12" fill="#FFC2D4" stroke="#E08CA5" stroke-width="2.2"/><circle cx="-3" cy="-13" r="7" fill="#FFD9E4" stroke="#E08CA5" stroke-width="2"/>');
+    case "cookie":
+      return wrap('<circle r="14" fill="#E0AE72" stroke="#B9834A" stroke-width="2.4"/><circle cx="-5" cy="-3" r="2.6" fill="#7A4A25"/><circle cx="5" cy="1" r="2.4" fill="#7A4A25"/><circle cx="0" cy="7" r="2.2" fill="#7A4A25"/>');
+    case "bird":
+      return wrap('<ellipse cx="0" cy="4" rx="15" ry="12" fill="#78C7E6" stroke="#3E8FB0" stroke-width="2.2"/><circle cx="11" cy="-4" r="8" fill="#8FD6EE" stroke="#3E8FB0" stroke-width="2.2"/><path d="M18,-3 l7,3 l-7,3 z" fill="#F6A93B"/><circle cx="13" cy="-6" r="1.9" fill="#2b3a44"/><path d="M-14,-2 q7,-8 14,0 q-7,-3 -14,0z" fill="#A8E0F2" stroke="#3E8FB0" stroke-width="1.6"/><path d="M-4,15 l0,5 M4,15 l0,5" stroke="#F6A93B" stroke-width="2.2" stroke-linecap="round"/>');
+    case "bird2":
+      return wrap('<ellipse cx="0" cy="4" rx="12" ry="10" fill="#F7C56B" stroke="#C68F2C" stroke-width="2.2"/><circle cx="9" cy="-3" r="6.5" fill="#FFDC97" stroke="#C68F2C" stroke-width="2.2"/><path d="M15,-2 l6,3 l-6,3 z" fill="#E8703F"/><circle cx="10.5" cy="-5" r="1.6" fill="#3b3327"/>', 0.85);
+    case "nest":
+      return wrap('<path d="M-22,4 q22,18 44,0 q-10,14 -22,14 q-12,0 -22,-14z" fill="#C79A63" stroke="#8E6633" stroke-width="2.2" stroke-linejoin="round"/><path d="M-20,6 q10,-6 20,0 M0,6 q10,-6 20,0" fill="none" stroke="#8E6633" stroke-width="1.6"/>', 0.9);
+    case "egg":
+      return wrap('<ellipse cx="0" cy="0" rx="8" ry="10.5" fill="#FFF6E2" stroke="#D8C49A" stroke-width="2"/>', 0.9);
+    case "hat":
+      return wrap('<ellipse cx="0" cy="4" rx="21" ry="7" fill="#C98A52" stroke="#8F5A2E" stroke-width="2.2"/><path d="M-11,4 q0,-14 11,-14 q11,0 11,14 z" fill="#D89A61" stroke="#8F5A2E" stroke-width="2.2"/><path d="M-11,0 q11,5 22,0" fill="none" stroke="#8F5A2E" stroke-width="2"/>', 0.95);
+    case "crown":
+      return wrap('<path d="M-15,6 L-15,-8 L-8,-1 L0,-12 L8,-1 L15,-8 L15,6 z" fill="#FFD35C" stroke="#C89A1E" stroke-width="2.2" stroke-linejoin="round"/><circle cx="0" cy="-12" r="2.4" fill="#F0705C"/>', 0.95);
+    case "cape":
+      return wrap('<path d="M8,-10 q26,6 22,30 q-14,4 -26,-8 z" fill="#E8624A" stroke="#B4432F" stroke-width="2.2" stroke-linejoin="round"/>', 0.95);
+    case "goggles":
+      return wrap('<circle cx="-9" cy="0" r="7.5" fill="#BEE7F5" stroke="#4E7E93" stroke-width="2.2"/><circle cx="9" cy="0" r="7.5" fill="#BEE7F5" stroke="#4E7E93" stroke-width="2.2"/><path d="M-16,0 L-22,-2 M16,0 L22,-2" stroke="#4E7E93" stroke-width="2.4" stroke-linecap="round"/>', 0.9);
+    case "glasses":
+      return wrap('<path d="M-18,0 h36" stroke="#2F3540" stroke-width="4" stroke-linecap="round"/><rect x="-15" y="-5" width="13" height="9" rx="3" fill="#3A424F"/><rect x="2" y="-5" width="13" height="9" rx="3" fill="#3A424F"/>', 0.9);
+    case "gift":
+      return wrap('<rect x="-13" y="-6" width="26" height="22" rx="3" fill="#8ED0A6" stroke="#4C9A6E" stroke-width="2.2"/><path d="M0,-6 v22 M-13,1 h26" stroke="#F6E6B0" stroke-width="3"/><path d="M0,-6 q-10,-10 -12,-2 q2,6 12,2 M0,-6 q10,-10 12,-2 q-2,6 -12,2" fill="none" stroke="#F0705C" stroke-width="2.4"/>', 0.9);
+    case "tree":
+      return wrap('<rect x="-6" y="-30" width="12" height="40" rx="4" fill="#9A6B3E"/><circle cx="0" cy="-44" r="26" fill="#7CC47C" stroke="#4C8F52" stroke-width="2.4"/><circle cx="-18" cy="-30" r="16" fill="#8ED08A" stroke="#4C8F52" stroke-width="2.2"/><circle cx="19" cy="-32" r="15" fill="#8ED08A" stroke="#4C8F52" stroke-width="2.2"/>', 1.5);
+    case "rock":
+      return wrap('<path d="M-26,4 q2,-22 20,-22 q18,0 22,20 q-20,8 -42,2z" fill="#B7BCC6" stroke="#7E8694" stroke-width="2.4" stroke-linejoin="round"/><path d="M-10,-2 q8,-6 14,2" fill="none" stroke="#939BA8" stroke-width="2"/>', 1.1);
+    case "worm":
+      return wrap('<path d="M-14,8 q6,-14 12,-2 q6,12 12-4" fill="none" stroke="#F09AA8" stroke-width="6" stroke-linecap="round"/><circle cx="-8" cy="3" r="1.8" fill="#5a2b34"/><circle cx="2" cy="1" r="1.8" fill="#5a2b34"/>', 0.9);
+    case "flowers":
+      return wrap('<path d="M0,0 v22" stroke="#4C8F52" stroke-width="3"/><circle cx="0" cy="-6" r="6.5" fill="#FFD466" stroke="#D8A81E" stroke-width="1.8"/><circle cx="0" cy="-6" r="2.8" fill="#F07E5E"/><path d="M0,10 q10,-4 12,4 q-10,4 -12,-4z" fill="#7CC47C" stroke="#4C8F52" stroke-width="1.6"/>', 0.9);
+    case "bag":
+      return wrap('<path d="M-11,-6 h22 l3,26 h-28 z" fill="#E8D9BC" stroke="#B79A6C" stroke-width="2.2" stroke-linejoin="round"/><path d="M-6,-6 q0,-8 6,-8 q6,0 6,8" fill="none" stroke="#B79A6C" stroke-width="2.2"/><circle cx="0" cy="8" r="3" fill="#E8624A" opacity=".6"/>', 0.9);
+    case "snake":
+      return wrap('<path d="M-16,14 q10,-12 2,-20 q-8,-8 2,-14" fill="none" stroke="#7EC47A" stroke-width="9" stroke-linecap="round"/><circle cx="4" cy="-20" r="8" fill="#96D68E" stroke="#4C8F52" stroke-width="2.2"/><circle cx="-1" cy="-22" r="1.9" fill="#2b3a2b"/><circle cx="6" cy="-22" r="1.9" fill="#2b3a2b"/><path d="M8,-17 q6,2 8,6" fill="none" stroke="#E8624A" stroke-width="2" stroke-linecap="round"/>');
+    case "book":
+      return wrap('<path d="M-20,-10 q10,-6 20,0 q10,-6 20,0 v20 q-10,-6 -20,0 q-10,-6 -20,0 z" fill="#FFF9EE" stroke="#A98C64" stroke-width="2.2" stroke-linejoin="round"/><path d="M0,-10 v20" stroke="#A98C64" stroke-width="2.2"/><path d="M-14,-2 h10 M-14,4 h10 M4,-2 h10 M4,4 h10" stroke="#C9B79A" stroke-width="1.7" stroke-linecap="round"/>', 1.25);
+    case "piano":
+      return wrap('<rect x="-34" y="-14" width="68" height="30" rx="4" fill="#4A3B4F" stroke="#2E2432" stroke-width="2.2"/><rect x="-31" y="-2" width="62" height="15" fill="#fff" stroke="#333"/><path d="M-22,-2 v15 M-12,-2 v15 M-2,-2 v15 M8,-2 v15 M18,-2 v15" stroke="#333" stroke-width="1.8"/>', 1.15);
+    case "whale":
+      return wrap('<path d="M-30,6 q6,-22 30,-22 q22,0 26,16 q8,-2 10,-8 q2,14 -10,18 q-14,8 -30,4 q-14,-2 -26,-8z" fill="#6FB4D6" stroke="#3D7E9B" stroke-width="2.4" stroke-linejoin="round"/><circle cx="-14" cy="-4" r="3.2" fill="#2b3a44"/><path d="M-26,10 q12,-4 22,0" fill="none" stroke="#3D7E9B" stroke-width="2"/><path d="M-18,-20 q0,-14 10,-18 q-2,12 -4,16" fill="none" stroke="#9BD7ED" stroke-width="3.4" stroke-linecap="round"/>', 1.28);
+    case "map":
+      return wrap('<path d="M-18,-12 l12,-4 l12,4 l12,-4 v24 l-12,4 l-12,-4 l-12,4z" fill="#FFEFC9" stroke="#C3A36B" stroke-width="2.2" stroke-linejoin="round"/><path d="M-6,-16 v24 M6,-12 v24" stroke="#D9BF92" stroke-width="1.6"/><circle cx="2" cy="2" r="2.6" fill="#E8624A"/>', 1.0);
+    case "trumpet":
+      return wrap('<path d="M-24,-4 h26 v10 h-26 z" fill="#F2C24B" stroke="#B98A1E" stroke-width="2.2"/><path d="M2,-10 q10,0 14,6 q-4,6 -14,6" fill="#FFDA73" stroke="#B98A1E" stroke-width="2.2"/><path d="M22,-12 q10,2 10,14 q0,8 -8,10" fill="#FFDA73" stroke="#B98A1E" stroke-width="2.4"/><rect x="-30" y="-7" width="8" height="16" rx="2" fill="#E0B33C" stroke="#B98A1E" stroke-width="2"/><path d="M-8,-4 v10 M0,-4 v10" stroke="#B98A1E" stroke-width="1.8"/>', 1.0);
+    case "frog":
+      return wrap('<ellipse cx="0" cy="4" rx="14" ry="11" fill="#8CCF6E" stroke="#4C8F52" stroke-width="2.2"/><circle cx="-7" cy="-4" r="4.6" fill="#8CCF6E" stroke="#4C8F52" stroke-width="2"/><circle cx="7" cy="-4" r="4.6" fill="#8CCF6E" stroke="#4C8F52" stroke-width="2"/><circle cx="-7" cy="-4" r="1.8" fill="#2b3a2b"/><circle cx="7" cy="-4" r="1.8" fill="#2b3a2b"/><path d="M-5,8 q5,4 10,0" fill="none" stroke="#4C8F52" stroke-width="1.8"/>', 0.9);
+    case "pig":
+      return wrap('<ellipse cx="0" cy="0" rx="20" ry="18" fill="#F9B9CA" stroke="#D4738C" stroke-width="2.4"/><path d="M-13,-15 q1,-9 8,-8 q3,6 -3,9z" fill="#F9B9CA" stroke="#D4738C" stroke-width="2"/><path d="M8,-16 q6,-8 12,-3 q-1,7 -8,8z" fill="#F9B9CA" stroke="#D4738C" stroke-width="2"/><ellipse cx="0" cy="4" rx="8" ry="6" fill="#EE93AC" stroke="#D4738C" stroke-width="1.8"/><circle cx="-3" cy="4" r="1.5" fill="#D4738C"/><circle cx="3" cy="4" r="1.5" fill="#D4738C"/><circle cx="-7" cy="-5" r="2.2" fill="#3B3340"/><circle cx="7" cy="-5" r="2.2" fill="#3B3340"/>', 1.0);
+    case "leaf":
+      return wrap('<path d="M-16,8 q4,-20 18,-22 q6,14 -6,22 q-8,4 -12,0z" fill="#8ED08A" stroke="#4C8F52" stroke-width="2.2" stroke-linejoin="round"/><path d="M-12,6 q6,-10 14,-14" fill="none" stroke="#4C8F52" stroke-width="1.8"/>');
+    case "bowl":
+      return wrap('<path d="M-17,-2 h34 q-2,18 -17,18 q-15,0 -17,-18z" fill="#DCE3EC" stroke="#8A94A6" stroke-width="2.2" stroke-linejoin="round"/><ellipse cx="0" cy="-2" rx="17" ry="5" fill="#8FD17A" stroke="#5C9E4C" stroke-width="2"/><circle cx="-6" cy="-3" r="2.6" fill="#6FBB5C"/><circle cx="6" cy="-2" r="2" fill="#6FBB5C"/>', 1.0);
+    case "car":
+      return wrap('<path d="M-34,10 q0,-14 12,-16 l8,-12 h24 l10,12 q10,2 10,14 q0,6 -6,6 h-42 q-6,0 -6,-4z" fill="#E8564B" stroke="#A8392F" stroke-width="2.4" stroke-linejoin="round"/><path d="M-12,-14 h12 l6,10 h-22z" fill="#BEE7F5" stroke="#A8392F" stroke-width="2"/><circle cx="-18" cy="16" r="8" fill="#3B3340"/><circle cx="18" cy="16" r="8" fill="#3B3340"/><circle cx="-18" cy="16" r="3" fill="#8E96A6"/><circle cx="18" cy="16" r="3" fill="#8E96A6"/>', 1.2);
+    case "umbrella":
+      return wrap('<path d="M-26,0 q0,-24 26,-24 q26,0 26,24 q-13,-8 -26,0 q-13,-8 -26,0z" fill="#7FBEE0" stroke="#3D7E9B" stroke-width="2.2" stroke-linejoin="round"/><path d="M0,-24 v34 q0,10 10,10" fill="none" stroke="#7A5A3A" stroke-width="3.2" stroke-linecap="round"/>', 1.15);
+    case "hippo":
+      return wrap('<ellipse cx="0" cy="6" rx="26" ry="20" fill="#B7A8CE" stroke="#7E6A9C" stroke-width="2.4"/><ellipse cx="0" cy="14" rx="16" ry="10" fill="#D9CCE8" stroke="#7E6A9C" stroke-width="2"/><circle cx="-9" cy="-2" r="2.6" fill="#4A3B5C"/><circle cx="9" cy="-2" r="2.6" fill="#4A3B5C"/><circle cx="-15" cy="-14" r="6" fill="#C8BBDE" stroke="#7E6A9C" stroke-width="2"/><circle cx="15" cy="-14" r="6" fill="#C8BBDE" stroke="#7E6A9C" stroke-width="2"/>', 1.15);
+    case "mask":
+      return wrap('<rect x="-16" y="-12" width="32" height="26" rx="7" fill="#BFC9D8" stroke="#6C7788" stroke-width="2.2"/><circle cx="-6" cy="-2" r="3.6" fill="#3B3340"/><circle cx="6" cy="-2" r="3.6" fill="#3B3340"/><rect x="-7" y="5" width="14" height="4" rx="2" fill="#6C7788"/><path d="M0,-12 v-8" stroke="#6C7788" stroke-width="2.4"/><circle cx="0" cy="-22" r="3" fill="#E8624A"/>', 1.0);
+    default:
+      return "";
+  }
+}
+
+/* ---------- 배경 ---------- */
+function bgArt(bg){
+  var g = "", G = "g" + (++uid);
+  function sky(a, b){
+    return '<defs><linearGradient id="'+G+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+a+'"/><stop offset="1" stop-color="'+b+'"/></linearGradient></defs>' +
+           '<rect width="400" height="280" fill="url(#'+G+')"/>';
+  }
+  function sun(x, y, r){
+    return '<circle cx="'+x+'" cy="'+y+'" r="'+(r+6)+'" fill="#FFE27A" opacity=".35"/><circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="#FFD35C"/>';
+  }
+  function cloud(x, y, k){
+    k = k || 1;
+    return '<g transform="translate('+x+','+y+') scale('+k+')" opacity=".92"><ellipse cx="0" cy="0" rx="22" ry="13" fill="#fff"/><ellipse cx="-16" cy="4" rx="15" ry="10" fill="#fff"/><ellipse cx="17" cy="5" rx="14" ry="9" fill="#fff"/></g>';
+  }
+  function grass(y, col, x){
+    return '<path d="M'+x+','+y+' l3,-11 l3,11 M'+(x+8)+','+y+' l2,-8 l3,8" stroke="'+col+'" stroke-width="2.4" fill="none" stroke-linecap="round"/>';
+  }
+
+  if (bg === "party"){
+    g += sky("#FFE6F2", "#FFF6DF");
+    g += '<g>' + [0,1,2,3,4,5,6,7].map(function(i){
+      return '<path d="M'+(14+i*50)+',0 l16,0 l-8,20z" fill="'+["#F07E9C","#FFD35C","#7FBEE0","#8ED08A"][i%4]+'"/>';
+    }).join("") + '</g>';
+    g += '<path d="M0,236 q100,-18 200,0 q100,18 200,0 v44 h-400z" fill="#FFD9A8"/>';
+    for (var i = 0; i < 26; i++){
+      g += '<circle cx="'+(rnd(i)*400).toFixed(0)+'" cy="'+(40+rnd(i+9)*170).toFixed(0)+'" r="'+(2+rnd(i+3)*2.4).toFixed(1)+'" fill="'+["#F07E9C","#FFD35C","#7FBEE0","#8ED08A","#F2A0A8"][i%5]+'" opacity=".75"/>';
+    }
+  } else if (bg === "night"){
+    g += sky("#141E3B", "#3B4B7C");
+    g += '<circle cx="64" cy="52" r="24" fill="#FFF3C4"/><circle cx="55" cy="46" r="22" fill="#22305A" opacity=".85"/>';
+    for (var s = 0; s < 34; s++){
+      var sx = (rnd(s)*400).toFixed(0), sy = (rnd(s+40)*180).toFixed(0), sr = (0.9+rnd(s+7)*1.5).toFixed(1);
+      g += '<circle cx="'+sx+'" cy="'+sy+'" r="'+sr+'" fill="#FFF8D6" opacity="'+(0.5+rnd(s+2)*0.5).toFixed(2)+'"/>';
+    }
+    g += '<path d="M0,222 q100,-26 200,-6 q100,20 200,-2 v66 h-400z" fill="#26345A"/>';
+  } else if (bg === "sunset"){
+    g += sky("#FFB877", "#FFE3C8");
+    g += '<circle cx="200" cy="196" r="46" fill="#FF8F5E" opacity=".55"/><circle cx="200" cy="196" r="34" fill="#FFB05C"/>';
+    g += '<path d="M0,214 q80,-30 170,-4 q90,26 230,-6 v76 h-400z" fill="#C98B6B"/>';
+    g += '<path d="M0,238 q120,-16 220,0 q90,14 180,-4 v46 h-400z" fill="#A9705A"/>';
+  } else if (bg === "rain"){
+    g += sky("#AFC4D8", "#DCE9F2");
+    g += cloud(90, 44, 1.15) + cloud(280, 60, 1.3) + cloud(190, 26, 0.9);
+    for (var r = 0; r < 34; r++){
+      var rx = (rnd(r+3)*400).toFixed(0), ry = (30 + rnd(r+11)*160).toFixed(0);
+      g += '<path d="M'+rx+','+ry+' l-4,14" stroke="#8FB4CE" stroke-width="2.4" stroke-linecap="round" opacity=".65"/>';
+    }
+    g += '<path d="M0,222 q100,-10 200,2 q100,12 200,-2 v58 h-400z" fill="#7FA37A"/>';
+    g += '<ellipse cx="120" cy="244" rx="42" ry="9" fill="#A9CDE6" opacity=".8"/><ellipse cx="292" cy="252" rx="30" ry="7" fill="#A9CDE6" opacity=".7"/>';
+  } else if (bg === "pond"){
+    g += sky("#BFE7FF", "#EAF7FF");
+    g += sun(330, 50, 22) + cloud(80, 44, 0.95);
+    g += '<path d="M0,180 h400 v100 h-400z" fill="#7FC6E8"/>';
+    g += '<path d="M0,180 q50,-10 100,0 q50,10 100,0 q50,-10 100,0 q50,10 100,0 v10 q-50,10 -100,0 q-50,-10 -100,0 q-50,10 -100,0 q-50,-10 -100,0z" fill="#A5DCF2" opacity=".85"/>';
+    for (var w = 0; w < 5; w++){
+      g += '<path d="M'+(30+w*80)+','+(210+w%2*22)+' q20,-6 40,0" fill="none" stroke="#EAF9FF" stroke-width="3" stroke-linecap="round" opacity=".8"/>';
+    }
+    g += '<path d="M44,182 q4,-34 14,-44 M44,182 q-10,-26 -20,-32" fill="none" stroke="#4C8F52" stroke-width="4" stroke-linecap="round"/>';
+  } else if (bg === "room"){
+    g += '<rect width="400" height="280" fill="#FFF2E0"/>';
+    g += '<rect x="0" y="206" width="400" height="74" fill="#EAD3B4"/>';
+    g += '<path d="M0,206 h400" stroke="#D3B591" stroke-width="2"/>';
+    g += '<rect x="252" y="46" width="98" height="82" rx="4" fill="#BFE7FF" stroke="#C9A87F" stroke-width="5"/><path d="M301,46 v82 M252,87 h98" stroke="#C9A87F" stroke-width="5"/>';
+    g += '<circle cx="76" cy="60" r="17" fill="#FFD35C"/><rect x="72" y="76" width="8" height="20" fill="#C9A87F"/>';
+    g += '<rect x="20" y="176" width="70" height="32" rx="6" fill="#F2B5C6" stroke="#C9859A" stroke-width="2"/>';
+  } else if (bg === "sky"){
+    g += sky("#8FD3FF", "#DCF2FF");
+    g += cloud(70, 70, 1.2) + cloud(300, 50, 1) + cloud(190, 130, 0.8) + cloud(340, 190, 0.9);
+  } else if (bg === "snow"){
+    g += sky("#CFE6FA", "#F3FAFF");
+    g += '<path d="M0,210 q100,-16 200,0 q100,16 200,0 v70 h-400z" fill="#FFFFFF"/>';
+    for (var n = 0; n < 30; n++){
+      g += '<circle cx="'+(rnd(n+5)*400).toFixed(0)+'" cy="'+(20+rnd(n+15)*180).toFixed(0)+'" r="'+(1.6+rnd(n)*2).toFixed(1)+'" fill="#fff" opacity=".9"/>';
+    }
+  } else if (bg === "stage"){
+    g += sky("#3A1F32", "#5A2C43");
+    g += '<path d="M0,0 h60 q-14,120 10,240 h-70z" fill="#8E2F44"/><path d="M400,0 h-60 q14,120 -10,240 h70z" fill="#8E2F44"/>';
+    g += '<path d="M120,0 L280,0 L340,280 L60,280z" fill="#FFF0C9" opacity=".18"/>';
+    g += '<rect y="232" width="400" height="48" fill="#6E3B2E"/>';
+  } else { /* meadow */
+    g += sky("#BFE7FF", "#EAF8FF");
+    g += sun(332, 46, 24);
+    g += cloud(84, 54, 1) + cloud(268, 34, 0.8);
+    g += '<path d="M0,206 q100,-24 200,-2 q100,22 200,-4 v80 h-400z" fill="#A8DC8A"/>';
+    g += '<path d="M0,232 q120,-14 220,2 q90,14 180,-2 v48 h-400z" fill="#8FCC74"/>';
+    g += grass(240, "#6FAF57", 40) + grass(252, "#6FAF57", 150) + grass(244, "#6FAF57", 320) + grass(258, "#6FAF57", 240);
+  }
+  return g;
+}
+
+function decoSVG(kind){
+  var g = "";
+  if (kind === "sun") g = '<circle cx="344" cy="44" r="30" fill="#FFE27A" opacity=".35"/><circle cx="344" cy="44" r="20" fill="#FFD35C"/>';
+  else if (kind === "cloud") g = '<g opacity=".9"><ellipse cx="70" cy="58" rx="24" ry="14" fill="#fff"/><ellipse cx="52" cy="62" rx="16" ry="10" fill="#fff"/><ellipse cx="88" cy="63" rx="15" ry="9" fill="#fff"/></g>';
+  else if (kind === "cloud2") g = '<g opacity=".85"><ellipse cx="316" cy="86" rx="22" ry="12" fill="#fff"/><ellipse cx="300" cy="90" rx="14" ry="9" fill="#fff"/></g>';
+  else if (kind === "moon") g = '<circle cx="58" cy="50" r="20" fill="#FFF3C4"/><circle cx="50" cy="44" r="18" fill="#22305A" opacity=".9"/>';
+  else if (kind === "stars"){
+    var pts = [[40,40],[80,72],[120,34],[160,60],[210,36],[250,66],[290,40],[330,74],[360,30],[60,110],[300,116]];
+    g = pts.map(function(p, i){
+      return '<path d="M'+p[0]+','+(p[1]-5)+' l1.6,3.6 3.9,.4 -2.9,2.6 .8,3.9 -3.4,-2.1 -3.4,2.1 .8,-3.9 -2.9,-2.6 3.9,-.4z" fill="#FFF3B0" opacity="'+(0.6+ (i%3)*0.15)+'"/>';
+    }).join("");
+  } else if (kind === "hearts"){
+    g = [[60,80,1],[330,110,.8],[200,40,.7],[100,140,.6],[300,60,.75]].map(function(h, i){
+      return '<path transform="translate('+h[0]+','+h[1]+') scale('+h[2]+')" d="M0,6 C-10,-4 -8,-12 0,-7 C8,-12 10,-4 0,6z" fill="#F8708A" opacity=".85"/>';
+    }).join("");
+  } else if (kind === "confetti"){
+    var cols = ["#F07E9C","#FFD35C","#7FBEE0","#8ED08A","#F2A0A8"];
+    for (var i = 0; i < 18; i++){
+      var x = (rnd(i+21)*380+10).toFixed(0), y = (rnd(i+31)*150+20).toFixed(0);
+      g += '<rect x="'+x+'" y="'+y+'" width="6" height="3" rx="1.2" fill="'+cols[i%5]+'" transform="rotate('+(rnd(i)*90).toFixed(0)+' '+x+' '+y+')" opacity=".9"/>';
+    }
+  } else if (kind === "zzz"){
+    g = '<text x="300" y="70" font-size="20" font-weight="700" fill="#7C879C" opacity=".85">z</text>' +
+        '<text x="318" y="52" font-size="26" font-weight="700" fill="#7C879C" opacity=".7">z</text>' +
+        '<text x="340" y="32" font-size="32" font-weight="700" fill="#7C879C" opacity=".55">Z</text>';
+  } else if (kind === "music"){
+    g = '<g fill="#8B6BC4" opacity=".85"><path d="M96,66 l0,-22 l16,-4 l0,22" fill="none" stroke="#8B6BC4" stroke-width="2.6"/><ellipse cx="92" cy="68" rx="7" ry="5"/><ellipse cx="108" cy="64" rx="7" ry="5"/></g>' +
+        '<g fill="#8B6BC4" opacity=".55" transform="translate(212,-6)"><path d="M96,66 l0,-22 l16,-4 l0,22" fill="none" stroke="#8B6BC4" stroke-width="2.6"/><ellipse cx="92" cy="68" rx="7" ry="5"/><ellipse cx="108" cy="64" rx="7" ry="5"/></g>';
+  } else if (kind === "sparkle"){
+    g = [[100,70,1],[300,80,.8],[200,50,.7],[60,120,.6]].map(function(p){
+      return '<path transform="translate('+p[0]+','+p[1]+') scale('+p[2]+')" d="M0,-12 L3,-3 L12,0 L3,3 L0,12 L-3,3 L-12,0 L-3,-3z" fill="#FFD35C" opacity=".9"/>';
+    }).join("");
+  } else if (kind === "splash"){
+    g = '<g fill="none" stroke="#7FC6E8" stroke-width="3" stroke-linecap="round" opacity=".9"><path d="M120,214 q-10,-20 -18,-26"/><path d="M132,210 q0,-24 4,-32"/><path d="M146,214 q10,-20 18,-24"/></g>';
+  }
+  return g;
+}
+
+function isBack(who){ return /^(far|.*-back)$/.test(who || ""); }
+
+function sceneSVG(scene, cls){
+  scene = scene || {};
+  var bg = scene.bg || "meadow";
+  var props = scene.props || (scene.prop ? [{n: scene.prop, who: scene.who || "mid"}] : []);
+  var deco = scene.deco || [];
+  var o = [];
+  o.push('<svg viewBox="0 0 400 280" preserveAspectRatio="xMidYMid slice" class="'+(cls || "scene")+'" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">');
+  o.push(bgArt(bg));
+  props.forEach(function(p){ if (isBack(p.who)) o.push(drawProp(p.n, p.who)); });
+  deco.forEach(function(d){ if (d === "stars" || d === "moon" || d === "cloud" || d === "cloud2") o.push(decoSVG(d)); });
+  var swap = !!scene.swap;
+  o.push(elephant(scene.ek || "stand", scene.ef || "happy", swap ? 274 : 130, 180, 1.04, false));
+  o.push(pig(scene.pk || "stand", scene.pf || "happy", swap ? 130 : 268, 188, 1.0, swap));
+  props.forEach(function(p){ if (!isBack(p.who)) o.push(drawProp(p.n, p.who || "mid")); });
+  deco.forEach(function(d){
+    if (d !== "stars" && d !== "moon" && d !== "cloud" && d !== "cloud2") o.push(decoSVG(d));
+  });
+  o.push("</svg>");
+  return o.join("");
+}
+
+/* ---------- 화면: 책장 ---------- */
+function visibleBooks(){
+  var q = query.trim().toLowerCase();
+  return BOOKS.filter(function(b){
+    var k = bookKey(b);
+    if (tab === "fav" && !has(favs, k)) return false;
+    if (tab === "done" && !has(dones, k)) return false;
+    if (tab === "todo" && has(dones, k)) return false;
+    if (!q) return true;
+    var hay = (b.en + " " + b.ko + " " + b.intro + " " + b.n).toLowerCase();
+    return hay.indexOf(q) !== -1;
+  });
+}
+
+function renderChips(){
+  var wrapC = $("#chips");
+  wrapC.innerHTML = "";
+  TABS.forEach(function(t){
+    var b = document.createElement("button");
+    b.className = "chip" + (tab === t.id ? " on" : "");
+    b.setAttribute("data-tab", t.id);
+    var n = t.id === "all" ? BOOKS.length : t.id === "fav" ? favs.length : t.id === "done" ? dones.length : (BOOKS.length - dones.length);
+    b.textContent = t.label + " " + n;
+    b.onclick = function(){ tab = t.id; renderChips(); render(); };
+    wrapC.appendChild(b);
+  });
+}
+
+function render(){
+  var list = visibleBooks();
+  var host = $("#list");
+  host.innerHTML = "";
+  $("#count").innerHTML = "<b>" + list.length + "권</b> 보기";
+  $("#progress").textContent = "들은 책 " + dones.length + " / " + BOOKS.length;
+
+  if (!list.length){
+    host.innerHTML = '<div class="empty">조건에 맞는 책이 없어요.<br>검색어를 지우거나 다른 목록을 눌러 보세요.</div>';
+    return;
+  }
+  list.forEach(function(b){
+    var k = bookKey(b);
+    var card = document.createElement("div");
+    card.className = "card" + (has(dones, k) ? " read" : "");
+    card.setAttribute("data-n", String(b.n));
+    var cover = b.pages && b.pages[0] ? b.pages[0].scene : {};
+    card.innerHTML =
+      '<button class="thumb" aria-label="#'+b.n+' '+b.en+' 열기">' + sceneSVG(cover, "coverart") +
+        '<span class="num">#' + b.n + '</span></button>' +
+      '<div class="body">' +
+        '<h3>' + b.en + '<span class="ar">AR ' + b.ar.toFixed(1) + '</span></h3>' +
+        '<p class="ko">' + b.ko + '</p>' +
+        '<p class="intro">' + b.intro + ' · 5쪽</p>' +
+        '<div class="flags">' +
+          '<button class="flag ' + (has(favs, k) ? "fav" : "off") + '" data-act="fav">' + (has(favs, k) ? "♥ 즐겨찾기" : "♡ 즐겨찾기") + '</button>' +
+          '<button class="flag ' + (has(dones, k) ? "done" : "off") + '" data-act="done">' + (has(dones, k) ? "✓ 다 읽음" : "✓ 읽음 표시") + '</button>' +
+        '</div>' +
+      '</div>';
+    card.onclick = function(ev){
+      var act = ev.target.getAttribute && ev.target.getAttribute("data-act");
+      if (act === "fav"){
+        ev.stopPropagation();
+        toggleIn(favs, k); save(LS.fav, favs); renderChips(); render();
+        toast(has(favs, k) ? "즐겨찾기에 담았어요" : "즐겨찾기에서 뺐어요");
+        return;
+      }
+      if (act === "done"){
+        ev.stopPropagation();
+        toggleIn(dones, k); save(LS.done, dones); renderChips(); render();
+        toast(has(dones, k) ? "다 읽은 책으로 표시했어요" : "표시를 지웠어요");
+        return;
+      }
+      openBook(BOOKS.indexOf(b), { play: true });
+    };
+    host.appendChild(card);
+  });
+}
+
+/* ---------- 화면: 리더 ---------- */
+function curBook(){ return idx >= 0 ? BOOKS[idx] : null; }
+function curPage(){ var b = curBook(); return b ? b.pages[page] : null; }
+function curSents(){ var p = curPage(); return p ? p.en : []; }
+
+function renderReader(){
+  var b = curBook();
+  if (!b) return;
+  $("#rTitle").textContent = "#" + b.n + " " + b.en;
+  $("#rKo").textContent = b.ko + " · AR " + b.ar.toFixed(1);
+  $("#rNum").textContent = "#" + b.n + " / 25 · " + b.en;
+  $("#rPrevBook").disabled = idx <= 0;
+  $("#rNextBook").disabled = idx >= BOOKS.length - 1;
+  $("#rYt").href = "https://www.youtube.com/results?search_query=" +
+    encodeURIComponent("Elephant and Piggie " + b.en + " read aloud");
+  renderPage();
+}
+function renderPage(){
+  var b = curBook(), p = curPage();
+  if (!b || !p) return;
+  $("#rArt").innerHTML = sceneSVG(p.scene, "scene");
+  $("#rPage").textContent = (page + 1) + " / " + b.pages.length;
+  var dots = $("#rDots");
+  dots.innerHTML = "";
+  b.pages.forEach(function(_, i){
+    var d = document.createElement("span");
+    d.className = "dot" + (i === page ? " on" : "");
+    dots.appendChild(d);
+  });
+  var holder = $("#rSent");
+  holder.innerHTML = "";
+  p.en.forEach(function(s, i){
+    var sp = document.createElement("span");
+    sp.className = "sent" + (i === sentIdx ? " on" : "");
+    sp.setAttribute("data-i", String(i));
+    sp.textContent = s + " ";
+    holder.appendChild(sp);
+  });
+  $("#rKoText").textContent = p.ko;
+  $("#rKoBox").classList.toggle("show", koOn);
+  $("#rPrev").disabled = page <= 0;
+  $("#rNext").disabled = page >= b.pages.length - 1;
+  paintControls();
+}
+function paintControls(){
+  var playBtn = $("#rPlay");
+  playBtn.textContent = playing && !paused ? "⏸ 일시정지" : (paused ? "▶ 계속 읽기" : "▶ 읽기");
+  $("#rSpeed").innerHTML = "속도<b>" + speed.toFixed(2).replace(/0$/, "") + "x</b>";
+  $("#rSpeed").classList.toggle("on", speed !== 1.0);
+  $("#rAuto").innerHTML = "자동 넘김<b>" + (autoOn ? "켜짐" : "꺼짐") + "</b>";
+  $("#rAuto").classList.toggle("on", autoOn);
+  $("#rCont").innerHTML = "다음 책 연속<b>" + (contOn ? "켜짐" : "꺼짐") + "</b>";
+  $("#rCont").classList.toggle("on", contOn);
+  $("#rKoBtn").innerHTML = "한국어 뜻<b>" + (koOn ? "보임" : "숨김") + "</b>";
+  $("#rKoBtn").classList.toggle("on", koOn);
+  $("#rSleep").innerHTML = "수면 타이머<b>" + (sleepMin ? sleepMin + "분" : "끔") + "</b>";
+  $("#rSleep").classList.toggle("on", !!sleepMin);
+  $("#rRestart").innerHTML = "처음부터<b>1쪽</b>";
+  $("#rNight").classList.toggle("on", night);
+  $("#rNight").textContent = night ? "☀️" : "🌙";
+}
+
+function paintSent(){
+  var spans = document.querySelectorAll("#rSent .sent");
+  for (var i = 0; i < spans.length; i++){
+    spans[i].classList.toggle("on", i === sentIdx);
+  }
+}
+
+/* ---------- 음성 ---------- */
+var synth = window.speechSynthesis || null;
+var voices = [], voiceURI = null, utter = null, seq = 0, silenceSince = 0;
+function voiceScore(v){
+  var s = 0, n = (v.name || "").toLowerCase(), l = (v.lang || "").toLowerCase();
+  if (/^en[-_]us/.test(l)) s += 3;
+  if (/^en[-_]gb/.test(l)) s += 2;
+  if (/natural|neural|premium|enhanced|siri/.test(n)) s += 4;
+  if (/google/.test(n)) s += 2;
+  if (/samantha|aria|jenny|karen|daniel|zira|ava|allison|serena|kate|moira|tessa|google us english/.test(n)) s += 3;
+  return s;
+}
+function refreshVoices(){
+  if (!synth) return;
+  try{
+    voices = (synth.getVoices() || []).filter(function(v){ return /^en([-_]|$)/i.test(v.lang || ""); });
+    voices.sort(function(a, b){ return voiceScore(b) - voiceScore(a); });
+  }catch(e){ voices = []; }
+}
+function pickVoice(){
+  if (!voices.length) return null;
+  if (voiceURI){
+    for (var i = 0; i < voices.length; i++){
+      if ((voices[i].voiceURI || voices[i].name) === voiceURI) return voices[i];
+    }
+  }
+  return voices[0] || null;
+}
+
+function speakSent(i){
+  if (!synth){ toast("이 브라우저는 읽어주기를 지원하지 않아요."); return; }
+  var sents = curSents();
+  if (!sents.length) return;
+  if (i >= sents.length){ pageFinished(); return; }
+  sentIdx = i;
+  paintSent();
+  var my = ++seq;
+  try{ synth.cancel(); }catch(e){}
+  var u = new SpeechSynthesisUtterance(sents[i]);
+  var v = pickVoice();
+  if (v) u.voice = v;
+  u.lang = v && v.lang ? v.lang : "en-US";
+  u.rate = speed;
+  u.pitch = 1;
+  u.volume = 1;
+  u.onstart = function(){ if (my !== seq) return; playing = true; paused = false; document.body.classList.add("reading"); paintControls(); };
+  u.onend = function(){
+    if (my !== seq) return;
+    setTimeout(function(){ if (my === seq && playing && !paused) speakSent(i + 1); }, 200);
+  };
+  u.onerror = function(e){
+    if (my !== seq) return;
+    document.body.classList.remove("reading");
+    if (e && (e.error === "interrupted" || e.error === "canceled")) return;
+    playing = false; paused = false; paintControls();
+    toast("읽어주기를 계속할 수 없어요. 속도나 음성을 바꿔 보세요.");
+  };
+  utter = u;
+  playing = true; paused = false;
+  document.body.classList.add("reading");
+  paintControls();
+  synth.speak(u);
+}
+
+function stopSpeech(){
+  seq++;
+  try{ if (synth) synth.cancel(); }catch(e){}
+  playing = false; paused = false;
+  document.body.classList.remove("reading");
+  paintControls();
+}
+
+function pageFinished(){
+  playing = false; paused = false;
+  paintControls();
+  var b = curBook();
+  if (!b) return;
+  if (!autoOn){
+    document.body.classList.remove("reading");
+    if (page === b.pages.length - 1) markDone(b);
+    return;
+  }
+  if (page < b.pages.length - 1){
+    goPage(page + 1, true);
+    return;
+  }
+  markDone(b);
+  if (contOn && idx < BOOKS.length - 1){
+    openBook(idx + 1, { play: true });
+    return;
+  }
+  document.body.classList.remove("reading");
+  if (contOn) toast("25권을 모두 읽었어요! 🎉");
+  else toast("이 책을 다 읽었어요 ✓");
+}
+
+function markDone(b){
+  var k = bookKey(b);
+  if (!has(dones, k)){
+    dones.push(k); save(LS.done, dones); renderChips();
+  }
+}
+
+/* ---------- 이동 ---------- */
+function saveLast(){
+  if (idx < 0) return;
+  save(LS.last, JSON.stringify({ i: idx, p: page }));
+}
+function goPage(p, play){
+  var b = curBook();
+  if (!b || p < 0 || p >= b.pages.length) return;
+  seq++;
+  try{ if (synth) synth.cancel(); }catch(e){}
+  page = p; sentIdx = -1;
+  playing = false; paused = false;
+  renderPage();
+  saveLast();
+  if (play) speakSent(0);
+}
+function openBook(i, opts){
+  opts = opts || {};
+  if (i < 0 || i >= BOOKS.length) return;
+  seq++;
+  try{ if (synth) synth.cancel(); }catch(e){}
+  idx = i; page = 0; sentIdx = -1;
+  playing = false; paused = false;
+  $("#reader").hidden = false;
+  document.body.classList.add("inreader");
+  renderReader();
+  if (opts.play) speakSent(0);
+  $("#reader").scrollTop = 0;
+}
+
+function togglePlay(){
+  if (!synth){ toast("이 브라우저는 읽어주기를 지원하지 않아요."); return; }
+  if (playing && !paused){ paused = true; try{ synth.pause(); }catch(e){} paintControls(); return; }
+  if (paused){
+    paused = false;
+    try{ synth.resume(); }catch(e){}
+    paintControls();
+    return;
+  }
+  var sents = curSents();
+  var start = (sentIdx >= 0 && sentIdx < sents.length) ? sentIdx : 0;
+  speakSent(start);
+}
+
+/* ---------- 수면 타이머 ---------- */
+function setSleep(min){
+  sleepMin = min;
+  sleepEndsAt = min ? Date.now() + min * 60000 : 0;
+  save(LS.sleep, String(min));
+  paintControls();
+  toast(min ? "수면 타이머 " + min + "분" : "수면 타이머를 껐어요");
+}
+setInterval(function(){
+  if (!sleepEndsAt) return;
+  if (Date.now() >= sleepEndsAt){
+    sleepEndsAt = 0; sleepMin = 0; save(LS.sleep, "0");
+    stopSpeech();
+    paintControls();
+    toast("수면 타이머로 멈췄어요 🌙");
+  }
+}, 1000);
+
+/* ---------- 음성 멈춤 감시 ---------- */
+setInterval(function(){
+  if (!synth || !playing || paused || document.hidden){ silenceSince = 0; return; }
+  if (synth.speaking || synth.pending){ silenceSince = 0; return; }
+  if (!silenceSince){ silenceSince = Date.now(); return; }
+  if (Date.now() - silenceSince > 1800){
+    silenceSince = 0;
+    speakSent(sentIdx >= 0 ? sentIdx : 0);
+  }
+}, 800);
+
+/* ---------- 팝업 ---------- */
+function openPop(title, items, current, onPick){
+  var pop = $("#pop"), sheet = $("#popSheet");
+  sheet.innerHTML = '<h4>' + title + '</h4>';
+  var row = document.createElement("div");
+  row.className = "row";
+  items.forEach(function(it){
+    var b = document.createElement("button");
+    b.textContent = it.label;
+    if (it.value === current) b.className = "on";
+    b.onclick = function(){ closePop(); onPick(it.value); };
+    row.appendChild(b);
+  });
+  sheet.appendChild(row);
+  pop.hidden = false;
+}
+function closePop(){ $("#pop").hidden = true; $("#popSheet").innerHTML = ""; }
+
+/* ---------- 밤 모드 ---------- */
+function applyNight(){
+  document.body.classList.toggle("night", night);
+  $("#nightTop").classList.toggle("on", night);
+  $("#nightTop").textContent = night ? "☀️" : "🌙";
+  var m = $("#metaTheme");
+  if (m) m.setAttribute("content", night ? "#0f1420" : "#fff8ef");
+  paintControls();
+}
+function setNight(on){
+  night = on; saveBool(LS.night, night); applyNight();
+}
+
+/* ---------- 이벤트 ---------- */
+$("#nightTop").onclick = function(){ setNight(!night); };
+$("#rNight").onclick = function(){ setNight(!night); };
+$("#q").addEventListener("input", function(e){
+  query = e.target.value;
+  $("#qClear").hidden = !query;
+  render();
+});
+$("#qClear").onclick = function(){
+  query = ""; $("#q").value = ""; $("#qClear").hidden = true; render(); $("#q").focus();
+};
+$("#playAll").onclick = function(){
+  autoOn = true; contOn = true; saveBool(LS.auto, true); saveBool(LS.cont, true);
+  openBook(0, { play: true });
+  toast("1권부터 쭉 읽어 줄게요");
+};
+$("#resumeBtn").onclick = function(){
+  var last = null;
+  try{ last = JSON.parse(localStorage.getItem(LS.last) || "null"); }catch(e){}
+  if (last && typeof last.i === "number"){
+    openBook(last.i, { play: false });
+    if (typeof last.p === "number" && last.p > 0) goPage(last.p, false);
+  }
+};
+$("#rBack").onclick = function(){
+  seq++;
+  try{ if (synth) synth.cancel(); }catch(e){}
+  playing = false; paused = false;
+  document.body.classList.remove("reading");
+  $("#reader").hidden = true;
+  document.body.classList.remove("inreader");
+  render();
+};
+$("#rPlay").onclick = togglePlay;
+$("#rPrev").onclick = function(){ goPage(page - 1, playing || paused); };
+$("#rNext").onclick = function(){ goPage(page + 1, playing || paused); };
+$("#rPrevBook").onclick = function(){ if (idx > 0) openBook(idx - 1, { play: playing || paused }); };
+$("#rNextBook").onclick = function(){ if (idx < BOOKS.length - 1) openBook(idx + 1, { play: playing || paused }); };
+$("#rRestart").onclick = function(){ goPage(0, playing || paused); };
+$("#rSpeed").onclick = function(){
+  openPop("읽는 속도", SPEEDS.map(function(s){ return { label: s.toFixed(2).replace(/0$/, "") + "x", value: s }; }), speed, function(v){
+    speed = v; save(LS.speed, String(v));
+    paintControls();
+    if (playing){ speakSent(sentIdx >= 0 ? sentIdx : 0); }
+    toast("속도 " + v.toFixed(2).replace(/0$/, "") + "x");
+  });
+};
+$("#rAuto").onclick = function(){
+  autoOn = !autoOn; saveBool(LS.auto, autoOn); paintControls();
+  toast(autoOn ? "한 쪽을 다 읽으면 자동으로 넘겨요" : "자동 넘김을 껐어요");
+};
+$("#rCont").onclick = function(){
+  contOn = !contOn; saveBool(LS.cont, contOn); paintControls();
+  toast(contOn ? "한 책을 다 읽으면 다음 책으로 넘어가요" : "다음 책 연속 재생을 껐어요");
+};
+$("#rKoBtn").onclick = function(){
+  koOn = !koOn; saveBool(LS.ko, koOn);
+  $("#rKoBox").classList.toggle("show", koOn);
+  paintControls();
+};
+$("#rSleep").onclick = function(){
+  openPop("수면 타이머", [{ label: "끔", value: 0 }].concat(SLEEPS.map(function(m){ return { label: m + "분", value: m }; })), sleepMin, function(v){
+    setSleep(v);
+  });
+};
+$("#pop").onclick = function(e){ if (e.target.id === "pop") closePop(); };
+
+/* ---------- 시작 ---------- */
+refreshVoices();
+if (synth && synth.addEventListener) synth.addEventListener("voiceschanged", refreshVoices);
+setTimeout(refreshVoices, 300);
+applyNight();
+renderChips();
+render();
+(function(){
+  try{
+    var last = JSON.parse(localStorage.getItem(LS.last) || "null");
+    if (last && typeof last.i === "number" && BOOKS[last.i]){
+      var b = BOOKS[last.i];
+      var btn = $("#resumeBtn");
+      btn.hidden = false;
+      btn.textContent = "이어 보기 · #" + b.n + " " + (last.p + 1) + "쪽";
+    }
+  }catch(e){}
+})();
+
+/* 테스트용 최소 핸들 */
+window.__ep = {
+  books: BOOKS,
+  state: function(){
+    return { idx: idx, page: page, sent: sentIdx, playing: playing, paused: paused,
+             auto: autoOn, cont: contOn, speed: speed, ko: koOn, night: night,
+             sleep: sleepMin, tab: tab, favs: favs.slice(), dones: dones.slice() };
+  },
+  open: openBook,
+  goto: goPage,
+  sentences: curSents,
+  synth: function(){ return synth; }
+};
+</script>
+</body>
+</html>
